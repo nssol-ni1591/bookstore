@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.cglib.use_reflection_optimizer">true</property>
+<!-- 2010/02/23 delete
+        <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
+        <property name="hibernate.connection.password">BookStore</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@192.168.75.125:1521:ORCL</property>
+        <property name="hibernate.connection.username">BookStore</property>
+-->
+<!-- 2010/02/23 add -->
+<!--
+	<property name="hibernate.jndi.url">t3://vm141.vm.net:7101</property>
+	<property name="hibernate.jndi.class">weblogic.jndi.WLInitialContextFactory</property>
+-->
+	<property name="hibernate.connection.datasource">vm125-orcl-bookstore</property>
+	<property name="hibernate.transaction.manager_lookup_class">org.hibernate.transaction.WeblogicTransactionManagerLookup</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+<!-- 2010/02/22 add
+	ClassNotFoundException: org.hibernate.hql.ast.HqlToken
+-->
+	<property name="hibernate.query.factory_class">org.hibernate.hql.classic.ClassicQueryTranslatorFactory</property>
+
+        <!--
+        <mapping resource="../hbm/bookstore/pbean/TOrder.hbm.xml" />
+        <mapping resource="../hbm/bookstore/pbean/TCustomer.hbm.xml" />
+        <mapping resource="../hbm/bookstore/pbean/TBook.hbm.xml" />
+        <mapping resource="../hbm/bookstore/pbean/TOrderDetail.hbm.xml" />
+        -->
+        <!--
+        <mapping resource="TOrder.hbm.xml" />
+        <mapping resource="TCustomer.hbm.xml" />
+        <mapping resource="TBook.hbm.xml" />
+        <mapping resource="TOrderDetail.hbm.xml" />
+        -->
+        <mapping resource="bookstore/pbean/TOrder.hbm.xml" />
+        <mapping resource="bookstore/pbean/TCustomer.hbm.xml" />
+        <mapping resource="bookstore/pbean/TBook.hbm.xml" />
+        <mapping resource="bookstore/pbean/TOrderDetail.hbm.xml" />
+    </session-factory>
+</hibernate-configuration>

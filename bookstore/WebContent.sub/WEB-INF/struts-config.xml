@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE struts-config PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
+	"http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+
+<struts-config>
+	<form-beans>
+		<form-bean	name="CreateUserActionName"
+				type="bookstore.action.bean.CreateUserActionFormBean" />
+		<form-bean	name="LoginActionName"
+				type="bookstore.action.bean.LoginActionFormBean" />
+		<form-bean	name="AddToCartActionName"
+				type="bookstore.action.bean.AddToCartActionFormBean" />
+		<form-bean	name="SearchActionName"
+				type="bookstore.action.bean.SearchActionFormBean" />
+		<form-bean	name="LogoutActionName"
+				type="bookstore.action.bean.LogoutActionFormBean" />
+	</form-beans>
+
+	<global-forwards>
+		<forward name="illegalSession" path="/sessionError.vm" />
+	</global-forwards>
+	
+	<action-mappings>
+		<action	path="/CreateUser"
+				type="org.springframework.web.struts.DelegatingActionProxy"
+				name="CreateUserActionName"
+				scope="request"
+				validate="true"
+				input="/createAccount.vm" >
+			<forward name="UserCreated" path="/index.vm" />
+			<forward name="illegalCreateUser" path="/createAccount.vm" />
+		</action>
+
+		<action	path="/Login"
+				type="org.springframework.web.struts.DelegatingActionProxy"
+				name="LoginActionName"
+				scope="request" >
+			<forward name="LoginSuccess" path="/BookStore.vm" />
+			<forward name="illegalLogin" path="/index.vm" />
+		</action>
+
+		<action	path="/AddToCartAction"
+				type="org.springframework.web.struts.DelegatingActionProxy"
+				name="AddToCartActionName"
+				scope="request" >
+			<forward name="Continue" path="/BookStore.vm" />
+		</action>		
+		
+		<action	path="/CheckoutAction"
+				type="org.springframework.web.struts.DelegatingActionProxy"
+				name="CheckoutActionName"
+				scope="request" >
+			<forward name="ToCheck" path="/Check.vm" />
+			<forward name="illegalCheckout" path="/BookStore.vm" />
+			<forward name="ToBack" path="/BookStore.vm" />
+		</action>
+
+		<action	path="/OrderAction"
+				type="org.springframework.web.struts.DelegatingActionProxy"
+				name="OrderActionName"
+				scope="request" >
+			<forward name="OrderSuccess" path="/Order.vm" />
+		</action>
+
+		<action	path="/SearchAction"
+				type="org.springframework.web.struts.DelegatingActionProxy"
+				name="SearchActionName"
+				scope="request" >
+			<forward name="SearchSuccess" path="/BookStore.vm" />
+		</action>
+
+		<action	path="/Logout"
+				type="org.springframework.web.struts.DelegatingActionProxy"
+				name="LogoutActionName"
+				scope="request" >
+			<forward name="LogoutSuccess" path="/Logout.vm" />
+		</action>
+	</action-mappings>
+
+
+	<message-resources	parameter="ApplicationResources"
+				key="org.apache.struts.action.MESSAGE" />
+	<message-resources	parameter="MessageResources" /> 
+
+</struts-config>

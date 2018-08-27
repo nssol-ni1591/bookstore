@@ -1,0 +1,5 @@
+okada
+
+dropdb BookStore
+
+createdb -U okada BookStore

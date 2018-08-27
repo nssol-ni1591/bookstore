@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2009/09/17 12:35:56 by Hibernate Tools 3.2.4.GA -->
+<hibernate-mapping>
+	<class name="bookstore.pbean.TCustomer" table="T_CUSTOMER"
+		schema="BOOKSTORE">
+		<id name="id" type="int">
+			<column name="ID" precision="22" scale="0" />
+			<!-- <generator class="assigned" /> -->
+			<generator class="identity"></generator>
+			<!-- ex: eclipselinkの場合
+			generatorがとりうる値: 
+				assigned => アプリの実装でキーを引き渡す
+				auto => hebernate_sequence_fbn(?)というテーブルが必要
+				identity -> DB側の機能でid生成を行う
+				sequence => SQL grammar [values nextval for hibernate_sequence]
+				table => ? -> assignedと同じ?
+				none => ?
+			 -->
+		</id>
+		<property name="username" type="string">
+			<column name="USERNAME" length="256" not-null="true" unique="true" />
+		</property>
+		<property name="passwordmd5" type="string">
+			<column name="PASSWORDMD5" length="256" not-null="true" />
+		</property>
+		<property name="name" type="string">
+			<column name="NAME" length="256" not-null="true" />
+		</property>
+		<property name="email" type="string">
+			<column name="EMAIL" length="256" not-null="true" />
+		</property>
+		<set name="TOrders" inverse="true" lazy="true" table="T_ORDER"
+			fetch="select">
+			<key>
+				<column name="CUSTOMER_ID_FK" precision="22" scale="0"
+					not-null="true" />
+			</key>
+			<one-to-many class="bookstore.pbean.TOrder" />
+		</set>
+	</class>
+</hibernate-mapping>

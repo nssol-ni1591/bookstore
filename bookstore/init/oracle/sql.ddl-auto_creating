@@ -1,0 +1,7 @@
+create table BOOKSTORE.T_BOOK (ID number(10,0) not null, ISBN varchar2(256) not null unique, TITLE varchar2(256) not null, AUTHOR varchar2(256) not null, PUBLISHER varchar2(256) not null, PRICE number(10,0) not null, primary key (ID));
+create table BOOKSTORE.T_CUSTOMER (ID number(10,0) not null, USERNAME varchar2(256) not null unique, PASSWORDMD5 varchar2(256) not null, NAME varchar2(256) not null, EMAIL varchar2(256) not null, primary key (ID));
+create table BOOKSTORE.T_ORDER (ID number(10,0) not null, CUSTOMER_ID_FK number(10,0) not null, ORDERDAY raw(255) not null, primary key (ID));
+create table BOOKSTORE.T_ORDER_DETAIL (ID number(10,0) not null, BOOK_ID_FK number(10,0) not null, ORDER_ID_FK number(10,0) not null, primary key (ID));
+alter table BOOKSTORE.T_ORDER add constraint FK2276383F2FCBC76 foreign key (CUSTOMER_ID_FK) references BOOKSTORE.T_CUSTOMER;
+alter table BOOKSTORE.T_ORDER_DETAIL add constraint FKE9FA3C8D18A36DB6 foreign key (ORDER_ID_FK) references BOOKSTORE.T_ORDER;
+alter table BOOKSTORE.T_ORDER_DETAIL add constraint FKE9FA3C8D3EE1E64C foreign key (BOOK_ID_FK) references BOOKSTORE.T_BOOK;

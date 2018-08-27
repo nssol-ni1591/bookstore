@@ -1,0 +1,73 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=Windows-31J">
+</head>
+
+<body>
+
+	<center>
+	<h2>商品一覧</h2>
+	</center>
+	<br>
+	<form method="post"
+		action="$link.setAction( "/SearchAction" )">
+		検索: <input type="text" name="keyword"/>
+		<input type="submit" value="検索" />
+	</form>
+	#if( $messages.exist() )
+		<br>
+		<font color="red">
+			$messages.get( "productalart" )
+		</font>
+		<br>
+	#end
+<form method="post"
+		action="$link.setAction( "/AddToCartAction" )">
+ 
+	<table border="1">
+
+    #foreach ( $item in $ProductListView )
+
+		<tr>
+		<th rowspan="2">
+			
+		<input type="checkbox" name="selecteditems" value="$item.isbn"
+				#if( $item.selected ) checked #end > 
+		</th>
+		<td colspan="3">
+		$item.title
+		</td>
+	</tr>
+	<tr>
+		<td>
+		$item.author
+		</td>
+		<td>
+		$item.publisher
+		</td>
+		<td>
+		$item.price 円
+		</td>
+	</tr>
+ 
+    #end
+	
+	
+	</table>	
+	<br>
+
+	<input type="submit" value="カートに追加" />
+
+</form>
+
+<form method="post" action="$link.setAction( "/CheckoutAction" )">
+	<input type="submit" value="商品購入" />
+</form>
+
+<form method="post" action="$link.setAction( "/Logout" )">
+	<input type="submit" value="logout" />
+</form>
+
+</body>
+
+</html>

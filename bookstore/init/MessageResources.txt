@@ -1,0 +1,15 @@
+errors.header=<font color="red">
+errors.footer=</font>
+
+error.login.pwmismatch=ログイン名とパスワードが一致しません。
+
+error.createuser.pass2inmatch=確認用パスワードが一致しません。
+error.createuser.useralreadyexist=このアカウントはすでに利用されています。
+error.createuser.cannotcreate=ユーザが作成できませんでした。
+error.createuser.hasempty=入力欄に空欄がありました。
+
+error.addtocart.notselected=商品が選択されていません。
+
+error.checkout.noselected=商品が選択されていません。
+
+error.search.notfound=見つかりませんでした。

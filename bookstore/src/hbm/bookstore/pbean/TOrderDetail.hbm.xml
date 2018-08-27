@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2009/09/17 12:35:56 by Hibernate Tools 3.2.4.GA -->
+<hibernate-mapping>
+    <class name="bookstore.pbean.TOrderDetail" table="T_ORDER_DETAIL" schema="BOOKSTORE">
+        <id name="id" type="int">
+            <column name="ID" precision="22" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="TBook" class="bookstore.pbean.TBook" fetch="select">
+            <column name="BOOK_ID_FK" precision="22" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="TOrder" class="bookstore.pbean.TOrder" fetch="select">
+            <column name="ORDER_ID_FK" precision="22" scale="0" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

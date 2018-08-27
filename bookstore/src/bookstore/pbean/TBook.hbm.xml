@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2009/09/17 12:35:56 by Hibernate Tools 3.2.4.GA -->
+<hibernate-mapping>
+    <class name="bookstore.pbean.TBook" table="T_BOOK" schema="BOOKSTORE">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <property name="isbn" type="string">
+            <column name="ISBN" not-null="true" unique="true" />
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE" not-null="true" />
+        </property>
+        <property name="author" type="string">
+            <column name="AUTHOR" not-null="true" />
+        </property>
+        <property name="publisher" type="string">
+            <column name="PUBLISHER" not-null="true" />
+        </property>
+        <property name="price" type="int">
+            <column name="PRICE" not-null="true" />
+        </property>
+        <set name="TOrderDetails" inverse="true" lazy="true" table="T_ORDER_DETAIL" fetch="select">
+            <key>
+                <column name="BOOK_ID_FK" not-null="true" />
+            </key>
+            <one-to-many class="bookstore.pbean.TOrderDetail" />
+        </set>
+    </class>
+</hibernate-mapping>
