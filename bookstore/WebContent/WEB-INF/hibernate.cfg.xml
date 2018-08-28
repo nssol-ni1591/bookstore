@@ -4,7 +4,15 @@
 "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
+    <!-- 
         <property name="hibernate.cglib.use_reflection_optimizer">true</property>
+     -->
+<!-- 2018/08/27 -->
+		<property name="hibernate.connection.driver_class">org.apache.derby.jdbc.ClientDriver</property>
+		<property name="hibernate.connection.url">jdbc:derby://localhost:1527/bookstore</property>
+		<property name="hibernate.connection.username">bookstore</property>
+		<property name="hibernate.connection.password">bookstore</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
 <!-- 2010/02/23 delete
 		<property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
 		<property name="hibernate.connection.password">bookstore</property>
@@ -12,13 +20,13 @@
 		<property name="hibernate.connection.username">bookstore</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
 -->
-<!-- 2012/07/30 Apache Derby setting -->
+<!-- 2012/07/30 Apache Derby setting
 		<property name="hibernate.connection.driver_class">org.apache.derby.jdbc.ClientDriver</property>
-		<property name="hibernate.connection.url">jdbc:derby://localhost:1527/MyDB;create=true</property>
+		<property name="hibernate.connection.url">jdbc:derby://localhost:1527/MyDB</property>
 		<property name="hibernate.connection.username">bookstore</property>
 		<property name="hibernate.connection.password">bookstore</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
-
+-->
 <!-- 2010/02/23 add -->
 <!--
 	<property name="hibernate.jndi.url">t3://vm141.vm.net:7101</property>

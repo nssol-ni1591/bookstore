@@ -18,7 +18,7 @@ public class BookDAOImpl
 
   public int getPriceByISBNs(final List inISBNList) {
     HibernateTemplate ht = getHibernateTemplate();
-    return( ((Integer)ht.execute(new HibernateCallback() {
+    return( ((Long)ht.execute(new HibernateCallback() {
 	public Object doInHibernate(Session session)
 	  throws HibernateException {
 	  Query priceQuery = session
@@ -29,7 +29,7 @@ public class BookDAOImpl
 	    Thread.currentThread().sleep(10000);
 	  }
 	  catch (InterruptedException ex) { }
-	  return( (Integer)priceQuery.uniqueResult() );
+	  return( (Long)priceQuery.uniqueResult() );
 	}
       } )).intValue() );
   }

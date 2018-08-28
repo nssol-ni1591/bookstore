@@ -16,7 +16,7 @@ public class CustomerDAOImpl extends HibernateDaoSupport implements CustomerDAO 
 
 		HibernateTemplate ht = getHibernateTemplate();
 
-		return (((Integer) ht.execute(new HibernateCallback() {
+		return (((Long) ht.execute(new HibernateCallback() {
 
 			public Object doInHibernate(Session session)
 					throws HibernateException {
@@ -25,7 +25,7 @@ public class CustomerDAOImpl extends HibernateDaoSupport implements CustomerDAO 
 						.createQuery("select count(*) from TCustomer customer where customer.username like :USERNAME");
 				numQuery.setString("USERNAME", inUid);
 
-				return ((Integer) numQuery.uniqueResult());
+				return ((Long) numQuery.uniqueResult());
 			}
 		})).intValue());
 	}

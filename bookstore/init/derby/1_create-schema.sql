@@ -1,3 +1,5 @@
+connect 'jdbc:derby:c:/opt/java-bin/db-derby-10.13.1.1-bin/db/bookstore;user=bookstore;password=bookstore;create=true';
+
 drop schema bookstore RESTRICT;
 create schema bookstore;
 
