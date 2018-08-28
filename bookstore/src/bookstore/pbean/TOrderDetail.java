@@ -19,6 +19,7 @@ import javax.persistence.Table;
 )
 public class TOrderDetail  implements java.io.Serializable {
 
+	private static final long serialVersionUID = 1L;
 
      private int id;
      private TBook TBook;

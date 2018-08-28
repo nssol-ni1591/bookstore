@@ -25,11 +25,12 @@ import javax.persistence.TemporalType;
 )
 public class TOrder  implements java.io.Serializable {
 
+	private static final long serialVersionUID = 1L;
 
      private int id;
      private TCustomer TCustomer;
      private Date orderday;
-     private Set<TOrderDetail> TOrderDetails = new HashSet<TOrderDetail>(0);
+     private Set<TOrderDetail> TOrderDetails = new HashSet<>(0);
 
     public TOrder() {
     }

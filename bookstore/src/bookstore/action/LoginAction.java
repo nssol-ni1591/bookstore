@@ -16,56 +16,51 @@ import org.apache.struts.action.ActionMessages;
 import bookstore.action.bean.LoginActionFormBean;
 import bookstore.logic.BookLogic;
 import bookstore.logic.CustomerLogic;
+import bookstore.vbean.VBook;
 
-public class LoginAction extends Action{
-	
+public class LoginAction extends Action {
+
 	CustomerLogic customerLogic;
 	BookLogic bookLogic;
-	
-	public ActionForward execute( ActionMapping mapping,
-								   ActionForm form,
-								   HttpServletRequest req,
-								   HttpServletResponse res ){
-		
-		LoginActionFormBean lafb = (LoginActionFormBean)form;
 
-		// password match
-		if( !customerLogic.isPasswordMatched(
-							lafb.getAccount(),
-							lafb.getPasswd() ) ){
+	public ActionForward execute(ActionMapping mapping,
+			ActionForm form,
+			HttpServletRequest req,
+			HttpServletResponse res) {
+
+		LoginActionFormBean lafb = (LoginActionFormBean) form;
+
+		// check password
+		if (!customerLogic.isPasswordMatched(lafb.getAccount(), lafb.getPasswd())) {
 			// Account Mismached
 			ActionMessages errors = new ActionMessages();
-			errors.add( "illegallogin",
-				new ActionMessage( "error.login.pwmismatch" ) );
-			saveMessages( req, errors );
-			return( mapping.findForward( "illegalLogin" ) );
+			errors.add("illegallogin", new ActionMessage("error.login.pwmismatch"));
+			saveMessages(req, errors);
+			return mapping.findForward("illegalLogin");
 		}
-		
+
 		// getSession()
-		HttpSession httpSession = req.getSession( false );
-		if( httpSession != null ){
+		HttpSession httpSession = req.getSession(false);
+		if (httpSession != null) {
 			httpSession.invalidate();
 		}
 
 		httpSession = req.getSession();
-		
-		httpSession.setAttribute( "Login", lafb.getAccount() );
-		
-		List productListAll = bookLogic.getAllBookISBNs();
-		List vProductList = bookLogic.createVBookList(
-										 productListAll, null );
-		
-		httpSession.setAttribute( "ProductList", productListAll );
-		httpSession.setAttribute( "ProductListView", vProductList );
-		
-		return( mapping.findForward( "LoginSuccess" ) );
+
+		httpSession.setAttribute("Login", lafb.getAccount());
+
+		List<String> productListAll = bookLogic.getAllBookISBNs();
+		List<VBook> vProductList = bookLogic.createVBookList(productListAll, null);
+
+		httpSession.setAttribute("ProductList", productListAll);
+		httpSession.setAttribute("ProductListView", vProductList);
+
+		return (mapping.findForward("LoginSuccess"));
 	}
 
-	
 	public void setCustomerLogic(CustomerLogic customerLogic) {
 		this.customerLogic = customerLogic;
 	}
-
 
 	public void setBookLogic(BookLogic bookLogic) {
 		this.bookLogic = bookLogic;

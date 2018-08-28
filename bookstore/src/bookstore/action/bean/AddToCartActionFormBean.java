@@ -2,7 +2,9 @@ package bookstore.action.bean;
 
 import org.apache.struts.action.ActionForm;
 
-public class AddToCartActionFormBean extends ActionForm{
+public class AddToCartActionFormBean extends ActionForm {
+
+	private static final long serialVersionUID = 1L;
 
 	private String[] selecteditems;
 	

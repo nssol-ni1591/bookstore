@@ -1,6 +1,5 @@
 package bookstore.dao.hibernate;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Calendar;
 
@@ -15,37 +14,37 @@ import bookstore.dao.OrderDAO;
 import bookstore.pbean.TCustomer;
 import bookstore.pbean.TOrder;
 
-public class OrderDAOImpl extends HibernateDaoSupport
-  implements OrderDAO{
-	public TOrder createOrder(TCustomer inCustomer){
+public class OrderDAOImpl extends HibernateDaoSupport implements OrderDAO {
+	public TOrder createOrder(TCustomer inCustomer) {
 
 		TOrder saveOrder = new TOrder();
-		saveOrder.setTCustomer( inCustomer );
-		saveOrder.setOrderday( Calendar.getInstance().getTime() );
-		
-		getHibernateTemplate().save( saveOrder );
-		
-		return( saveOrder );
+		saveOrder.setTCustomer(inCustomer);
+		saveOrder.setOrderday(Calendar.getInstance().getTime());
+
+		getHibernateTemplate().save(saveOrder);
+
+		return (saveOrder);
 	}
 
-  public List retrieveOrders(final List orderIdList) {
-    //return new ArrayList();
+	@SuppressWarnings("unchecked")
+	public List<TOrder> retrieveOrders(final List<String> orderIdList) {
+		// return new ArrayList();
 
-    HibernateTemplate ht = getHibernateTemplate();
+		HibernateTemplate ht = getHibernateTemplate();
 
-    if (orderIdList == null) {
-      return(ht.find( "from TOrder order" ));
-    }
-    else {
-      return(((List)ht.execute(new HibernateCallback() {
-	  public Object doInHibernate(Session session)
-	    throws HibernateException {
-	    Query retrieveQuery =
-	      session.createQuery("from TOrder order where order.id in ( :ID )");
-	    retrieveQuery.setParameterList("ID", orderIdList);
-	    return(retrieveQuery.list());
-	  }
-	} )));
-    }
-  }
+		if (orderIdList == null) {
+			return ht.find("from TOrder order");
+		}
+		else {
+			return ht.execute(new HibernateCallback<List<TOrder>>() {
+
+				public List<TOrder> doInHibernate(Session session) throws HibernateException {
+					Query retrieveQuery = session.createQuery("from TOrder order where order.id in ( :ID )");
+					retrieveQuery.setParameterList("ID", orderIdList);
+					return retrieveQuery.list();
+				}
+
+			});
+		}
+	}
 }

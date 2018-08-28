@@ -20,14 +20,15 @@ import javax.persistence.Table;
 )
 public class TBook  implements java.io.Serializable {
 
+	private static final long serialVersionUID = 1L;
 
-     private int id;
+	private int id;
      private String isbn;
      private String title;
      private String author;
      private String publisher;
      private int price;
-     private Set<TOrderDetail> TOrderDetails = new HashSet<TOrderDetail>(0);
+     private Set<TOrderDetail> TOrderDetails = new HashSet<>(0);
 
     public TBook() {
     }

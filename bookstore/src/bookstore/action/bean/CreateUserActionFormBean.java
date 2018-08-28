@@ -7,8 +7,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 
-public class CreateUserActionFormBean extends ActionForm{
-	
+public class CreateUserActionFormBean extends ActionForm {
+
+	private static final long serialVersionUID = 1L;
+
 	private String account;
 	private String name;
 	private String email;

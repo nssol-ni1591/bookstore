@@ -2,8 +2,14 @@ package bookstore.dao;
 
 import java.util.List;
 
-public interface BookDAO{
-	public int getPriceByISBNs( List inISBNList );
-	public List retrieveBooksByKeyword( String inKeyword );
-	public List retrieveBooksByISBNs( List inISBNList );
+import bookstore.pbean.TBook;
+
+public interface BookDAO {
+
+	public int getPriceByISBNs(List<String> inISBNList);
+
+	public List<TBook> retrieveBooksByKeyword(String inKeyword);
+
+	public List<TBook> retrieveBooksByISBNs(List<String> inISBNList);
+
 }

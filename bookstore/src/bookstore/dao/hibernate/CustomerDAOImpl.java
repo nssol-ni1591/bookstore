@@ -16,36 +16,34 @@ public class CustomerDAOImpl extends HibernateDaoSupport implements CustomerDAO 
 
 		HibernateTemplate ht = getHibernateTemplate();
 
-		return (((Long) ht.execute(new HibernateCallback() {
+		return ht.execute(new HibernateCallback<Long>() {
 
-			public Object doInHibernate(Session session)
-					throws HibernateException {
+			public Long doInHibernate(Session session) throws HibernateException {
 
 				Query numQuery = session
 						.createQuery("select count(*) from TCustomer customer where customer.username like :USERNAME");
 				numQuery.setString("USERNAME", inUid);
 
-				return ((Long) numQuery.uniqueResult());
+				return (Long)numQuery.uniqueResult();
 			}
-		})).intValue());
+		}).intValue();
 	}
 
 	public TCustomer findCustomerByUid(final String inUid) {
 
 		HibernateTemplate ht = getHibernateTemplate();
 
-		return (((TCustomer) ht.execute(new HibernateCallback() {
+		return ht.execute(new HibernateCallback<TCustomer>	() {
 
-			public Object doInHibernate(Session session)
-					throws HibernateException {
+			public TCustomer doInHibernate(Session session) throws HibernateException {
 
 				Query priceQuery = session
 						.createQuery("from TCustomer customer where customer.username like :USERNAME");
 				priceQuery.setString("USERNAME", inUid);
 
-				return ((TCustomer) priceQuery.uniqueResult());
+				return (TCustomer)priceQuery.uniqueResult();
 			}
-		})));
+		});
 	}
 
 	public void saveCustomer(String inUid, String inPasswordMD5, String inName,

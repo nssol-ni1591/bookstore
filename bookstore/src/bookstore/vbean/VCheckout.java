@@ -2,23 +2,24 @@ package bookstore.vbean;
 
 import java.util.List;
 
+public class VCheckout {
 
-public class VCheckout{
-	
 	private int total;
-	private List selecteditems;
+	private List<VBook> selecteditems;
 
-	public int getTotal(){
-		return( this.total );
+	public int getTotal() {
+		return (this.total);
 	}
-	public void setTotal( int inTotal ){
+
+	public void setTotal(int inTotal) {
 		this.total = inTotal;
 	}
-	
-	public List getSelecteditems() {
+
+	public List<VBook> getSelecteditems() {
 		return selecteditems;
 	}
-	public void setSelecteditems(List inSelecteditems) {
+
+	public void setSelecteditems(List<VBook> inSelecteditems) {
 		this.selecteditems = inSelecteditems;
 	}
 }

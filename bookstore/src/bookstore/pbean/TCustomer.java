@@ -20,13 +20,14 @@ import javax.persistence.Table;
 )
 public class TCustomer  implements java.io.Serializable {
 
+	private static final long serialVersionUID = 1L;
 
      private int id;
      private String username;
      private String passwordmd5;
      private String name;
      private String email;
-     private Set<TOrder> TOrders = new HashSet<TOrder>(0);
+     private Set<TOrder> TOrders = new HashSet<>(0);
 
     public TCustomer() {
     }
