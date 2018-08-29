@@ -1,0 +1,67 @@
+package bookstore.servlet;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import bookstore.logic.CustomerLogic;
+import bookstore.logic.CustomerLogicImpl2;
+
+public class CreateUserServlet extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		doPost(req, res);
+	}
+
+	@Override
+	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+
+		String account = req.getParameter("account");
+		String passwd = req.getParameter("passwd");
+		String passwd2 = req.getParameter("passwd2");
+		String name = req.getParameter("name");
+		String email = req.getParameter("email");
+
+		CustomerLogic customerLogic = new CustomerLogicImpl2();
+		Map<String, String> errors = new HashMap<>();
+
+		RequestDispatcher dispatcher;
+
+		if (passwd.equals(passwd2) == false) {
+			// passwd and passwd2 not matched
+			errors.put("illegalcreateuser", "error.createuser.pass2inmatch");
+			req.setAttribute("errors", errors);
+			dispatcher = req.getRequestDispatcher("createAccount.jsp");
+		}
+		else if (customerLogic.isAlreadyExsited(account)) {
+			// user has already exsited
+			errors.put("illegalcreateuser", "error.createuser.useralreadyexist");
+			req.setAttribute("errors", errors);
+			dispatcher = req.getRequestDispatcher("createAccount.jsp");
+		}
+		else if (!customerLogic.createCustomer(account, passwd, name, email)) {
+			// user was not created
+			errors.put("illegalcreateuser", "error.createuser.cannotcreate");
+			req.setAttribute("errors", errors);
+			dispatcher = req.getRequestDispatcher("createAccount.jsp");
+		}
+		else {
+			dispatcher = req.getRequestDispatcher("index.jsp");
+		}
+		dispatcher.forward(req, res);
+	}
+	/* for spring
+	public void setCustomerLogic(CustomerLogic inCustomerLogic) {
+		this.customerLogic = inCustomerLogic;
+	}
+	*/
+}

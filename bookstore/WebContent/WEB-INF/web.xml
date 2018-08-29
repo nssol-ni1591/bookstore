@@ -59,6 +59,68 @@
 		<load-on-startup>10</load-on-startup>
 	</servlet>
 
+	<servlet>
+		<servlet-name>LoginServlet</servlet-name>
+		<servlet-class>bookstore.servlet.LoginServlet</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>CreateUserServlet</servlet-name>
+		<servlet-class>bookstore.servlet.CreateUserServlet</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>SearchServlet</servlet-name>
+		<servlet-class>bookstore.servlet.SearchServlet</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>AddToCartServlet</servlet-name>
+		<servlet-class>bookstore.servlet.AddToCartServlet</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>CheckoutServlet</servlet-name>
+		<servlet-class>bookstore.servlet.CheckoutServlet</servlet-class>
+	</servlet>
+
+
+	<servlet>
+		<servlet-name>OrderServlet</servlet-name>
+		<servlet-class>bookstore.servlet.OrderServlet</servlet-class>
+	</servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>OrderServlet</servlet-name>
+		<url-pattern>/OrderServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>CheckoutServlet</servlet-name>
+		<url-pattern>/CheckoutServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>AddToCartServlet</servlet-name>
+		<url-pattern>/AddToCartServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>SearchServlet</servlet-name>
+		<url-pattern>/SearchServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>CreateUserServlet</servlet-name>
+		<url-pattern>/CreateUserServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>LoginServlet</servlet-name>
+		<url-pattern>/LoginServlet</url-pattern>
+	</servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>action</servlet-name>
 		<url-pattern>*.do</url-pattern>

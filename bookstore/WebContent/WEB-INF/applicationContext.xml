@@ -238,4 +238,17 @@
 
 	<bean name="/Logout" class="bookstore.action.LogoutAction">
 	</bean>
+
+	<!-- Servlet Layer Implement -->
+	<!-- ServletはSpringで生成されたインスタンスとは別のインスタンスが使用されるので無理
+	<bean name="/bookstore/LoginServlet" class="bookstore.servlet.LoginServlet">
+		<property name="customerLogic">
+			<ref local="LogicCustomerImplBId" />
+		</property>
+		<property name="bookLogic">
+			<ref local="LogicBookImplBId" />
+		</property>
+	</bean>
+	 -->
+
 </beans>
