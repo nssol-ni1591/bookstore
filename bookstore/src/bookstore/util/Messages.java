@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Messages extends HashMap<String, String> {
 
@@ -18,8 +20,8 @@ public class Messages extends HashMap<String, String> {
 				props.load(new InputStreamReader(is));
 			}
 		}
-		catch (IOException ex) {
-			ex.printStackTrace();
+		catch (IOException e) {
+			Logger.getLogger(Messages.class.getName()).log(Level.SEVERE, "", e);
 		}
 	}
 

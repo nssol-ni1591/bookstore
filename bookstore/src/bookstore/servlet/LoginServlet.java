@@ -2,6 +2,8 @@ package bookstore.servlet;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -64,8 +66,8 @@ public class LoginServlet extends HttpServlet {
 			httpSession.setAttribute("ProductList", productListAll);
 			httpSession.setAttribute("ProductListView", vProductList);
 
-			System.out.println("LoginServlet.doPost: ProductList=" + productListAll);
-			System.out.println("LoginServlet.doPost: ProductListView=" + vProductList);
+			Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, "doPost: productListAll={0}", productListAll);
+			Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, "doPost: ProductListView={0}", vProductList);
 
 			dispatcher = req.getRequestDispatcher("BookStore.jsp");
 		}

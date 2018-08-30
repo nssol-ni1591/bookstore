@@ -1,6 +1,8 @@
 package bookstore.dao.hibernate;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.hibernate.HibernateException;
@@ -59,8 +61,8 @@ public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 					Query retrieveQuery = session.createQuery("from TBook book where book.isbn in ( :ISBNS )");
 					retrieveQuery.setParameterList("ISBNS", inISBNList);
 
-					System.out.println("inISBNList=\"" + inISBNList + "\"");
-					System.out.println("retrieveQuery=\"" + retrieveQuery + "\"");
+					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.INFO, "inISBNList={0}", retrieveQuery);
+					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.INFO, "retrieveQuery={0}", retrieveQuery);
 
 					return retrieveQuery.list();
 				}

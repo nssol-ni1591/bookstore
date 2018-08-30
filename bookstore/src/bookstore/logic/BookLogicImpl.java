@@ -19,7 +19,7 @@ public class BookLogicImpl implements BookLogic {
 		List<String> isbns = new ArrayList<String>();
 
 		while (iter.hasNext()) {
-			TBook book = (TBook) iter.next();
+			TBook book = iter.next();
 			isbns.add(book.getIsbn());
 		}
 

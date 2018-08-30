@@ -1,6 +1,8 @@
 package bookstore.dao.impl;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,7 +35,7 @@ public class OrderDAOImpl implements OrderDAO {
 			pst.setInt(1, inCustomer.getId());
 			pst.setDate(2, new java.sql.Date(saveOrder.getOrderday().getTime()));
 			if (!pst.execute()) {
-				System.err.println("failed sql: \"" + pst.toString() + "\"");
+				Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, "failed sql: {0}", pst.toString());
 				return null;
 			}
 			pst2 = con.prepareStatement("select AUTOINCREMENTVALUE, COLUMNNAME, AUTOINCREMENTSTART, AUTOINCREMENTINC"
@@ -44,11 +46,11 @@ public class OrderDAOImpl implements OrderDAO {
 				saveOrder.setId(rs.getInt(1));
 			}
 			else {
-				System.err.println("failed get id: \"" + pst2.toString() + "\"");
+				Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, "failed get id: {0}", pst2.toString());
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			e.printStackTrace();
+			Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
 			if (pst != null) {
@@ -56,7 +58,7 @@ public class OrderDAOImpl implements OrderDAO {
 					pst.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (pst2 != null) {
@@ -64,7 +66,7 @@ public class OrderDAOImpl implements OrderDAO {
 					pst2.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (con != null) {
@@ -72,7 +74,7 @@ public class OrderDAOImpl implements OrderDAO {
 					con.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 		}
@@ -106,7 +108,7 @@ public class OrderDAOImpl implements OrderDAO {
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			e.printStackTrace();
+			Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
 			if (rs != null) {
@@ -114,7 +116,7 @@ public class OrderDAOImpl implements OrderDAO {
 					rs.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (pst != null) {
@@ -122,7 +124,7 @@ public class OrderDAOImpl implements OrderDAO {
 					pst.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (con != null) {
@@ -130,7 +132,7 @@ public class OrderDAOImpl implements OrderDAO {
 					con.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 		}

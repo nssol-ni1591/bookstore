@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;
@@ -26,7 +28,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			e.printStackTrace();
+			Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
 			if (rs != null ) {
@@ -34,7 +36,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 					rs.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (pst != null) {
@@ -42,7 +44,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 					pst.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (con != null) {
@@ -50,7 +52,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 					con.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 		}
@@ -77,7 +79,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			e.printStackTrace();
+			Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
 			if (rs != null ) {
@@ -85,7 +87,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 					rs.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (pst != null) {
@@ -93,7 +95,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 					pst.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (con != null) {
@@ -101,7 +103,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 					con.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 		}
@@ -123,11 +125,11 @@ public class CustomerDAOImpl implements CustomerDAO {
 			pst.setString(3, inName);
 			pst.setString(4, inEmail);
 			if (!pst.execute()) {
-				System.err.println("failed sql: \"" + pst.toString() + "\"");
+				Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, "failed sql: {0}", pst.toString());
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			e.printStackTrace();
+			Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
 			if (pst != null) {
@@ -135,7 +137,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 					pst.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (con != null) {
@@ -143,7 +145,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 					con.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 		}

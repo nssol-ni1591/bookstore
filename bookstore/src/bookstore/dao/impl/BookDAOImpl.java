@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import bookstore.dao.BookDAO;
 import bookstore.pbean.TBook;
@@ -29,7 +31,7 @@ public class BookDAOImpl implements BookDAO {
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			e.printStackTrace();
+			Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
 			if (rs != null ) {
@@ -37,7 +39,7 @@ public class BookDAOImpl implements BookDAO {
 					rs.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (pst != null) {
@@ -45,7 +47,7 @@ public class BookDAOImpl implements BookDAO {
 					pst.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (con != null) {
@@ -53,7 +55,7 @@ public class BookDAOImpl implements BookDAO {
 					con.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 		}
@@ -85,7 +87,7 @@ public class BookDAOImpl implements BookDAO {
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			e.printStackTrace();
+			Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
 			if (rs != null ) {
@@ -93,7 +95,7 @@ public class BookDAOImpl implements BookDAO {
 					rs.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (pst != null) {
@@ -101,7 +103,7 @@ public class BookDAOImpl implements BookDAO {
 					pst.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (con != null) {
@@ -109,7 +111,7 @@ public class BookDAOImpl implements BookDAO {
 					con.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 		}
@@ -144,7 +146,7 @@ public class BookDAOImpl implements BookDAO {
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			e.printStackTrace();
+			Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
 			if (rs != null ) {
@@ -152,7 +154,7 @@ public class BookDAOImpl implements BookDAO {
 					rs.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (pst != null) {
@@ -160,7 +162,7 @@ public class BookDAOImpl implements BookDAO {
 					pst.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (con != null) {
@@ -168,7 +170,7 @@ public class BookDAOImpl implements BookDAO {
 					con.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 		}

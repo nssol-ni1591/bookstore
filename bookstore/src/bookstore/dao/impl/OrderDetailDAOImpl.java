@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import bookstore.dao.OrderDetailDAO;
 import bookstore.pbean.TBook;
@@ -21,11 +23,11 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 			pst.setInt(1, inOrder.getId());
 			pst.setInt(2, inBook.getId());
 			if (!pst.execute()) {
-				System.err.println("failed sql: \"" + pst.toString() + "\"");
+				Logger.getLogger(OrderDetailDAOImpl.class.getName()).log(Level.SEVERE, "failed sql: {0}", pst.toString());
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			e.printStackTrace();
+			Logger.getLogger(OrderDetailDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
 			if (pst != null) {
@@ -33,7 +35,7 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 					pst.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(OrderDetailDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 			if (con != null) {
@@ -41,7 +43,7 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 					con.close();
 				}
 				catch (SQLException e) {
-					e.printStackTrace();
+					Logger.getLogger(OrderDetailDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
 				}
 			}
 		}
