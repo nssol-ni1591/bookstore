@@ -80,7 +80,7 @@ h2 {
 		<input type="submit" value="¤•iw“ü" />
 	</form>
 
-	<form method="post" action="/Logout.vm">
+	<form method="post" action="Logout.jsp">
 		<input type="submit" value="logout" />
 	</form>
 </body>
