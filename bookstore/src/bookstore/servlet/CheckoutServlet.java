@@ -1,9 +1,7 @@
 package bookstore.servlet;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import bookstore.logic.BookLogic;
 import bookstore.logic.BookLogicImpl2;
+import bookstore.util.Messages;
 
 public class CheckoutServlet extends HttpServlet {
 
@@ -29,17 +28,18 @@ public class CheckoutServlet extends HttpServlet {
 
 		HttpSession httpSession = req.getSession(false);
 
-		Map<String, String> errors = new HashMap<>();
+		Messages errors = new Messages();
 		RequestDispatcher dispatcher;
 
 		if (httpSession == null) {
-			dispatcher = req.getRequestDispatcher("sessionError.vm");
+			dispatcher = req.getRequestDispatcher("sessionError.html");
 		}
 		else {
 			@SuppressWarnings("unchecked")
 			List<String> selectedItems = (List<String>) httpSession.getAttribute("Cart");
-			if (selectedItems == null || selectedItems.size() == 0) {
-				errors.put("productalart", "error.checkout.noselected");
+			if (selectedItems == null || selectedItems.isEmpty()) {
+				errors.add("productalart", "error.checkout.noselected");
+				req.setAttribute("errors", errors);
 
 				dispatcher = req.getRequestDispatcher("BookStore.jsp");
 			}

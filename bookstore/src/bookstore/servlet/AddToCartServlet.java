@@ -3,9 +3,7 @@ package bookstore.servlet;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import bookstore.logic.BookLogic;
 import bookstore.logic.BookLogicImpl2;
-import bookstore.util.Message;
+import bookstore.util.Messages;
 import bookstore.vbean.VBook;
 
 public class AddToCartServlet extends HttpServlet {
@@ -35,7 +33,7 @@ public class AddToCartServlet extends HttpServlet {
 
 		HttpSession httpSession = req.getSession(false);
 		if (httpSession == null) {
-			dispatcher = req.getRequestDispatcher("sessionError.vm");
+			dispatcher = req.getRequestDispatcher("sessionError.html");
 		}
 		else {
 			BookLogic bookLogic = new BookLogicImpl2();
@@ -65,8 +63,8 @@ public class AddToCartServlet extends HttpServlet {
 				httpSession.setAttribute("ProductListView", vProductList);
 			}
 			else {
-				Map<String, String> errors = new HashMap<>();
-				errors.put("productalart", Message.getMessage("error.addtocart.notselected"));
+				Messages errors = new Messages();
+				errors.add("productalart", "error.addtocart.notselected");
 				req.setAttribute("errors", errors);
 			}
 			dispatcher = req.getRequestDispatcher("BookStore.jsp");

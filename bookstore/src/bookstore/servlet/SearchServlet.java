@@ -1,9 +1,7 @@
 package bookstore.servlet;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import bookstore.logic.BookLogic;
 import bookstore.logic.BookLogicImpl2;
+import bookstore.util.Messages;
 import bookstore.vbean.VBook;
 
 public class SearchServlet extends HttpServlet {
@@ -30,12 +29,12 @@ public class SearchServlet extends HttpServlet {
 
 		String keyword = req.getParameter("keyword");
 
-		Map<String, String> errors = new HashMap<>();
+		Messages errors = new Messages();
 		RequestDispatcher dispatcher;
 
 		HttpSession httpSession = req.getSession(false);
 		if (httpSession == null) {
-			dispatcher = req.getRequestDispatcher("sessionError.vm");
+			dispatcher = req.getRequestDispatcher("sessionError.html");
 		}
 		else {
 			BookLogic bookLogic = new BookLogicImpl2();
@@ -46,15 +45,14 @@ public class SearchServlet extends HttpServlet {
 			if (foundBooks == null || foundBooks.isEmpty()) {
 				foundBooks = bookLogic.getAllBookISBNs();
 
-				errors.put("productalart", "error.search.notfound");
+				errors.add("productalart", "error.search.notfound");
 				req.setAttribute("errors", errors);
 			}
-			else {
-				List<VBook> vProductList = bookLogic.createVBookList(foundBooks, cart);
+			List<VBook> vProductList = bookLogic.createVBookList(foundBooks, cart);
 
-				httpSession.setAttribute("ProductList", foundBooks);
-				httpSession.setAttribute("ProductListView", vProductList);
-			}
+			httpSession.setAttribute("ProductList", foundBooks);
+			httpSession.setAttribute("ProductListView", vProductList);
+
 			dispatcher = req.getRequestDispatcher("BookStore.jsp");
 		}
 		dispatcher.forward(req, res);

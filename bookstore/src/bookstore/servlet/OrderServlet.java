@@ -31,7 +31,7 @@ public class OrderServlet extends HttpServlet {
 		RequestDispatcher dispatcher;
 
 		if (httpSession == null) {
-			dispatcher = req.getRequestDispatcher("sessionError.vm");
+			dispatcher = req.getRequestDispatcher("sessionError.html");
 		}
 		else {
 			OrderLogic orderLogic = new OrderLogicImpl2();

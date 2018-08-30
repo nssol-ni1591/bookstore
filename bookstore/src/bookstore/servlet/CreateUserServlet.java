@@ -1,8 +1,6 @@
 package bookstore.servlet;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import bookstore.logic.CustomerLogic;
 import bookstore.logic.CustomerLogicImpl2;
+import bookstore.util.Messages;
 
 public class CreateUserServlet extends HttpServlet {
 
@@ -32,7 +31,7 @@ public class CreateUserServlet extends HttpServlet {
 		String email = req.getParameter("email");
 
 		CustomerLogic customerLogic = new CustomerLogicImpl2();
-		Map<String, String> errors = new HashMap<>();
+		Messages errors = new Messages();
 
 		RequestDispatcher dispatcher;
 
@@ -43,25 +42,25 @@ public class CreateUserServlet extends HttpServlet {
 				|| email == null || email.isEmpty()
 				) {
 			// check empty field
-			errors.put("illegalcreateuser", "error.createuser.hasempty");
+			errors.add("illegalcreateuser", "error.createuser.hasempty");
 			req.setAttribute("errors", errors);
 			dispatcher = req.getRequestDispatcher("createAccount.jsp");
 		}
 		else if (passwd.equals(passwd2) == false) {
 			// passwd and passwd2 not matched
-			errors.put("illegalcreateuser", "error.createuser.pass2inmatch");
+			errors.add("illegalcreateuser", "error.createuser.pass2inmatch");
 			req.setAttribute("errors", errors);
 			dispatcher = req.getRequestDispatcher("createAccount.jsp");
 		}
 		else if (customerLogic.isAlreadyExsited(account)) {
 			// user has already exsited
-			errors.put("illegalcreateuser", "error.createuser.useralreadyexist");
+			errors.add("illegalcreateuser", "error.createuser.useralreadyexist");
 			req.setAttribute("errors", errors);
 			dispatcher = req.getRequestDispatcher("createAccount.jsp");
 		}
 		else if (!customerLogic.createCustomer(account, passwd, name, email)) {
 			// user was not created
-			errors.put("illegalcreateuser", "error.createuser.cannotcreate");
+			errors.add("illegalcreateuser", "error.createuser.cannotcreate");
 			req.setAttribute("errors", errors);
 			dispatcher = req.getRequestDispatcher("createAccount.jsp");
 		}

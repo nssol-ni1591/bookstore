@@ -1,9 +1,7 @@
 package bookstore.servlet;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,7 +14,7 @@ import bookstore.logic.BookLogic;
 import bookstore.logic.BookLogicImpl2;
 import bookstore.logic.CustomerLogic;
 import bookstore.logic.CustomerLogicImpl2;
-import bookstore.util.Message;
+import bookstore.util.Messages;
 import bookstore.vbean.VBook;
 
 public class LoginServlet extends HttpServlet {
@@ -35,14 +33,14 @@ public class LoginServlet extends HttpServlet {
 		String passwd = req.getParameter("passwd");
 
 		CustomerLogic customerLogic = new CustomerLogicImpl2();
-		Map<String, String> errors = new HashMap<>();
+		Messages errors = new Messages();
 
 		RequestDispatcher dispatcher;
 
 		// check password
 		if (!customerLogic.isPasswordMatched(account, passwd)) {
 			// Account mismatched
-			errors.put("illegallogin", Message.getMessage("error.login.pwmismatch"));
+			errors.add("illegallogin", "error.login.pwmismatch");
 			req.setAttribute("errors", errors);
 
 			dispatcher = req.getRequestDispatcher("index.jsp");
