@@ -25,13 +25,6 @@ public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 				Query priceQuery = 
 						session.createQuery("select sum( book.price ) from TBook book where book.isbn in ( :SELECTED_ITEMS )");
 				priceQuery.setParameterList("SELECTED_ITEMS", inISBNList);
-
-				try {
-					Thread.sleep(10000);
-				}
-				catch (InterruptedException ex) {
-					// Do nothing
-				}
 				return (Long)priceQuery.uniqueResult();
 			}}).intValue();
 	}
@@ -69,12 +62,6 @@ public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 					System.out.println("inISBNList=\"" + inISBNList + "\"");
 					System.out.println("retrieveQuery=\"" + retrieveQuery + "\"");
 
-					try {
-						Thread.sleep(10000);
-					}
-					catch (InterruptedException ex) {
-						// Do nothing
-					}
 					return retrieveQuery.list();
 				}
 			});
