@@ -6,8 +6,6 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -19,15 +17,12 @@ public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 	@Override
 	public int getPriceByISBNs(final List<String> inISBNList) {
 		HibernateTemplate ht = getHibernateTemplate();
-
-		return ht.execute(new HibernateCallback<Long>() {
-
-			public Long doInHibernate(Session session) {
-				Query priceQuery = 
-						session.createQuery("select sum( book.price ) from TBook book where book.isbn in ( :SELECTED_ITEMS )");
-				priceQuery.setParameterList("SELECTED_ITEMS", inISBNList);
-				return (Long)priceQuery.uniqueResult();
-			}}).intValue();
+		return ht.execute(session -> {
+			Query priceQuery = 
+					session.createQuery("select sum( book.price ) from TBook book where book.isbn in ( :SELECTED_ITEMS )");
+			priceQuery.setParameterList("SELECTED_ITEMS", inISBNList);
+			return (Long)priceQuery.uniqueResult();
+		}).intValue();
 	}
 
 	@Override
@@ -52,19 +47,14 @@ public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 			return ht.find("from TBook book");
 		}
 		else {
+			return ht.execute(session -> {
+				Query retrieveQuery = session.createQuery("from TBook book where book.isbn in ( :ISBNS )");
+				retrieveQuery.setParameterList("ISBNS", inISBNList);
 
-			return ht.execute(new HibernateCallback<List<TBook>>() {
-
-				public List<TBook> doInHibernate(Session session) {
-
-					Query retrieveQuery = session.createQuery("from TBook book where book.isbn in ( :ISBNS )");
-					retrieveQuery.setParameterList("ISBNS", inISBNList);
-
-					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.INFO, "inISBNList={0}", retrieveQuery);
-					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.INFO, "retrieveQuery={0}", retrieveQuery);
-
-					return retrieveQuery.list();
-				}
+				Logger.getLogger(BookDAOImpl.class.getName()).log(Level.INFO, "inISBNList={0}", retrieveQuery);
+				Logger.getLogger(BookDAOImpl.class.getName()).log(Level.INFO, "retrieveQuery={0}", retrieveQuery);
+				return retrieveQuery.list();
+				
 			});
 		}
 	}

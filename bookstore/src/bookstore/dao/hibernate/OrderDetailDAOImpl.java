@@ -8,6 +8,7 @@ import bookstore.pbean.TOrder;
 import bookstore.pbean.TOrderDetail;
 
 public class OrderDetailDAOImpl extends HibernateDaoSupport implements OrderDetailDAO {
+
 	public void createOrderDetail(TOrder inOrder, TBook inBook) {
 
 		TOrderDetail saveOrderDetail = new TOrderDetail();

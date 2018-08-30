@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Calendar;
 
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -34,14 +32,10 @@ public class OrderDAOImpl extends HibernateDaoSupport implements OrderDAO {
 			return ht.find("from TOrder order");
 		}
 		else {
-			return ht.execute(new HibernateCallback<List<TOrder>>() {
-
-				public List<TOrder> doInHibernate(Session session) {
-					Query retrieveQuery = session.createQuery("from TOrder order where order.id in ( :ID )");
-					retrieveQuery.setParameterList("ID", orderIdList);
-					return retrieveQuery.list();
-				}
-
+			return ht.execute(session -> {
+				Query retrieveQuery = session.createQuery("from TOrder order where order.id in ( :ID )");
+				retrieveQuery.setParameterList("ID", orderIdList);
+				return retrieveQuery.list();
 			});
 		}
 	}

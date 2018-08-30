@@ -1,8 +1,6 @@
 package bookstore.dao.hibernate;
 
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -14,17 +12,11 @@ public class CustomerDAOImpl extends HibernateDaoSupport implements CustomerDAO 
 	public int getCustomerNumberByUid(final String inUid) {
 
 		HibernateTemplate ht = getHibernateTemplate();
-
-		return ht.execute(new HibernateCallback<Long>() {
-
-			public Long doInHibernate(Session session) {
-
-				Query numQuery = session
-						.createQuery("select count(*) from TCustomer customer where customer.username like :USERNAME");
-				numQuery.setString("USERNAME", inUid);
-
-				return (Long)numQuery.uniqueResult();
-			}
+		return ht.execute(session -> {
+			Query numQuery = session
+					.createQuery("select count(*) from TCustomer customer where customer.username like :USERNAME");
+			numQuery.setString("USERNAME", inUid);
+			return (Long)numQuery.uniqueResult();
 		}).intValue();
 	}
 
@@ -32,16 +24,11 @@ public class CustomerDAOImpl extends HibernateDaoSupport implements CustomerDAO 
 
 		HibernateTemplate ht = getHibernateTemplate();
 
-		return ht.execute(new HibernateCallback<TCustomer>	() {
-
-			public TCustomer doInHibernate(Session session) {
-
-				Query priceQuery = session
-						.createQuery("from TCustomer customer where customer.username like :USERNAME");
-				priceQuery.setString("USERNAME", inUid);
-
-				return (TCustomer)priceQuery.uniqueResult();
-			}
+		return ht.execute(session -> {
+			Query priceQuery = session
+					.createQuery("from TCustomer customer where customer.username like :USERNAME");
+			priceQuery.setString("USERNAME", inUid);
+			return (TCustomer)priceQuery.uniqueResult();
 		});
 	}
 
