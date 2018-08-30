@@ -13,20 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bookstore.logic.BookLogic;
-import bookstore.logic.BookLogicImpl;
 import bookstore.logic.BookLogicImpl2;
 import bookstore.logic.CustomerLogic;
-import bookstore.logic.CustomerLogicImpl;
 import bookstore.logic.CustomerLogicImpl2;
+import bookstore.util.Message;
 import bookstore.vbean.VBook;
 
 public class LoginServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-
-	// for Spring
-	//CustomerLogic customerLogic;
-	//BookLogic bookLogic;
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -46,8 +41,8 @@ public class LoginServlet extends HttpServlet {
 
 		// check password
 		if (!customerLogic.isPasswordMatched(account, passwd)) {
-			// Account mismached
-			errors.put("illegallogin", "error.login.pwmismatch");
+			// Account mismatched
+			errors.put("illegallogin", Message.getMessage("error.login.pwmismatch"));
 			req.setAttribute("errors", errors);
 
 			dispatcher = req.getRequestDispatcher("index.jsp");
@@ -75,18 +70,8 @@ public class LoginServlet extends HttpServlet {
 			System.out.println("LoginServlet.doPost: ProductListView=" + vProductList);
 
 			dispatcher = req.getRequestDispatcher("BookStore.jsp");
-			//dispatcher = req.getRequestDispatcher("/BookStore.vm");
 		}
 		dispatcher.forward(req, res);
 	}
 
-	/* for Spring
-	public void setCustomerLogic(CustomerLogic customerLogic) {
-		this.customerLogic = customerLogic;
-	}
-
-	public void setBookLogic(BookLogic bookLogic) {
-		this.bookLogic = bookLogic;
-	}
-	*/
 }

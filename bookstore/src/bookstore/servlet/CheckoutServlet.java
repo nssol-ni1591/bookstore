@@ -36,10 +36,10 @@ public class CheckoutServlet extends HttpServlet {
 			dispatcher = req.getRequestDispatcher("sessionError.vm");
 		}
 		else {
+			@SuppressWarnings("unchecked")
 			List<String> selectedItems = (List<String>) httpSession.getAttribute("Cart");
 			if (selectedItems == null || selectedItems.size() == 0) {
-				errors.put("illegallogin", "error.login.pwmismatch");
-				req.setAttribute("errors", errors);
+				errors.put("productalart", "error.checkout.noselected");
 
 				dispatcher = req.getRequestDispatcher("BookStore.jsp");
 			}
@@ -51,9 +51,4 @@ public class CheckoutServlet extends HttpServlet {
 		}
 		dispatcher.forward(req, res);
 	}
-	/*
-	public void setBookLogic(BookLogic bookLogic) {
-		this.bookLogic = bookLogic;
-	}
-	*/
 }

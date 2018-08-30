@@ -132,7 +132,7 @@
 	</servlet-mapping>
 
 	<welcome-file-list>
-		<welcome-file>Login.do</welcome-file>
+		<welcome-file>index.vm</welcome-file>
 	</welcome-file-list>
 
 </web-app>

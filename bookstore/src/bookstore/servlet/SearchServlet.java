@@ -39,6 +39,7 @@ public class SearchServlet extends HttpServlet {
 		}
 		else {
 			BookLogic bookLogic = new BookLogicImpl2();
+			@SuppressWarnings("unchecked")
 			List<String> cart = (List<String>) httpSession.getAttribute("Cart");
 			List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(keyword);
 
@@ -58,9 +59,4 @@ public class SearchServlet extends HttpServlet {
 		}
 		dispatcher.forward(req, res);
 	}
-	/*
-	public void setBookLogic(BookLogic bookLogic) {
-		this.bookLogic = bookLogic;
-	}
-	*/
 }

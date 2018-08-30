@@ -5,12 +5,13 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=Windows-31J">
 </head>
-
+<style>
+h2 {
+  text-align: center;
+}
+</style>
 <body>
-
-	<center>
-		<h2>ログイン</h2>
-	</center>
+	<h2>ログイン</h2>
 
 	<form action="LoginServlet" method="post">
 		ログイン名: <input type="text" name="account" /><br>

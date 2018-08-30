@@ -82,6 +82,6 @@
 
 	<message-resources	parameter="ApplicationResources"
 				key="org.apache.struts.action.MESSAGE" />
-	<message-resources	parameter="MessageResources" /> 
+	<message-resources	parameter="/META-INF/MessageResources" /> 
 
 </struts-config>

@@ -1,9 +1,7 @@
 package bookstore.servlet;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -36,12 +34,12 @@ public class OrderServlet extends HttpServlet {
 			dispatcher = req.getRequestDispatcher("sessionError.vm");
 		}
 		else {
-			List<String> selectedItems = (List<String>)httpSession.getAttribute("Cart");
 			OrderLogic orderLogic = new OrderLogicImpl2();
 			CustomerLogic customerLogic = new CustomerLogicImpl2();
 
 			String uid = (String) httpSession.getAttribute("Login");
 
+			@SuppressWarnings("unchecked")
 			List<String> cart = (List<String>)httpSession.getAttribute("Cart");
 
 			orderLogic.orderBooks(uid, cart);
@@ -52,13 +50,4 @@ public class OrderServlet extends HttpServlet {
 		}
 		dispatcher.forward(req, res);
 	}
-	/*
-	public void setOrderLogic(OrderLogic orderLogic) {
-		this.orderLogic = orderLogic;
-	}
-
-	public void setCustomerLogic(CustomerLogic customerLogic) {
-		this.customerLogic = customerLogic;
-	}
-	*/
 }

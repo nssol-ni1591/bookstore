@@ -36,7 +36,18 @@ public class CreateUserServlet extends HttpServlet {
 
 		RequestDispatcher dispatcher;
 
-		if (passwd.equals(passwd2) == false) {
+		if (account == null || account.isEmpty()
+				|| passwd == null || passwd.isEmpty()
+				|| passwd2 == null || passwd2.isEmpty()
+				|| name == null || name.isEmpty()
+				|| email == null || email.isEmpty()
+				) {
+			// check empty field
+			errors.put("illegalcreateuser", "error.createuser.hasempty");
+			req.setAttribute("errors", errors);
+			dispatcher = req.getRequestDispatcher("createAccount.jsp");
+		}
+		else if (passwd.equals(passwd2) == false) {
 			// passwd and passwd2 not matched
 			errors.put("illegalcreateuser", "error.createuser.pass2inmatch");
 			req.setAttribute("errors", errors);
@@ -59,9 +70,4 @@ public class CreateUserServlet extends HttpServlet {
 		}
 		dispatcher.forward(req, res);
 	}
-	/* for spring
-	public void setCustomerLogic(CustomerLogic inCustomerLogic) {
-		this.customerLogic = inCustomerLogic;
-	}
-	*/
 }

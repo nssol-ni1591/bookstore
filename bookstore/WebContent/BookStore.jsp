@@ -8,12 +8,13 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=Windows-31J" />
 </head>
-
+<style>
+h2 {
+  text-align: center;
+}
+</style>
 <body>
-
-	<center>
-		<h2>商品一覧</h2>
-	</center>
+	<h2>商品一覧</h2>
 	<br>
 	<form method="post" action="SearchServlet">
 		検索: 
@@ -26,6 +27,7 @@
 		<font color="red">
 			<%= errors.get("productalart") %>
 		</font>
+		<br>
 		<br>
 	<% } %>
 

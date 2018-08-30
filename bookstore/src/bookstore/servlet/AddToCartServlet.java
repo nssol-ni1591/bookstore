@@ -3,7 +3,9 @@ package bookstore.servlet;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import bookstore.logic.BookLogic;
 import bookstore.logic.BookLogicImpl2;
+import bookstore.util.Message;
 import bookstore.vbean.VBook;
 
 public class AddToCartServlet extends HttpServlet {
@@ -37,10 +40,12 @@ public class AddToCartServlet extends HttpServlet {
 		else {
 			BookLogic bookLogic = new BookLogicImpl2();
 
+			@SuppressWarnings("unchecked")
 			List<String> cart = (List<String>)httpSession.getAttribute("Cart");
 			if (cart == null) {
 				cart = new ArrayList<>();
 			}
+			@SuppressWarnings("unchecked")
 			List<String> productList = (List<String>)httpSession.getAttribute("ProductList");
 
 			String[] selecteItemsArray = req.getParameterValues("selecteditems");
@@ -48,24 +53,24 @@ public class AddToCartServlet extends HttpServlet {
 
 			if (selecteItemsArray != null && selecteItemsArray.length != 0) {
 				selectedItems = Arrays.asList(selecteItemsArray);
+
+				List<String> newCart = bookLogic.createCart(productList, selectedItems, cart);
+
+				httpSession.setAttribute("Cart", newCart);
+
+				List<String> productListAll = bookLogic.getAllBookISBNs();
+				List<VBook> vProductList = bookLogic.createVBookList(productListAll, newCart);
+
+				httpSession.setAttribute("ProductList", productListAll);
+				httpSession.setAttribute("ProductListView", vProductList);
 			}
-
-			List<String> newCart = bookLogic.createCart(productList, selectedItems, cart);
-
-			httpSession.setAttribute("Cart", newCart);
-
-			List<String> productListAll = bookLogic.getAllBookISBNs();
-			List<VBook> vProductList = bookLogic.createVBookList(productListAll, newCart);
-
-			httpSession.setAttribute("ProductList", productListAll);
-			httpSession.setAttribute("ProductListView", vProductList);
+			else {
+				Map<String, String> errors = new HashMap<>();
+				errors.put("productalart", Message.getMessage("error.addtocart.notselected"));
+				req.setAttribute("errors", errors);
+			}
 			dispatcher = req.getRequestDispatcher("BookStore.jsp");
 		}
 		dispatcher.forward(req, res);
 	}
-	/*
-	public void setBookLogic(BookLogic bookLogic) {
-		this.bookLogic = bookLogic;
-	}
-	*/
 }

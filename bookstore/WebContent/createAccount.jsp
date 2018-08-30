@@ -5,12 +5,13 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=Windows-31J">
 </head>
-
+<style>
+h2 {
+  text-align: center;
+}
+</style>
 <body>
-
-	<center>
-		<h2>アカウント作成</h2>
-	</center>
+	<h2>アカウント作成</h2>
 
 	<form action="CreateUserServlet" method="post">
 		氏名: <input type="text" name="name" /><br>
