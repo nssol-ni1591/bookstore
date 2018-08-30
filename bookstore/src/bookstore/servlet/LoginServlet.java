@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bookstore.logic.BookLogic;
-import bookstore.logic.BookLogicImpl2;
+import bookstore.logic.BookLogicWrapper;
 import bookstore.logic.CustomerLogic;
-import bookstore.logic.CustomerLogicImpl2;
+import bookstore.logic.CustomerLogicWrapper;
 import bookstore.util.Messages;
 import bookstore.vbean.VBook;
 
@@ -34,7 +34,7 @@ public class LoginServlet extends HttpServlet {
 		String account = req.getParameter("account");
 		String passwd = req.getParameter("passwd");
 
-		CustomerLogic customerLogic = new CustomerLogicImpl2();
+		CustomerLogic customerLogic = new CustomerLogicWrapper();
 		Messages errors = new Messages(req);
 
 		RequestDispatcher dispatcher;
@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
 			dispatcher = req.getRequestDispatcher("index.jsp");
 		}
 		else {
-			BookLogic bookLogic = new BookLogicImpl2();
+			BookLogic bookLogic = new BookLogicWrapper();
 
 			// getSession()
 			HttpSession httpSession = req.getSession(false);

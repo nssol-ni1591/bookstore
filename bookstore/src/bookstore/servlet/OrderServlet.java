@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bookstore.logic.CustomerLogic;
-import bookstore.logic.CustomerLogicImpl2;
+import bookstore.logic.CustomerLogicWrapper;
 import bookstore.logic.OrderLogic;
-import bookstore.logic.OrderLogicImpl2;
+import bookstore.logic.OrderLogicWrapper;
 
 public class OrderServlet extends HttpServlet {
 
@@ -36,8 +36,8 @@ public class OrderServlet extends HttpServlet {
 			dispatcher = req.getRequestDispatcher("sessionError.html");
 		}
 		else {
-			OrderLogic orderLogic = new OrderLogicImpl2();
-			CustomerLogic customerLogic = new CustomerLogicImpl2();
+			OrderLogic orderLogic = new OrderLogicWrapper();
+			CustomerLogic customerLogic = new CustomerLogicWrapper();
 
 			String uid = (String) httpSession.getAttribute("Login");
 

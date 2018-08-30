@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bookstore.logic.BookLogic;
-import bookstore.logic.BookLogicImpl2;
+import bookstore.logic.BookLogicWrapper;
 import bookstore.util.Messages;
 import bookstore.vbean.VBook;
 
@@ -39,7 +39,7 @@ public class SearchServlet extends HttpServlet {
 			dispatcher = req.getRequestDispatcher("sessionError.html");
 		}
 		else {
-			BookLogic bookLogic = new BookLogicImpl2();
+			BookLogic bookLogic = new BookLogicWrapper();
 			@SuppressWarnings("unchecked")
 			List<String> cart = (List<String>) httpSession.getAttribute("Cart");
 			List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(keyword);

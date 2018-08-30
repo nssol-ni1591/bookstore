@@ -2,9 +2,9 @@ package bookstore.logic;
 
 import bookstore.dao.impl.BookDAOImpl;
 
-public class BookLogicImpl2 extends BookLogicImpl {
+public class BookLogicWrapper extends BookLogicImpl {
 
-	public BookLogicImpl2() {
+	public BookLogicWrapper() {
 		setBookdao(new BookDAOImpl());
 	}
 

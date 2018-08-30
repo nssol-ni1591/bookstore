@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bookstore.logic.CustomerLogic;
-import bookstore.logic.CustomerLogicImpl2;
+import bookstore.logic.CustomerLogicWrapper;
 import bookstore.util.Messages;
 
 public class CreateUserServlet extends HttpServlet {
@@ -34,7 +34,7 @@ public class CreateUserServlet extends HttpServlet {
 		String name = req.getParameter("name");
 		String email = req.getParameter("email");
 
-		CustomerLogic customerLogic = new CustomerLogicImpl2();
+		CustomerLogic customerLogic = new CustomerLogicWrapper();
 		Messages errors = new Messages(req);
 
 		RequestDispatcher dispatcher;

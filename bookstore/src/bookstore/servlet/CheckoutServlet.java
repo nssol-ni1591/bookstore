@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bookstore.logic.BookLogic;
-import bookstore.logic.BookLogicImpl2;
+import bookstore.logic.BookLogicWrapper;
 import bookstore.util.Messages;
 
 public class CheckoutServlet extends HttpServlet {
@@ -45,7 +45,7 @@ public class CheckoutServlet extends HttpServlet {
 				dispatcher = req.getRequestDispatcher("BookStore.jsp");
 			}
 			else {
-				BookLogic bookLogic = new BookLogicImpl2();
+				BookLogic bookLogic = new BookLogicWrapper();
 				httpSession.setAttribute("ItemsToBuy", bookLogic.createVCheckout(selectedItems));
 				dispatcher = req.getRequestDispatcher("Check.jsp");
 			}

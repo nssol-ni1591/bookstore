@@ -2,9 +2,9 @@ package bookstore.logic;
 
 import bookstore.dao.impl.CustomerDAOImpl;
 
-public class CustomerLogicImpl2 extends CustomerLogicImpl {
+public class CustomerLogicWrapper extends CustomerLogicImpl {
 
-	public CustomerLogicImpl2() {
+	public CustomerLogicWrapper() {
 		super.setCustomerdao(new CustomerDAOImpl());
 	}
 
