@@ -1,8 +1,13 @@
 package bookstore.vbean;
 
+import java.io.Serializable;
+
 import bookstore.pbean.TBook;
 
-public class VBook {
+public class VBook implements Serializable {
+
+
+	private static final long serialVersionUID = 1L;
 
 	private String isbn;
 	private String title;

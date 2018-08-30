@@ -16,7 +16,7 @@ public class BookLogicImpl implements BookLogic {
 	public List<String> getAllBookISBNs() {
 
 		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(null).iterator();
-		List<String> isbns = new ArrayList<String>();
+		List<String> isbns = new ArrayList<>();
 
 		while (iter.hasNext()) {
 			TBook book = iter.next();
@@ -63,7 +63,7 @@ public class BookLogicImpl implements BookLogic {
 		VCheckout vc = new VCheckout();
 		vc.setTotal(bookdao.getPriceByISBNs(inSelectedList));
 
-		List<VBook> viewList = new ArrayList<VBook>();
+		List<VBook> viewList = new ArrayList<>();
 
 		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(inSelectedList).iterator();
 

@@ -2,6 +2,8 @@ package bookstore.servlet;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,16 +22,16 @@ public class SearchServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) {
 		doPost(req, res);
 	}
 
 	@Override
-	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	public void doPost(HttpServletRequest req, HttpServletResponse res) {
 
 		String keyword = req.getParameter("keyword");
 
-		Messages errors = new Messages();
+		Messages errors = new Messages(req);
 		RequestDispatcher dispatcher;
 
 		HttpSession httpSession = req.getSession(false);
@@ -46,7 +48,6 @@ public class SearchServlet extends HttpServlet {
 				foundBooks = bookLogic.getAllBookISBNs();
 
 				errors.add("productalart", "error.search.notfound");
-				req.setAttribute("errors", errors);
 			}
 			List<VBook> vProductList = bookLogic.createVBookList(foundBooks, cart);
 
@@ -55,6 +56,11 @@ public class SearchServlet extends HttpServlet {
 
 			dispatcher = req.getRequestDispatcher("BookStore.jsp");
 		}
-		dispatcher.forward(req, res);
+		try {
+			dispatcher.forward(req, res);
+		}
+		catch (ServletException | IOException e) {
+			Logger.getLogger(SearchServlet.class.getName()).log(Level.SEVERE, "", e);
+		}
 	}
 }

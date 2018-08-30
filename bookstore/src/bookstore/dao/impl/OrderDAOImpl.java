@@ -29,54 +29,33 @@ public class OrderDAOImpl implements OrderDAO {
 		PreparedStatement pst = null;
 		PreparedStatement pst2 = null;
 		ResultSet rs = null;
+		ResultSet rs2 = null;
 		try {
 			con = DB.createConnection();
 			pst = con.prepareStatement("insert into T_Order (customer_id_fk, orderday) values (?,?)");
 			pst.setInt(1, inCustomer.getId());
 			pst.setDate(2, new java.sql.Date(saveOrder.getOrderday().getTime()));
 			if (!pst.execute()) {
-				Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, "failed sql: {0}", pst.toString());
+				Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, "failed sql: {0}", pst);
 				return null;
 			}
 			pst2 = con.prepareStatement("select AUTOINCREMENTVALUE, COLUMNNAME, AUTOINCREMENTSTART, AUTOINCREMENTINC"
 					+ " from sys.systables t, sys.syscolumns c" + " where t.tablename='T_ORDER'"
 					+ "  and c.referenceid=t.tableid" + "  and c.columnname='ID");
-			rs = pst2.executeQuery();
-			if (rs.next()) {
-				saveOrder.setId(rs.getInt(1));
+			rs2 = pst2.executeQuery();
+			if (rs2.next()) {
+				saveOrder.setId(rs2.getInt(1));
 			}
 			else {
-				Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, "failed get id: {0}", pst2.toString());
+				Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, "failed get id: {0}", pst2);
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
 			Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (pst2 != null) {
-				try {
-					pst2.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
+			DB.close(OrderDAOImpl.class.getName(), rs, pst, con);
+			DB.close(OrderDAOImpl.class.getName(), rs2, pst2, null);
 		}
 		return saveOrder;
 	}
@@ -111,30 +90,7 @@ public class OrderDAOImpl implements OrderDAO {
 			Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (pst != null) {
-				try {
-					pst.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
+			DB.close(OrderDAOImpl.class.getName(), rs, pst, con);
 		}
 		return orderList;
 	}

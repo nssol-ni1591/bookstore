@@ -8,10 +8,14 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
+
 public class Messages extends HashMap<String, String> {
 
 	private static final long serialVersionUID = 1L;
 	private static final Properties props = new Properties();
+	
+	private transient HttpServletRequest request;
 	
 	static {
 		try {
@@ -25,11 +29,24 @@ public class Messages extends HashMap<String, String> {
 		}
 	}
 
+	public Messages(HttpServletRequest request) {
+		this.request = request;
+	}
 	public static String getMessage(String name) {
 		return props.getProperty(name, name);
 	}
 	
 	public void add(String key, String name) {
 		put(key, getMessage(name));
+		request.setAttribute("errors", this);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 }

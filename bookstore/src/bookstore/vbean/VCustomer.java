@@ -1,8 +1,12 @@
 package bookstore.vbean;
 
+import java.io.Serializable;
+
 import bookstore.pbean.TCustomer;
 
-public class VCustomer {
+public class VCustomer implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private String uid;
 	private String name;

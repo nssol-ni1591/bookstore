@@ -34,30 +34,7 @@ public class BookDAOImpl implements BookDAO {
 			Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
-			if (rs != null ) {
-				try {
-					rs.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (pst != null) {
-				try {
-					pst.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
+			DB.close(BookDAOImpl.class.getName(), rs, pst, con);
 		}
 		return 0;
 	}
@@ -90,30 +67,7 @@ public class BookDAOImpl implements BookDAO {
 			Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
-			if (rs != null ) {
-				try {
-					rs.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (pst != null) {
-				try {
-					pst.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
+			DB.close(BookDAOImpl.class.getName(), rs, pst, con);
 		}
 		return booksList;
 	}
@@ -149,30 +103,7 @@ public class BookDAOImpl implements BookDAO {
 			Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
-			if (rs != null ) {
-				try {
-					rs.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (pst != null) {
-				try {
-					pst.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
+			DB.close(BookDAOImpl.class.getName(), rs, pst, con);
 		}
 		return booksList;
 	}

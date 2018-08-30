@@ -9,14 +9,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import bookstore.logic.BookLogic;
-import bookstore.logic.CustomerLogic;
-
 public class LogoutAction extends Action {
 
-	CustomerLogic customerLogic;
-	BookLogic bookLogic;
-
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest req,
 			HttpServletResponse res) {
 

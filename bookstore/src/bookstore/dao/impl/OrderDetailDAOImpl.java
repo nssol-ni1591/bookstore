@@ -23,29 +23,14 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 			pst.setInt(1, inOrder.getId());
 			pst.setInt(2, inBook.getId());
 			if (!pst.execute()) {
-				Logger.getLogger(OrderDetailDAOImpl.class.getName()).log(Level.SEVERE, "failed sql: {0}", pst.toString());
+				Logger.getLogger(OrderDetailDAOImpl.class.getName()).log(Level.SEVERE, "failed sql: {0}", pst);
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
 			Logger.getLogger(OrderDetailDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(OrderDetailDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(OrderDetailDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
+			DB.close(OrderDetailDAOImpl.class.getName(), null, pst, con);
 		}
 	}
 

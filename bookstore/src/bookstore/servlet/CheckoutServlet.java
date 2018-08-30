@@ -2,6 +2,8 @@ package bookstore.servlet;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,16 +21,16 @@ public class CheckoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) {
 		doPost(req, res);
 	}
 
 	@Override
-	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	public void doPost(HttpServletRequest req, HttpServletResponse res) {
 
 		HttpSession httpSession = req.getSession(false);
 
-		Messages errors = new Messages();
+		Messages errors = new Messages(req);
 		RequestDispatcher dispatcher;
 
 		if (httpSession == null) {
@@ -39,7 +41,6 @@ public class CheckoutServlet extends HttpServlet {
 			List<String> selectedItems = (List<String>) httpSession.getAttribute("Cart");
 			if (selectedItems == null || selectedItems.isEmpty()) {
 				errors.add("productalart", "error.checkout.noselected");
-				req.setAttribute("errors", errors);
 
 				dispatcher = req.getRequestDispatcher("BookStore.jsp");
 			}
@@ -49,6 +50,11 @@ public class CheckoutServlet extends HttpServlet {
 				dispatcher = req.getRequestDispatcher("Check.jsp");
 			}
 		}
-		dispatcher.forward(req, res);
+		try {
+			dispatcher.forward(req, res);
+		}
+		catch (ServletException | IOException e) {
+			Logger.getLogger(CheckoutServlet.class.getName()).log(Level.SEVERE, "", e);
+		}
 	}
 }

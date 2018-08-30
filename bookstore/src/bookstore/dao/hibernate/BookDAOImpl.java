@@ -5,7 +5,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateCallback;
@@ -23,7 +22,7 @@ public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 
 		return ht.execute(new HibernateCallback<Long>() {
 
-			public Long doInHibernate(Session session) throws HibernateException {
+			public Long doInHibernate(Session session) {
 				Query priceQuery = 
 						session.createQuery("select sum( book.price ) from TBook book where book.isbn in ( :SELECTED_ITEMS )");
 				priceQuery.setParameterList("SELECTED_ITEMS", inISBNList);
@@ -56,7 +55,7 @@ public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 
 			return ht.execute(new HibernateCallback<List<TBook>>() {
 
-				public List<TBook> doInHibernate(Session session) throws HibernateException {
+				public List<TBook> doInHibernate(Session session) {
 
 					Query retrieveQuery = session.createQuery("from TBook book where book.isbn in ( :ISBNS )");
 					retrieveQuery.setParameterList("ISBNS", inISBNList);

@@ -57,6 +57,7 @@ public class CreateUserActionFormBean extends ActionForm {
 		this.passwd2 = passwd2;
 	}
 
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest req) {
 
 		ActionErrors errors = null;

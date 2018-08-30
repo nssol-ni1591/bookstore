@@ -2,6 +2,8 @@ package bookstore.servlet;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,12 +22,12 @@ public class OrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) {
 		doPost(req, res);
 	}
 
 	@Override
-	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	public void doPost(HttpServletRequest req, HttpServletResponse res) {
 		HttpSession httpSession = req.getSession(false);
 
 		RequestDispatcher dispatcher;
@@ -48,6 +50,11 @@ public class OrderServlet extends HttpServlet {
 
 			dispatcher = req.getRequestDispatcher("Order.jsp");
 		}
-		dispatcher.forward(req, res);
+		try {
+			dispatcher.forward(req, res);
+		}
+		catch (ServletException | IOException e) {
+			Logger.getLogger(OrderServlet.class.getName()).log(Level.SEVERE, "", e);
+		}
 	}
 }

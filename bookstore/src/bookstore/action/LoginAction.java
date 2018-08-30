@@ -20,9 +20,10 @@ import bookstore.vbean.VBook;
 
 public class LoginAction extends Action {
 
-	CustomerLogic customerLogic;
-	BookLogic bookLogic;
+	private CustomerLogic customerLogic;
+	private BookLogic bookLogic;
 
+	@Override
 	public ActionForward execute(ActionMapping mapping,
 			ActionForm form,
 			HttpServletRequest req,

@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -43,6 +45,34 @@ public class DB {
 		}
 
 		return DriverManager.getConnection(url, username, password);
+	}
+
+	public static void close(String className, ResultSet rs, PreparedStatement pst, Connection con) {
+		if (rs != null) {
+			try {
+				rs.close();
+			}
+			catch (SQLException e) {
+				Logger.getLogger(className).log(Level.SEVERE, e.getMessage());
+			}
+		}
+		if (pst != null) {
+			try {
+				pst.close();
+			}
+			catch (SQLException e) {
+				Logger.getLogger(className).log(Level.SEVERE, e.getMessage());
+			}
+		}
+		if (con != null) {
+			try {
+				con.close();
+			}
+			catch (SQLException e) {
+				Logger.getLogger(className).log(Level.SEVERE, e.getMessage());
+			}
+		}
+
 	}
 
 }

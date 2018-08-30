@@ -112,7 +112,7 @@ public class SetCharacterEncodingFilter implements Filter {
 
         // Conditionally select and set the character encoding to be used
         if (ignore || (request.getCharacterEncoding() == null)) {
-            String encoding = selectEncoding(request);
+            encoding = selectEncoding(request);
             if (encoding != null)
                 request.setCharacterEncoding(encoding);
         }

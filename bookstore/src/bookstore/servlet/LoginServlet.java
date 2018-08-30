@@ -24,18 +24,18 @@ public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) {
 		doPost(req, res);
 	}
 
 	@Override
-	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	public void doPost(HttpServletRequest req, HttpServletResponse res) {
 
 		String account = req.getParameter("account");
 		String passwd = req.getParameter("passwd");
 
 		CustomerLogic customerLogic = new CustomerLogicImpl2();
-		Messages errors = new Messages();
+		Messages errors = new Messages(req);
 
 		RequestDispatcher dispatcher;
 
@@ -43,7 +43,6 @@ public class LoginServlet extends HttpServlet {
 		if (!customerLogic.isPasswordMatched(account, passwd)) {
 			// Account mismatched
 			errors.add("illegallogin", "error.login.pwmismatch");
-			req.setAttribute("errors", errors);
 
 			dispatcher = req.getRequestDispatcher("index.jsp");
 		}
@@ -66,12 +65,17 @@ public class LoginServlet extends HttpServlet {
 			httpSession.setAttribute("ProductList", productListAll);
 			httpSession.setAttribute("ProductListView", vProductList);
 
-			Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, "doPost: productListAll={0}", productListAll);
-			Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, "doPost: ProductListView={0}", vProductList);
+			Logger.getLogger(LoginServlet.class.getName()).log(Level.INFO, "doPost: productListAll={0}", productListAll);
+			Logger.getLogger(LoginServlet.class.getName()).log(Level.INFO, "doPost: ProductListView={0}", vProductList);
 
 			dispatcher = req.getRequestDispatcher("BookStore.jsp");
 		}
-		dispatcher.forward(req, res);
+		try {
+			dispatcher.forward(req, res);
+		}
+		catch (ServletException | IOException e) {
+			Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, "", e);
+		}
 	}
 
 }

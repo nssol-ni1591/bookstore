@@ -31,30 +31,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
-			if (rs != null ) {
-				try {
-					rs.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (pst != null) {
-				try {
-					pst.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
+			DB.close(OrderDAOImpl.class.getName(), rs, pst, con);
 		}
 		return 0;
 	}
@@ -82,30 +59,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
-			if (rs != null ) {
-				try {
-					rs.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (pst != null) {
-				try {
-					pst.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
+			DB.close(OrderDAOImpl.class.getName(), rs, pst, con);
 		}
 		return null;
 	}
@@ -125,29 +79,14 @@ public class CustomerDAOImpl implements CustomerDAO {
 			pst.setString(3, inName);
 			pst.setString(4, inEmail);
 			if (!pst.execute()) {
-				Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, "failed sql: {0}", pst.toString());
+				Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, "failed sql: {0}", pst);
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
 			Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, "", e);
 		}
 		finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (SQLException e) {
-					Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, e.getMessage());
-				}
-			}
+			DB.close(OrderDAOImpl.class.getName(), null, pst, con);
 		}
 	}
 }

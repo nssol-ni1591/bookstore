@@ -10,15 +10,7 @@ public class CustomerLogicImpl implements CustomerLogic {
 	CustomerDAO customerdao;
 
 	public boolean isAlreadyExsited(String inUid) {
-
-		int customernum = customerdao.getCustomerNumberByUid(inUid);
-
-		if (customernum != 0) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return customerdao.getCustomerNumberByUid(inUid) != 0;
 	}
 
 	public boolean createCustomer(String inUid, String inPassword, String inName, String inEmail) {
@@ -41,10 +33,7 @@ public class CustomerLogicImpl implements CustomerLogic {
 		}
 
 		TCustomer customer = customerdao.findCustomerByUid(inUid);
-		if (customer.getPasswordmd5().equals(getStringDigest(inPassword)) == false) {
-			return false;
-		}
-		return true;
+		return customer.getPasswordmd5().equals(getStringDigest(inPassword));
 	}
 
 	public VCustomer createVCustomer(String inUid) {

@@ -1,6 +1,8 @@
 package bookstore.servlet;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,14 +17,16 @@ import bookstore.util.Messages;
 public class CreateUserServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	private static final String ILLEGAL_CREATE_USER = "illegalCreateUser";
+	private static final String CREATE_ACCOUNT_JSP = "createAccount.jsp";
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) {
 		doPost(req, res);
 	}
 
 	@Override
-	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	public void doPost(HttpServletRequest req, HttpServletResponse res) {
 
 		String account = req.getParameter("account");
 		String passwd = req.getParameter("passwd");
@@ -31,7 +35,7 @@ public class CreateUserServlet extends HttpServlet {
 		String email = req.getParameter("email");
 
 		CustomerLogic customerLogic = new CustomerLogicImpl2();
-		Messages errors = new Messages();
+		Messages errors = new Messages(req);
 
 		RequestDispatcher dispatcher;
 
@@ -42,31 +46,32 @@ public class CreateUserServlet extends HttpServlet {
 				|| email == null || email.isEmpty()
 				) {
 			// check empty field
-			errors.add("illegalcreateuser", "error.createuser.hasempty");
-			req.setAttribute("errors", errors);
-			dispatcher = req.getRequestDispatcher("createAccount.jsp");
+			errors.add(ILLEGAL_CREATE_USER, "error.createuser.hasempty");
+			dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
 		}
-		else if (passwd.equals(passwd2) == false) {
+		else if (!passwd.equals(passwd2)) {
 			// passwd and passwd2 not matched
-			errors.add("illegalcreateuser", "error.createuser.pass2inmatch");
-			req.setAttribute("errors", errors);
-			dispatcher = req.getRequestDispatcher("createAccount.jsp");
+			errors.add(ILLEGAL_CREATE_USER, "error.createuser.pass2inmatch");
+			dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
 		}
 		else if (customerLogic.isAlreadyExsited(account)) {
 			// user has already exsited
-			errors.add("illegalcreateuser", "error.createuser.useralreadyexist");
-			req.setAttribute("errors", errors);
-			dispatcher = req.getRequestDispatcher("createAccount.jsp");
+			errors.add(ILLEGAL_CREATE_USER, "error.createuser.useralreadyexist");
+			dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
 		}
 		else if (!customerLogic.createCustomer(account, passwd, name, email)) {
 			// user was not created
-			errors.add("illegalcreateuser", "error.createuser.cannotcreate");
-			req.setAttribute("errors", errors);
-			dispatcher = req.getRequestDispatcher("createAccount.jsp");
+			errors.add(ILLEGAL_CREATE_USER, "error.createuser.cannotcreate");
+			dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
 		}
 		else {
 			dispatcher = req.getRequestDispatcher("index.jsp");
 		}
-		dispatcher.forward(req, res);
+		try {
+			dispatcher.forward(req, res);
+		}
+		catch (ServletException | IOException e) {
+			Logger.getLogger(CreateUserServlet.class.getName()).log(Level.SEVERE, "", e);
+		}
 	}
 }

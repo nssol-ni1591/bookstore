@@ -16,9 +16,10 @@ import bookstore.logic.OrderLogic;
 
 public class OrderAction extends Action {
 
-	OrderLogic orderLogic;
-	CustomerLogic customerLogic;
+	private OrderLogic orderLogic;
+	private CustomerLogic customerLogic;
 
+	@Override
 	public ActionForward execute(ActionMapping mapping
 			, ActionForm form
 			, HttpServletRequest req

@@ -1,35 +1,23 @@
 package bookstore.vbean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Iterator;
 import java.util.Date;
 
-import bookstore.pbean.TCustomer;
 import bookstore.pbean.TOrder;
-import bookstore.pbean.TOrderDetail;
 
-public class VOrder {
+public class VOrder implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private int id;
 
 	private VCustomer vCustomer;
-	private String uid;
-	private String name;
-	private String email;
 
 	private Date orderday;
 
-	private List vOrderDetails = new ArrayList();
-	// - id -> this.id
-	// - order -> this
-	// - book
-	private int bookId;
-	private String isbn;
-	private String title;
-	private String author;
-	private String publisher;
-	private int price;
+	private List<VOrderDetail> vOrderDetails = new ArrayList<>();
 
 	public VOrder() {
 	}
@@ -38,12 +26,6 @@ public class VOrder {
 		id = order.getId();
 		vCustomer = new VCustomer(order.getTCustomer());
 		orderday = order.getOrderday();
-		/*
-		 * Iterator iter = order.getTOrderDetails().iterator(); while(iter.hasNext()){
-		 * TOrderDetail orderDetail = (TOrderDetail)iter.next(); VOrderDetail
-		 * vOrderDetail = new VOrderDetail(orderDetail.getTOrderDetail());
-		 * vOrderDetails.add(vOrderDetail); }
-		 */
 	}
 
 	public int getId() {
@@ -70,11 +52,11 @@ public class VOrder {
 		this.orderday = orderday;
 	}
 
-	public List getVOrderDetails() {
+	public List<VOrderDetail> getVOrderDetails() {
 		return vOrderDetails;
 	}
 
-	public void setVOrderDetails(List vOrderDetails) {
+	public void setVOrderDetails(List<VOrderDetail> vOrderDetails) {
 		this.vOrderDetails = vOrderDetails;
 	}
 }

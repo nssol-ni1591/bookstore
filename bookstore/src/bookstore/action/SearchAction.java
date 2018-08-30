@@ -19,8 +19,9 @@ import bookstore.vbean.VBook;
 
 public class SearchAction extends Action {
 
-	BookLogic bookLogic;
+	private BookLogic bookLogic;
 
+	@Override
 	public ActionForward execute(ActionMapping mapping
 			, ActionForm form
 			, HttpServletRequest req

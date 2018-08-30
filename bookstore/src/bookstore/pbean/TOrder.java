@@ -28,24 +28,24 @@ public class TOrder  implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
      private int id;
-     private TCustomer TCustomer;
+     private TCustomer tCustomer;
      private Date orderday;
-     private Set<TOrderDetail> TOrderDetails = new HashSet<>(0);
+     private Set<TOrderDetail> tOrderDetails = new HashSet<>(0);
 
     public TOrder() {
     }
 
 	
-    public TOrder(int id, TCustomer TCustomer, Date orderday) {
+    public TOrder(int id, TCustomer tCustomer, Date orderday) {
         this.id = id;
-        this.TCustomer = TCustomer;
+        this.tCustomer = tCustomer;
         this.orderday = orderday;
     }
-    public TOrder(int id, TCustomer TCustomer, Date orderday, Set<TOrderDetail> TOrderDetails) {
+    public TOrder(int id, TCustomer tCustomer, Date orderday, Set<TOrderDetail> tOrderDetails) {
        this.id = id;
-       this.TCustomer = TCustomer;
+       this.tCustomer = tCustomer;
        this.orderday = orderday;
-       this.TOrderDetails = TOrderDetails;
+       this.tOrderDetails = tOrderDetails;
     }
    
      @Id 
@@ -60,14 +60,14 @@ public class TOrder  implements java.io.Serializable {
         this.id = id;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="CUSTOMER_ID_FK", nullable=false)
     public TCustomer getTCustomer() {
-        return this.TCustomer;
+        return this.tCustomer;
     }
     
-    public void setTCustomer(TCustomer TCustomer) {
-        this.TCustomer = TCustomer;
+    public void setTCustomer(TCustomer tCustomer) {
+        this.tCustomer = tCustomer;
     }
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -80,13 +80,13 @@ public class TOrder  implements java.io.Serializable {
         this.orderday = orderday;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="TOrder")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="TOrder")
     public Set<TOrderDetail> getTOrderDetails() {
-        return this.TOrderDetails;
+        return this.tOrderDetails;
     }
     
-    public void setTOrderDetails(Set<TOrderDetail> TOrderDetails) {
-        this.TOrderDetails = TOrderDetails;
+    public void setTOrderDetails(Set<TOrderDetail> tOrderDetails) {
+        this.tOrderDetails = tOrderDetails;
     }
 
 

@@ -3,7 +3,6 @@ package bookstore.dao.hibernate;
 import java.util.List;
 import java.util.Calendar;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateCallback;
@@ -28,7 +27,6 @@ public class OrderDAOImpl extends HibernateDaoSupport implements OrderDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<TOrder> retrieveOrders(final List<String> orderIdList) {
-		// return new ArrayList();
 
 		HibernateTemplate ht = getHibernateTemplate();
 
@@ -38,7 +36,7 @@ public class OrderDAOImpl extends HibernateDaoSupport implements OrderDAO {
 		else {
 			return ht.execute(new HibernateCallback<List<TOrder>>() {
 
-				public List<TOrder> doInHibernate(Session session) throws HibernateException {
+				public List<TOrder> doInHibernate(Session session) {
 					Query retrieveQuery = session.createQuery("from TOrder order where order.id in ( :ID )");
 					retrieveQuery.setParameterList("ID", orderIdList);
 					return retrieveQuery.list();

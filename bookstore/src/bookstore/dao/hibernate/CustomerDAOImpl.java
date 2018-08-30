@@ -1,6 +1,5 @@
 package bookstore.dao.hibernate;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateCallback;
@@ -18,7 +17,7 @@ public class CustomerDAOImpl extends HibernateDaoSupport implements CustomerDAO 
 
 		return ht.execute(new HibernateCallback<Long>() {
 
-			public Long doInHibernate(Session session) throws HibernateException {
+			public Long doInHibernate(Session session) {
 
 				Query numQuery = session
 						.createQuery("select count(*) from TCustomer customer where customer.username like :USERNAME");
@@ -35,7 +34,7 @@ public class CustomerDAOImpl extends HibernateDaoSupport implements CustomerDAO 
 
 		return ht.execute(new HibernateCallback<TCustomer>	() {
 
-			public TCustomer doInHibernate(Session session) throws HibernateException {
+			public TCustomer doInHibernate(Session session) {
 
 				Query priceQuery = session
 						.createQuery("from TCustomer customer where customer.username like :USERNAME");

@@ -17,8 +17,9 @@ import bookstore.logic.BookLogic;
 
 public class CheckoutAction extends Action {
 
-	BookLogic bookLogic;
+	private BookLogic bookLogic;
 
+	@Override
 	public ActionForward execute(ActionMapping mapping
 			, ActionForm form
 			, HttpServletRequest req
@@ -32,7 +33,7 @@ public class CheckoutAction extends Action {
 		@SuppressWarnings("unchecked")
 		List<String> selectedItems = (List<String>) httpSession.getAttribute("Cart");
 
-		if (selectedItems == null || selectedItems.size() == 0) {
+		if (selectedItems == null || selectedItems.isEmpty()) {
 
 			ActionMessages errors = new ActionMessages();
 
