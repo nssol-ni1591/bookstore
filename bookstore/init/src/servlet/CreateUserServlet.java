@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bookstore.logic.CustomerLogic;
-import bookstore.logic.CustomerLogicWrapper;
+import bookstore.logic.wrapper.CustomerLogicWrapper;
 import bookstore.util.Messages;
 
 public class CreateUserServlet extends HttpServlet {

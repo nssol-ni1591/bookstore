@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bookstore.logic.CustomerLogic;
-import bookstore.logic.CustomerLogicWrapper;
 import bookstore.logic.OrderLogic;
-import bookstore.logic.OrderLogicWrapper;
+import bookstore.logic.wrapper.CustomerLogicWrapper;
+import bookstore.logic.wrapper.OrderLogicWrapper;
 
 public class OrderServlet extends HttpServlet {
 

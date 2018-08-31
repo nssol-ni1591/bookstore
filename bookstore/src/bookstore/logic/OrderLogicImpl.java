@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
 import bookstore.dao.OrderDAO;
@@ -15,10 +17,10 @@ import bookstore.vbean.VOrder;
 
 public class OrderLogicImpl implements OrderLogic {
 
-	BookDAO bookdao;
-	CustomerDAO customerdao;
-	OrderDAO orderdao;
-	OrderDetailDAO odetaildao;
+	@Autowired BookDAO bookdao;
+	@Autowired CustomerDAO customerdao;
+	@Autowired OrderDAO orderdao;
+	@Autowired OrderDetailDAO odetaildao;
 
 	public void orderBooks(String inUid, List<String> inISBNs) {
 
@@ -43,7 +45,7 @@ public class OrderLogicImpl implements OrderLogic {
 		}
 		return orderList;
 	}
-
+/*
 	public void setBookdao(BookDAO bookdao) {
 		this.bookdao = bookdao;
 	}
@@ -59,4 +61,5 @@ public class OrderLogicImpl implements OrderLogic {
 	public void setOrderdetaildao(OrderDetailDAO odetaildao) {
 		this.odetaildao = odetaildao;
 	}
+*/
 }

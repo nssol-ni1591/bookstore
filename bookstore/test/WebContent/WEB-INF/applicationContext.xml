@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<context:annotation-config />
+	<context:component-scan base-package="test" />
+ 
+	<!-- SessionFactory -->
+	<!-- 
+	<bean id="sessionFactory"
+			class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="configLocation">
+			<value>/WEB-INF/hibernate.cfg.xml</value>
+		</property>
+	</bean>
+	 -->
+<!-- 
+	<bean name="EnglishBid" class="test.dao.English">
+	</bean>
+ -->
+
+	<!-- 
+	<bean name="HelloLogicBid" class="test.logic.HelloLogic">
+		<property name="speaker">
+			<ref local="EnglishBid" />
+		</property>
+	</bean>
+
+	<bean name="HelloBid" class="test.logic.Hello">
+		<property name="target">
+			<ref local="HelloLogicBid" />
+		</property>
+	</bean>
+	 -->
+
+</beans>

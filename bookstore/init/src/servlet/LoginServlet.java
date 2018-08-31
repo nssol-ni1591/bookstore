@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bookstore.logic.BookLogic;
-import bookstore.logic.BookLogicWrapper;
 import bookstore.logic.CustomerLogic;
-import bookstore.logic.CustomerLogicWrapper;
+import bookstore.logic.wrapper.BookLogicWrapper;
+import bookstore.logic.wrapper.CustomerLogicWrapper;
 import bookstore.util.Messages;
 import bookstore.vbean.VBook;
 

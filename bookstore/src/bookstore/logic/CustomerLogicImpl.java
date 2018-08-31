@@ -4,10 +4,11 @@ import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;
 import bookstore.vbean.VCustomer;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class CustomerLogicImpl implements CustomerLogic {
 
-	CustomerDAO customerdao;
+	@Autowired CustomerDAO customerdao;
 
 	public boolean isAlreadyExsited(String inUid) {
 		return customerdao.getCustomerNumberByUid(inUid) != 0;
@@ -43,8 +44,9 @@ public class CustomerLogicImpl implements CustomerLogic {
 	private static String getStringDigest(String inString) {
 		return DigestUtils.md5Hex(inString + "digested");
 	}
-
+/*
 	public void setCustomerdao(CustomerDAO inCdao) {
 		this.customerdao = inCdao;
 	}
+*/
 }

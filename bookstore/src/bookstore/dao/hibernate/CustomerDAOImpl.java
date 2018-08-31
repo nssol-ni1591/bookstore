@@ -3,6 +3,7 @@ package bookstore.dao.hibernate;
 import org.hibernate.Query;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.stereotype.Repository;
 
 import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;

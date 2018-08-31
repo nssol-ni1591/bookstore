@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import bookstore.dao.BookDAO;
 import bookstore.pbean.TBook;
 import bookstore.vbean.VBook;
@@ -11,7 +13,7 @@ import bookstore.vbean.VCheckout;
 
 public class BookLogicImpl implements BookLogic {
 
-	BookDAO bookdao;
+	@Autowired BookDAO bookdao;
 
 	public List<String> getAllBookISBNs() {
 
@@ -86,8 +88,9 @@ public class BookLogicImpl implements BookLogic {
 		}
 		return (inCart);
 	}
-
+/*
 	public void setBookdao(BookDAO bookdao) {
 		this.bookdao = bookdao;
 	}
+*/
 }
