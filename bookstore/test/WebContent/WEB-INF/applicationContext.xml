@@ -12,7 +12,7 @@
 	<context:annotation-config />
 	<context:component-scan base-package="test" />
  
- 	<!-- 
+ 	<!-- Englishはディフォルトのbean名を使用する
 	<bean name="english" class="test.dao.English">
 	</bean>
  	 -->

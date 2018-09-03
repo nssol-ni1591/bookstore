@@ -1,8 +1,7 @@
 package test.dao;
 
-import org.springframework.stereotype.Component;
-
-@Component("ChaineseBId")
+//@Component("ChaineseBId")
+// applicationContext.xmlに定義されているので必要なし
 public class Chainese implements Speaker {
 
 	public String say() {
