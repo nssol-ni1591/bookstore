@@ -5,10 +5,13 @@ import bookstore.pbean.TCustomer;
 import bookstore.vbean.VCustomer;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
+@Component("LogicCustomerImplBId")
 public class CustomerLogicImpl implements CustomerLogic {
 
-	@Autowired CustomerDAO customerdao;
+	@Autowired @Qualifier("CustomerDAOBId") CustomerDAO customerdao;
 
 	public boolean isAlreadyExsited(String inUid) {
 		return customerdao.getCustomerNumberByUid(inUid) != 0;

@@ -13,7 +13,10 @@ import org.springframework.stereotype.Repository;
 import bookstore.dao.BookDAO;
 import bookstore.pbean.TBook;
 
+@Repository("BookDAOImplBId")
 public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
+
+	//@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
 
 	@Override
 	public int getPriceByISBNs(final List<String> inISBNList) {

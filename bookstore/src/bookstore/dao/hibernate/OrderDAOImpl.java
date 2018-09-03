@@ -12,7 +12,11 @@ import bookstore.dao.OrderDAO;
 import bookstore.pbean.TCustomer;
 import bookstore.pbean.TOrder;
 
+@Repository("OrderDAOImplBId")
 public class OrderDAOImpl extends HibernateDaoSupport implements OrderDAO {
+
+	//@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
+
 	public TOrder createOrder(TCustomer inCustomer) {
 
 		TOrder saveOrder = new TOrder();

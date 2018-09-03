@@ -8,7 +8,10 @@ import org.springframework.stereotype.Repository;
 import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;
 
+@Repository("CustomerDAOImplBId")
 public class CustomerDAOImpl extends HibernateDaoSupport implements CustomerDAO {
+
+	//@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
 
 	public int getCustomerNumberByUid(final String inUid) {
 

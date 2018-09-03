@@ -5,15 +5,18 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import bookstore.dao.BookDAO;
 import bookstore.pbean.TBook;
 import bookstore.vbean.VBook;
 import bookstore.vbean.VCheckout;
 
+@Component("LogicBookImplBId")
 public class BookLogicImpl implements BookLogic {
 
-	@Autowired BookDAO bookdao;
+	@Autowired @Qualifier("BookDAOBId") BookDAO bookdao;
 
 	public List<String> getAllBookISBNs() {
 

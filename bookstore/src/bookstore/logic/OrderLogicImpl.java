@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
@@ -15,12 +17,13 @@ import bookstore.pbean.TCustomer;
 import bookstore.pbean.TOrder;
 import bookstore.vbean.VOrder;
 
+@Component("LogicOrderImplBId")
 public class OrderLogicImpl implements OrderLogic {
 
-	@Autowired BookDAO bookdao;
-	@Autowired CustomerDAO customerdao;
-	@Autowired OrderDAO orderdao;
-	@Autowired OrderDetailDAO odetaildao;
+	@Autowired @Qualifier("BookDAOBId") BookDAO bookdao;
+	@Autowired @Qualifier("CustomerDAOBId") CustomerDAO customerdao;
+	@Autowired @Qualifier("OrderDAOBId")OrderDAO orderdao;
+	@Autowired @Qualifier("OrderDetailDAOBId")OrderDetailDAO odetaildao;
 
 	public void orderBooks(String inUid, List<String> inISBNs) {
 

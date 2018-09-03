@@ -8,7 +8,10 @@ import bookstore.pbean.TBook;
 import bookstore.pbean.TOrder;
 import bookstore.pbean.TOrderDetail;
 
+@Repository("OrderDetailDAOImplBId")
 public class OrderDetailDAOImpl extends HibernateDaoSupport implements OrderDetailDAO {
+
+	//@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
 
 	public void createOrderDetail(TOrder inOrder, TBook inBook) {
 
