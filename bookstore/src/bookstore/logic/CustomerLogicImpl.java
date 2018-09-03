@@ -47,9 +47,9 @@ public class CustomerLogicImpl implements CustomerLogic {
 	private static String getStringDigest(String inString) {
 		return DigestUtils.md5Hex(inString + "digested");
 	}
-/*
+
 	public void setCustomerdao(CustomerDAO inCdao) {
 		this.customerdao = inCdao;
 	}
-*/
+
 }

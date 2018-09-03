@@ -1,0 +1,241 @@
+<?xml version="1.0"?>
+<!DOCTYPE beans PUBLIC
+  "-//SPRING//DTD BEAN//EN"
+  "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<!-- SessionFactory -->
+	<bean id="sessionFactory"
+			class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="configLocation">
+			<value>/WEB-INF/hibernate.cfg.xml</value>
+		</property>
+	</bean>
+
+
+	<!-- TransactionManager -->
+	<bean id="transactionManager"
+			class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+
+
+	<!-- DAO -->
+	<bean id="BookDAOBId"
+			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref local="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="BookDAOImplBId" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="retrieve*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="CustomerDAOBId"
+			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref local="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="CustomerDAOImplBId" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="OrderDAOBId"
+			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref local="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="OrderDAOImplBId" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="create*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="OrderDetailDAOBId"
+			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref local="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="OrderDetailDAOImplBId" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="create*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	
+	<!-- DAOImpl -->
+	<bean id="BookDAOImplBId" class="bookstore.dao.hibernate.BookDAOImpl">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="CustomerDAOImplBId" class="bookstore.dao.hibernate.CustomerDAOImpl">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="OrderDAOImplBId" class="bookstore.dao.hibernate.OrderDAOImpl">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="OrderDetailDAOImplBId" class="bookstore.dao.hibernate.OrderDetailDAOImpl">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	
+	
+	<!-- Logic Layer -->
+	<bean id="LogicCustomerBId"
+			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref local="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="LogicCustomerImplBId" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="is*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="createCustomer">PROPAGATION_REQUIRED</prop>
+				<prop key="createVCustomer">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="LogicBookBId"
+			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref local="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="LogicBookImplBId" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="create*">PROPAGATION_REQUIRED</prop>
+				<prop key="retrieve*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="LogicOrderBId"
+			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref local="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="LogicOrderImplBId" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="orderBooks">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+
+	<!-- Logic Layer Implement -->
+	<bean id="LogicCustomerImplBId" class="bookstore.logic.CustomerLogicImpl">
+		<property name="customerdao">
+			<ref local="CustomerDAOBId" />
+		</property>
+	</bean>
+
+	<bean id="LogicBookImplBId" class="bookstore.logic.BookLogicImpl">
+		<property name="bookdao">
+			<ref local="BookDAOBId" />
+		</property>
+	</bean>
+
+	<bean id="LogicOrderImplBId" class="bookstore.logic.OrderLogicImpl">
+		<property name="bookdao">
+			<ref local="BookDAOBId" />
+		</property>
+		<property name="customerdao">
+			<ref local="CustomerDAOBId" />
+		</property>
+		<property name="orderdao">
+			<ref local="OrderDAOBId" />
+		</property>
+		<property name="orderdetaildao">
+			<ref local="OrderDetailDAOBId" />
+		</property>
+	</bean>
+
+
+	<!-- Struts Action -->
+	<bean name="/CreateUser" class="bookstore.action.CreateUserAction">
+		<property name="customerLogic">
+			<ref local="LogicCustomerImplBId" />
+		</property>
+	</bean>
+
+	<bean name="/Login" class="bookstore.action.LoginAction">
+		<property name="customerLogic">
+			<ref local="LogicCustomerImplBId" />
+		</property>
+		<property name="bookLogic">
+			<ref local="LogicBookImplBId" />
+		</property>
+	</bean>
+
+	<bean name="/AddToCartAction" class="bookstore.action.AddToCartAction">
+		<property name="bookLogic">
+			<ref local="LogicBookImplBId" />
+		</property>
+	</bean>
+
+	<bean name="/CheckoutAction" class="bookstore.action.CheckoutAction">
+		<property name="bookLogic">
+			<ref local="LogicBookImplBId" />
+		</property>
+	</bean>
+
+	<bean name="/OrderAction" class="bookstore.action.OrderAction">
+		<property name="orderLogic">
+			<ref local="LogicOrderImplBId" />
+		</property>
+		<property name="customerLogic">
+			<ref local="LogicCustomerImplBId" />
+		</property>
+	</bean>
+
+	<bean name="/SearchAction" class="bookstore.action.SearchAction">
+		<property name="bookLogic">
+			<ref local="LogicBookImplBId" />
+		</property>
+	</bean>
+
+	<bean name="/Logout" class="bookstore.action.LogoutAction">
+	</bean>
+</beans>

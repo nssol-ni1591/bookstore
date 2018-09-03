@@ -6,7 +6,7 @@ import bookstore.logic.BookLogicImpl;
 public class BookLogicWrapper extends BookLogicImpl {
 
 	public BookLogicWrapper() {
-		//super.setBookdao(new BookDAOImpl());
+		setBookdao(new BookDAOImpl());
 	}
 
 }

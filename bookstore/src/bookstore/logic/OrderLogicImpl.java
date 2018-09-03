@@ -48,7 +48,7 @@ public class OrderLogicImpl implements OrderLogic {
 		}
 		return orderList;
 	}
-/*
+
 	public void setBookdao(BookDAO bookdao) {
 		this.bookdao = bookdao;
 	}
@@ -64,5 +64,5 @@ public class OrderLogicImpl implements OrderLogic {
 	public void setOrderdetaildao(OrderDetailDAO odetaildao) {
 		this.odetaildao = odetaildao;
 	}
-*/
+
 }

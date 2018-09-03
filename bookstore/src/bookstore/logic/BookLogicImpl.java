@@ -91,9 +91,9 @@ public class BookLogicImpl implements BookLogic {
 		}
 		return (inCart);
 	}
-/*
+
 	public void setBookdao(BookDAO bookdao) {
 		this.bookdao = bookdao;
 	}
-*/
+
 }
