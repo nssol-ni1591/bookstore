@@ -15,56 +15,55 @@ import org.apache.struts.action.ActionMapping;
 
 import bookstore.action.bean.AddToCartActionFormBean;
 import bookstore.logic.BookLogic;
+import bookstore.vbean.VBook;
 
 public class AddToCartAction extends Action {
-	
-	BookLogic bookLogic;
-	
-	public ActionForward execute( ActionMapping mapping,
-								   ActionForm form,
-								   HttpServletRequest req,
-								   HttpServletResponse res ){
 
-		HttpSession httpSession = req.getSession( false );
-		if( httpSession == null ){
-			return( mapping.findForward( "illegalSession" ) );
+	private BookLogic bookLogic;
+
+	@Override
+	public ActionForward execute(ActionMapping mapping
+			, ActionForm form
+			, HttpServletRequest req
+			, HttpServletResponse res) {
+
+		HttpSession httpSession = req.getSession(false);
+		if (httpSession == null) {
+			return (mapping.findForward("illegalSession"));
 		}
-		
-		List cart = (List) httpSession.getAttribute( "Cart" );
-		if( cart == null ){
-			cart = new ArrayList();
+
+		@SuppressWarnings("unchecked")
+		List<String> cart = (List<String>)httpSession.getAttribute("Cart");
+		if (cart == null) {
+			cart = new ArrayList<>();
 		}
-		
-		AddToCartActionFormBean atcafb = (AddToCartActionFormBean)form;
-		
-		List productList = (List)httpSession.getAttribute( "ProductList" );
-		
+
+		AddToCartActionFormBean atcafb = (AddToCartActionFormBean) form;
+
+		@SuppressWarnings("unchecked")
+		List<String> productList = (List<String>)httpSession.getAttribute("ProductList");
+
 		String[] selecteItemsArray = atcafb.getSelecteditems();
-		List selectedItems = null;
+		List<String> selectedItems = null;
 
-		if( selecteItemsArray != null &&
-				selecteItemsArray.length != 0 ){
-			selectedItems = Arrays.asList( atcafb.getSelecteditems() );
+		if (selecteItemsArray != null && selecteItemsArray.length != 0) {
+			selectedItems = Arrays.asList(atcafb.getSelecteditems());
 		}
-		
-		List newCart = bookLogic.createCart( productList,
-											 selectedItems,
-											 cart );
-		
-		httpSession.setAttribute( "Cart", newCart );
 
-		List productListAll = bookLogic.getAllBookISBNs();
-		List vProductList = bookLogic.createVBookList(
-										productListAll, newCart );
-		
-		httpSession.setAttribute( "ProductList", productListAll );
-		httpSession.setAttribute( "ProductListView", vProductList );
-		
-		return( mapping.findForward( "Continue" ) );
+		List<String> newCart = bookLogic.createCart(productList, selectedItems, cart);
+
+		httpSession.setAttribute("Cart", newCart);
+
+		List<String> productListAll = bookLogic.getAllBookISBNs();
+		List<VBook> vProductList = bookLogic.createVBookList(productListAll, newCart);
+
+		httpSession.setAttribute("ProductList", productListAll);
+		httpSession.setAttribute("ProductListView", vProductList);
+
+		return (mapping.findForward("Continue"));
 	}
-	
 
-	public void setBookLogic( BookLogic bookLogic ){
+	public void setBookLogic(BookLogic bookLogic) {
 		this.bookLogic = bookLogic;
 	}
 }

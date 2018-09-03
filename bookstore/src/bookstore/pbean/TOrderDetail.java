@@ -19,18 +19,19 @@ import javax.persistence.Table;
 )
 public class TOrderDetail  implements java.io.Serializable {
 
+	private static final long serialVersionUID = 1L;
 
      private int id;
-     private TBook TBook;
-     private TOrder TOrder;
+     private TBook tBook;
+     private TOrder tOrder;
 
     public TOrderDetail() {
     }
 
-    public TOrderDetail(int id, TBook TBook, TOrder TOrder) {
+    public TOrderDetail(int id, TBook tBook, TOrder tOrder) {
        this.id = id;
-       this.TBook = TBook;
-       this.TOrder = TOrder;
+       this.tBook = tBook;
+       this.tOrder = tOrder;
     }
    
      @Id 
@@ -48,21 +49,21 @@ public class TOrderDetail  implements java.io.Serializable {
 @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="BOOK_ID_FK", nullable=false)
     public TBook getTBook() {
-        return this.TBook;
+        return this.tBook;
     }
     
-    public void setTBook(TBook TBook) {
-        this.TBook = TBook;
+    public void setTBook(TBook tBook) {
+        this.tBook = tBook;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="ORDER_ID_FK", nullable=false)
     public TOrder getTOrder() {
-        return this.TOrder;
+        return this.tOrder;
     }
     
-    public void setTOrder(TOrder TOrder) {
-        this.TOrder = TOrder;
+    public void setTOrder(TOrder tOrder) {
+        this.tOrder = tOrder;
     }
 
 

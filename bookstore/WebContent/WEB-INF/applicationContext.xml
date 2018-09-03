@@ -1,9 +1,17 @@
 <?xml version="1.0"?>
-<!DOCTYPE beans PUBLIC
-  "-//SPRING//DTD BEAN//EN"
-  "http://www.springframework.org/dtd/spring-beans.dtd">
 
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<context:annotation-config />
+	<context:component-scan base-package="bookstore" />
+
 	<!-- SessionFactory -->
 	<bean id="sessionFactory"
 			class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
@@ -85,9 +93,10 @@
 			</props>
 		</property>
 	</bean>
-	
-	
+
+
 	<!-- DAOImpl -->
+	<!-- sessionFactoryをautowiredできなかった -->
 	<bean id="BookDAOImplBId" class="bookstore.dao.hibernate.BookDAOImpl">
 		<property name="sessionFactory">
 			<ref local="sessionFactory" />
@@ -111,8 +120,8 @@
 			<ref local="sessionFactory" />
 		</property>
 	</bean>
-	
-	
+
+
 	<!-- Logic Layer -->
 	<bean id="LogicCustomerBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
@@ -165,18 +174,24 @@
 	
 
 	<!-- Logic Layer Implement -->
+	<!-- autowired設定によりコメントアウト化ができた部分 -->
+	<!-- 
 	<bean id="LogicCustomerImplBId" class="bookstore.logic.CustomerLogicImpl">
 		<property name="customerdao">
 			<ref local="CustomerDAOBId" />
 		</property>
 	</bean>
+	 -->
 
+	<!-- 
 	<bean id="LogicBookImplBId" class="bookstore.logic.BookLogicImpl">
 		<property name="bookdao">
 			<ref local="BookDAOBId" />
 		</property>
 	</bean>
+	 -->
 
+	<!-- 
 	<bean id="LogicOrderImplBId" class="bookstore.logic.OrderLogicImpl">
 		<property name="bookdao">
 			<ref local="BookDAOBId" />
@@ -191,6 +206,7 @@
 			<ref local="OrderDetailDAOBId" />
 		</property>
 	</bean>
+	 -->
 
 
 	<!-- Struts Action -->
@@ -238,4 +254,17 @@
 
 	<bean name="/Logout" class="bookstore.action.LogoutAction">
 	</bean>
+
+	<!-- Servlet Layer Implement -->
+	<!-- ServletはSpringで生成されたインスタンスとは別のインスタンスが使用されるので無理
+	<bean name="/bookstore/LoginServlet" class="bookstore.servlet.LoginServlet">
+		<property name="customerLogic">
+			<ref local="LogicCustomerImplBId" />
+		</property>
+		<property name="bookLogic">
+			<ref local="LogicBookImplBId" />
+		</property>
+	</bean>
+	 -->
+
 </beans>

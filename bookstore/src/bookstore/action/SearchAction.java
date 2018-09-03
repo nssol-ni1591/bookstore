@@ -15,49 +15,49 @@ import org.apache.struts.action.ActionMessages;
 
 import bookstore.action.bean.SearchActionFormBean;
 import bookstore.logic.BookLogic;
+import bookstore.vbean.VBook;
 
-public class SearchAction extends Action{
+public class SearchAction extends Action {
 
-	BookLogic bookLogic;
-	
-	public ActionForward execute( ActionMapping mapping,
-								   ActionForm form,
-								   HttpServletRequest req,
-								   HttpServletResponse res ){
+	private BookLogic bookLogic;
 
-		HttpSession httpSession = req.getSession( false );
-		if( httpSession == null ){
-			return( mapping.findForward( "illegalSession" ) );
+	@Override
+	public ActionForward execute(ActionMapping mapping
+			, ActionForm form
+			, HttpServletRequest req
+			, HttpServletResponse res) {
+
+		HttpSession httpSession = req.getSession(false);
+		if (httpSession == null) {
+			return mapping.findForward("illegalSession");
 		}
-		
+
 		ActionMessages errors;
-		
-		List cart = (List) httpSession.getAttribute( "Cart" );
-		
-		SearchActionFormBean safb = (SearchActionFormBean)form;
-		
-		List foundBooks = bookLogic.retrieveBookISBNsByKeyword( safb.getKeyword() );
-		
-		if( foundBooks == null || foundBooks.size() == 0 ){
-			
-			foundBooks = bookLogic.getAllBookISBNs();
-			
-			errors = new ActionMessages();
-			errors.add( "productalart",
-					new ActionMessage( "error.search.notfound" ) );
-			saveMessages( req, errors );
-		}
-		
-		List vProductList = bookLogic.createVBookList(
-											foundBooks, cart );
 
-		httpSession.setAttribute( "ProductList", foundBooks );
-		httpSession.setAttribute( "ProductListView", vProductList );		
-				
-		return( mapping.findForward( "SearchSuccess" ) );
+		@SuppressWarnings("unchecked")
+		List<String> cart = (List<String>) httpSession.getAttribute("Cart");
+
+		SearchActionFormBean safb = (SearchActionFormBean) form;
+
+		List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(safb.getKeyword());
+
+		if (foundBooks == null || foundBooks.isEmpty()) {
+
+			foundBooks = bookLogic.getAllBookISBNs();
+
+			errors = new ActionMessages();
+			errors.add("productalart", new ActionMessage("error.search.notfound"));
+			saveMessages(req, errors);
+		}
+
+		List<VBook> vProductList = bookLogic.createVBookList(foundBooks, cart);
+
+		httpSession.setAttribute("ProductList", foundBooks);
+		httpSession.setAttribute("ProductListView", vProductList);
+
+		return (mapping.findForward("SearchSuccess"));
 	}
-	
-	
+
 	public void setBookLogic(BookLogic bookLogic) {
 		this.bookLogic = bookLogic;
 	}

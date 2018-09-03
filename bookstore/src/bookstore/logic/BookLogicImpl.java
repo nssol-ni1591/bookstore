@@ -4,101 +4,96 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
 import bookstore.dao.BookDAO;
 import bookstore.pbean.TBook;
 import bookstore.vbean.VBook;
 import bookstore.vbean.VCheckout;
 
-public class BookLogicImpl implements BookLogic{
+@Component("LogicBookImplBId")
+public class BookLogicImpl implements BookLogic {
 
-	BookDAO bookdao;
+	@Autowired @Qualifier("BookDAOBId") BookDAO bookdao;
 
-	public List getAllBookISBNs() {
+	public List<String> getAllBookISBNs() {
 
-		Iterator iter = bookdao.retrieveBooksByISBNs( null ).iterator();
-		List<String> isbns = new ArrayList<String>();
+		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(null).iterator();
+		List<String> isbns = new ArrayList<>();
 
-		while( iter.hasNext() ){
-			TBook book = (TBook)iter.next();
-			isbns.add( book.getIsbn() );
+		while (iter.hasNext()) {
+			TBook book = iter.next();
+			isbns.add(book.getIsbn());
 		}
 
-		return( isbns );
+		return isbns;
 	}
 
+	public List<String> retrieveBookISBNsByKeyword(String inKeyword) {
 
-	public List retrieveBookISBNsByKeyword(String inKeyword) {
+		Iterator<TBook> iter = bookdao.retrieveBooksByKeyword(inKeyword).iterator();
+		List<String> isbns = new ArrayList<>();
 
-		Iterator iter = bookdao.retrieveBooksByKeyword( inKeyword ).iterator();
-		List<String> isbns = new ArrayList<String>();
-
-		while( iter.hasNext() ){
-			TBook book = (TBook)iter.next();
-			isbns.add( book.getIsbn() );
+		while (iter.hasNext()) {
+			TBook book = iter.next();
+			isbns.add(book.getIsbn());
 		}
-
-		return( isbns );
+		return isbns;
 	}
 
+	public List<VBook> createVBookList(List<String> inProductList, List<String> inSelectedList) {
 
-	public List createVBookList(List inProductList, List inSelectedList) {
+		List<VBook> vArrayList = new ArrayList<>();
+		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(inProductList).iterator();
 
-		List<VBook> vArrayList = new ArrayList<VBook>();
-		Iterator iter = bookdao.retrieveBooksByISBNs( inProductList ).iterator();
+		while (iter.hasNext()) {
+			TBook currentBook = iter.next();
+			VBook currentVBook = new VBook(currentBook);
 
-		while( iter.hasNext() ){
-			TBook currentBook  = (TBook)iter.next();
-			VBook currentVBook = new VBook( currentBook );
+			currentVBook.setSelected(false);
 
-			currentVBook.setSelected( false );
-
-			if( inSelectedList != null && inSelectedList.size() != 0 ){
-				if( inSelectedList.contains( currentBook.getIsbn() ) ){
-					currentVBook.setSelected( true );
-				}
+			if (inSelectedList != null && !inSelectedList.isEmpty() && inSelectedList.contains(currentBook.getIsbn())) {
+				currentVBook.setSelected(true);
 			}
 
-			vArrayList.add( currentVBook );
+			vArrayList.add(currentVBook);
 		}
-		return( vArrayList );
+		return vArrayList;
 	}
 
-
-	public VCheckout createVCheckout( List inSelectedList ){
+	public VCheckout createVCheckout(List<String> inSelectedList) {
 
 		VCheckout vc = new VCheckout();
-		vc.setTotal( bookdao.getPriceByISBNs( inSelectedList ) );
+		vc.setTotal(bookdao.getPriceByISBNs(inSelectedList));
 
-		List<VBook> viewList = new ArrayList<VBook>();
-		
-		Iterator iter = bookdao.retrieveBooksByISBNs( inSelectedList ).iterator();
-		
-		while( iter.hasNext() ){
-			TBook currentBook = (TBook)iter.next();
-			VBook vb = new VBook( currentBook );
+		List<VBook> viewList = new ArrayList<>();
 
-			vb.setSelected(true );
-			viewList.add( vb );
+		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(inSelectedList).iterator();
+
+		while (iter.hasNext()) {
+			TBook currentBook = iter.next();
+			VBook vb = new VBook(currentBook);
+
+			vb.setSelected(true);
+			viewList.add(vb);
 		}
-		vc.setSelecteditems( viewList );
-		return( vc );
+		vc.setSelecteditems(viewList);
+		return (vc);
 	}
 
+	public List<String> createCart(List<String> inProductList, List<String> inSelectedList, List<String> inCart) {
 
-	public List createCart( List inProductList, 
-							 List inSelectedList,
-							 List inCart ){
-
-		inCart.removeAll( inProductList );
-		if( inSelectedList != null &&
-			inSelectedList.size() != 0 ){
-			inCart.addAll( inSelectedList );
+		inCart.removeAll(inProductList);
+		if (inSelectedList != null && !inSelectedList.isEmpty()) {
+			inCart.addAll(inSelectedList);
 		}
-		return( inCart );
+		return (inCart);
 	}
 
-
-	public void setBookdao( BookDAO bookdao ){
+	public void setBookdao(BookDAO bookdao) {
 		this.bookdao = bookdao;
 	}
+
 }

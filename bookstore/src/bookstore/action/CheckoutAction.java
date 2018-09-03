@@ -16,39 +16,38 @@ import org.apache.struts.action.ActionMessages;
 import bookstore.logic.BookLogic;
 
 public class CheckoutAction extends Action {
-	
-	BookLogic bookLogic;
-	
-	public ActionForward execute( ActionMapping mapping,
-				      ActionForm form,
-				      HttpServletRequest req,
-				      HttpServletResponse res ) {
 
-		HttpSession httpSession = req.getSession( false );
-		if( httpSession == null ){
-			return( mapping.findForward( "illegalSession" ) );
+	private BookLogic bookLogic;
+
+	@Override
+	public ActionForward execute(ActionMapping mapping
+			, ActionForm form
+			, HttpServletRequest req
+			, HttpServletResponse res) {
+
+		HttpSession httpSession = req.getSession(false);
+		if (httpSession == null) {
+			return (mapping.findForward("illegalSession"));
 		}
-		
-		List selectedItems = (List)httpSession.getAttribute( "Cart" );
 
-		if( selectedItems == null || selectedItems.size() == 0 ){
+		@SuppressWarnings("unchecked")
+		List<String> selectedItems = (List<String>) httpSession.getAttribute("Cart");
+
+		if (selectedItems == null || selectedItems.isEmpty()) {
 
 			ActionMessages errors = new ActionMessages();
-			
-			errors.add( "productalart",
-					new ActionMessage( "error.checkout.noselected" ) );
-			saveMessages( req, errors );
-			return( mapping.findForward( "illegalCheckout" ) );
-		}
-		
-		httpSession.setAttribute( "ItemsToBuy",
-					bookLogic.createVCheckout( selectedItems ) );
-		
-		return( mapping.findForward( "ToCheck" ) );
-	}
-	
 
-	public void setBookLogic( BookLogic bookLogic ){
+			errors.add("productalart", new ActionMessage("error.checkout.noselected"));
+			saveMessages(req, errors);
+			return (mapping.findForward("illegalCheckout"));
+		}
+
+		httpSession.setAttribute("ItemsToBuy", bookLogic.createVCheckout(selectedItems));
+
+		return (mapping.findForward("ToCheck"));
+	}
+
+	public void setBookLogic(BookLogic bookLogic) {
 		this.bookLogic = bookLogic;
 	}
 }

@@ -4,67 +4,52 @@ import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;
 import bookstore.vbean.VCustomer;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
+@Component("LogicCustomerImplBId")
 public class CustomerLogicImpl implements CustomerLogic {
-	
-	CustomerDAO customerdao;
-	
-	public boolean isAlreadyExsited( String inUid ){
-		
-		int customernum = customerdao.getCustomerNumberByUid( inUid );
-		
-		if( customernum != 0 ){
-			return( true );
-		}else{
-			return( false );
-		}
+
+	@Autowired @Qualifier("CustomerDAOBId") CustomerDAO customerdao;
+
+	public boolean isAlreadyExsited(String inUid) {
+		return customerdao.getCustomerNumberByUid(inUid) != 0;
 	}
 
-	
-	public boolean createCustomer( String inUid,
-									 String inPassword,
-									 String inName,
-									 String inEmail ){
+	public boolean createCustomer(String inUid, String inPassword, String inName, String inEmail) {
 
-		if( isAlreadyExsited( inUid ) ){
-			return( false );
+		if (isAlreadyExsited(inUid)) {
+			return false;
 		}
-		
-		String passwordMD5 = getStringDigest( inPassword );
-		
-		customerdao.saveCustomer( inUid, passwordMD5, inName, inEmail );
-		
-		return( true );
+
+		String passwordMD5 = getStringDigest(inPassword);
+
+		customerdao.saveCustomer(inUid, passwordMD5, inName, inEmail);
+
+		return true;
 	}
-	
 
 	public boolean isPasswordMatched(String inUid, String inPassword) {
 
-		if( !isAlreadyExsited( inUid ) ){
-			return( false );			
+		if (!isAlreadyExsited(inUid)) {
+			return false;
 		}
-		
-		TCustomer customer = customerdao.findCustomerByUid( inUid );
-		if( customer.getPasswordmd5()
-				.equals( getStringDigest( inPassword ) ) == false ){
-			return( false );	
-		}
-		return( true );
+
+		TCustomer customer = customerdao.findCustomerByUid(inUid);
+		return customer.getPasswordmd5().equals(getStringDigest(inPassword));
 	}
 
-	
 	public VCustomer createVCustomer(String inUid) {
-		return( new VCustomer( 
-					customerdao.findCustomerByUid( inUid ) ) );
-	}
-	
-	
-	private static String getStringDigest( String inString ){
-		return( DigestUtils.md5Hex( inString + "digested" ) );
+		return new VCustomer(customerdao.findCustomerByUid(inUid));
 	}
 
+	private static String getStringDigest(String inString) {
+		return DigestUtils.md5Hex(inString + "digested");
+	}
 
-	public void setCustomerdao( CustomerDAO inCdao ){
+	public void setCustomerdao(CustomerDAO inCdao) {
 		this.customerdao = inCdao;
 	}
+
 }

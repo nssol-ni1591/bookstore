@@ -1,82 +1,68 @@
 package bookstore.dao.hibernate;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.springframework.orm.hibernate3.HibernateCallback;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.stereotype.Repository;
 
 import bookstore.dao.BookDAO;
+import bookstore.pbean.TBook;
 
-public class BookDAOImpl
-  extends HibernateDaoSupport
-  implements BookDAO{
+@Repository("BookDAOImplBId")
+public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 
-  public int getPriceByISBNs(final List inISBNList) {
-    HibernateTemplate ht = getHibernateTemplate();
-    return( ((Integer)ht.execute(new HibernateCallback() {
-	public Object doInHibernate(Session session)
-	  throws HibernateException {
-	  Query priceQuery = session
-	    .createQuery("select sum( book.price ) from TBook book where book.isbn in ( :SELECTED_ITEMS )");
-	  priceQuery.setParameterList("SELECTED_ITEMS", inISBNList);
+	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
 
-	  try {
-	    Thread.currentThread().sleep(10000);
-	  }
-	  catch (InterruptedException ex) { }
-	  return( (Integer)priceQuery.uniqueResult() );
+	@Override
+	public int getPriceByISBNs(final List<String> inISBNList) {
+		HibernateTemplate ht = getHibernateTemplate();
+		return ht.execute(session -> {
+			Query priceQuery = 
+					session.createQuery("select sum( book.price ) from TBook book where book.isbn in ( :SELECTED_ITEMS )");
+			priceQuery.setParameterList("SELECTED_ITEMS", inISBNList);
+			return (Long)priceQuery.uniqueResult();
+		}).intValue();
 	}
-      } )).intValue() );
-  }
 
+	@Override
+	public List<TBook> retrieveBooksByKeyword(String inKeyword) {
+		String escapedKeyword = Pattern.compile("([%_])").matcher(inKeyword).replaceAll("\\\\$1");
+		Object[] keywords = { "%" + escapedKeyword + "%", "%" + escapedKeyword + "%", "%" + escapedKeyword + "%" };
 
-  public List retrieveBooksByKeyword(String inKeyword) {
-    String escapedKeyword = Pattern.compile( "([%_])" )
-      .matcher( inKeyword )
-      .replaceAll( "\\\\$1" );
-    String[] keywords = { "%" + escapedKeyword + "%",
-			  "%" + escapedKeyword + "%",
-			  "%" + escapedKeyword + "%" };
+		@SuppressWarnings("unchecked")
+		List<TBook> booksList = (List<TBook>)getHibernateTemplate()
+				.find("from TBook book where book.author like ?" + "or book.title like ? or book.publisher like ?",
+						keywords);
+		return booksList;
+	}
 
-    List booksList = getHibernateTemplate().find("from TBook book where book.author like ?" +
-						 "or book.title like ? or book.publisher like ?" ,
-						 keywords );
-    return( booksList );
-  }
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TBook> retrieveBooksByISBNs(final List<String> inISBNList) {
 
+		HibernateTemplate ht = getHibernateTemplate();
 
-  public List retrieveBooksByISBNs( final List inISBNList ){
+		if (inISBNList == null) {
+			return ht.find("from TBook book");
+		}
+		else {
+			return ht.execute(session -> {
+				Query retrieveQuery = session.createQuery("from TBook book where book.isbn in ( :ISBNS )");
+				retrieveQuery.setParameterList("ISBNS", inISBNList);
 
-    HibernateTemplate ht = getHibernateTemplate();
-		
-    if( inISBNList == null ){
-      return( ht.find( "from TBook book" ) );
-    }else{
-		
-      return( ((List)ht.execute(new HibernateCallback() {
-
-	  public Object doInHibernate(Session session)
-	    throws HibernateException {
-
-	    Query retrieveQuery = session
-	      .createQuery("from TBook book where book.isbn in ( :ISBNS )");
-	    retrieveQuery.setParameterList("ISBNS", inISBNList);
-
-	    System.out.println("inISBNList=\"" + inISBNList + "\"");
-	    System.out.println("retrieveQuery=\"" + retrieveQuery + "\"");
-
-	    try {
-	      Thread.currentThread().sleep(10000);
-	    }
-	    catch (InterruptedException ex) { }
-	    return( retrieveQuery.list() );
-	  }
-	} )));
-    }
-  }
+				Logger.getLogger(BookDAOImpl.class.getName()).log(Level.INFO, "inISBNList={0}", retrieveQuery);
+				Logger.getLogger(BookDAOImpl.class.getName()).log(Level.INFO, "retrieveQuery={0}", retrieveQuery);
+				return retrieveQuery.list();
+				
+			});
+		}
+	}
 }

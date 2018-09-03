@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-
-<!DOCTYPE web-app
-        PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-        "http://java.sun.com/dtd/web-app_2_3.dtd">
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
+
 	<filter>
 		<filter-name>Set Character Encoding</filter-name>
 		<filter-class>filters.SetCharacterEncodingFilter</filter-class>
@@ -59,6 +58,68 @@
 		<load-on-startup>10</load-on-startup>
 	</servlet>
 
+	<servlet>
+		<servlet-name>LoginServlet</servlet-name>
+		<servlet-class>bookstore.servlet.LoginServlet</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>CreateUserServlet</servlet-name>
+		<servlet-class>bookstore.servlet.CreateUserServlet</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>SearchServlet</servlet-name>
+		<servlet-class>bookstore.servlet.SearchServlet</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>AddToCartServlet</servlet-name>
+		<servlet-class>bookstore.servlet.AddToCartServlet</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>CheckoutServlet</servlet-name>
+		<servlet-class>bookstore.servlet.CheckoutServlet</servlet-class>
+	</servlet>
+
+
+	<servlet>
+		<servlet-name>OrderServlet</servlet-name>
+		<servlet-class>bookstore.servlet.OrderServlet</servlet-class>
+	</servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>OrderServlet</servlet-name>
+		<url-pattern>/OrderServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>CheckoutServlet</servlet-name>
+		<url-pattern>/CheckoutServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>AddToCartServlet</servlet-name>
+		<url-pattern>/AddToCartServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>SearchServlet</servlet-name>
+		<url-pattern>/SearchServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>CreateUserServlet</servlet-name>
+		<url-pattern>/CreateUserServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>LoginServlet</servlet-name>
+		<url-pattern>/LoginServlet</url-pattern>
+	</servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>action</servlet-name>
 		<url-pattern>*.do</url-pattern>
@@ -70,7 +131,7 @@
 	</servlet-mapping>
 
 	<welcome-file-list>
-		<welcome-file>Login.do</welcome-file>
+		<welcome-file>index.vm</welcome-file>
 	</welcome-file-list>
 
 </web-app>

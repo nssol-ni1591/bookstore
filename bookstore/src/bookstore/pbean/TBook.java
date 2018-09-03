@@ -20,14 +20,15 @@ import javax.persistence.Table;
 )
 public class TBook  implements java.io.Serializable {
 
+	private static final long serialVersionUID = 1L;
 
-     private int id;
+	private int id;
      private String isbn;
      private String title;
      private String author;
      private String publisher;
      private int price;
-     private Set<TOrderDetail> TOrderDetails = new HashSet<TOrderDetail>(0);
+     private Set<TOrderDetail> tOrderDetails = new HashSet<>(0);
 
     public TBook() {
     }
@@ -41,14 +42,14 @@ public class TBook  implements java.io.Serializable {
         this.publisher = publisher;
         this.price = price;
     }
-    public TBook(int id, String isbn, String title, String author, String publisher, int price, Set<TOrderDetail> TOrderDetails) {
+    public TBook(int id, String isbn, String title, String author, String publisher, int price, Set<TOrderDetail> tOrderDetails) {
        this.id = id;
        this.isbn = isbn;
        this.title = title;
        this.author = author;
        this.publisher = publisher;
        this.price = price;
-       this.TOrderDetails = TOrderDetails;
+       this.tOrderDetails = tOrderDetails;
     }
    
      @Id 
@@ -113,13 +114,13 @@ public class TBook  implements java.io.Serializable {
         this.price = price;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="TBook")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="TBook")
     public Set<TOrderDetail> getTOrderDetails() {
-        return this.TOrderDetails;
+        return this.tOrderDetails;
     }
     
-    public void setTOrderDetails(Set<TOrderDetail> TOrderDetails) {
-        this.TOrderDetails = TOrderDetails;
+    public void setTOrderDetails(Set<TOrderDetail> tOrderDetails) {
+        this.tOrderDetails = tOrderDetails;
     }
 
 

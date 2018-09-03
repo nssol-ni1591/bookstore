@@ -20,13 +20,14 @@ import javax.persistence.Table;
 )
 public class TCustomer  implements java.io.Serializable {
 
+	private static final long serialVersionUID = 1L;
 
      private int id;
      private String username;
      private String passwordmd5;
      private String name;
      private String email;
-     private Set<TOrder> TOrders = new HashSet<TOrder>(0);
+     private Set<TOrder> torders = new HashSet<>(0);
 
     public TCustomer() {
     }
@@ -39,13 +40,13 @@ public class TCustomer  implements java.io.Serializable {
         this.name = name;
         this.email = email;
     }
-    public TCustomer(int id, String username, String passwordmd5, String name, String email, Set<TOrder> TOrders) {
+    public TCustomer(int id, String username, String passwordmd5, String name, String email, Set<TOrder> torders) {
        this.id = id;
        this.username = username;
        this.passwordmd5 = passwordmd5;
        this.name = name;
        this.email = email;
-       this.TOrders = TOrders;
+       this.torders = torders;
     }
    
      @Id 
@@ -102,11 +103,11 @@ public class TCustomer  implements java.io.Serializable {
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="TCustomer")
     public Set<TOrder> getTOrders() {
-        return this.TOrders;
+        return this.torders;
     }
     
-    public void setTOrders(Set<TOrder> TOrders) {
-        this.TOrders = TOrders;
+    public void setTOrders(Set<TOrder> torders) {
+        this.torders = torders;
     }
 
 
