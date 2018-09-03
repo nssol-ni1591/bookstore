@@ -12,27 +12,47 @@
 	<context:annotation-config />
 	<context:component-scan base-package="test" />
  
-	<!-- SessionFactory -->
-	<!-- 
-	<bean id="sessionFactory"
-			class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
-		<property name="configLocation">
-			<value>/WEB-INF/hibernate.cfg.xml</value>
-		</property>
+ 	<!-- 
+	<bean name="english" class="test.dao.English">
 	</bean>
-	 -->
+ 	 -->
+
+	<!-- In spring 3.2.x, only value of 'singleton' or 'prototype' can be obtain  -->
+	<bean name="JapaneseBId" class="test.dao.Japanese" scope="prototype">
+	</bean>
+
+	<bean name="ChaineseBId" class="test.dao.Chainese">
+	</bean>
 <!-- 
-	<bean name="EnglishBid" class="test.dao.English">
+	<bean name="/TestServlet" class="test.servlet.TestServlet">
+		<property name="speaker2">
+			<ref local="JapaneseBId" />
+		</property>
 	</bean>
  -->
 
-	<!-- 
-	<bean name="HelloLogicBid" class="test.logic.HelloLogic">
-		<property name="speaker">
-			<ref local="EnglishBid" />
+	<bean name="HelloLogicBId" class="test.logic.HelloLogic">
+		<property name="speaker2">
+			<!--
+			<ref local="english" />
+			<ref local="JapaneseBId" />
+			<ref local="ChaineseBId" />
+			 -->
+			<ref local="JapaneseBId" />
 		</property>
 	</bean>
 
+ <!-- デフォルトの参照ができない。valueによる参照が必要
+	org.springframework.beans.factory.NoUniqueBeanDefinitionException:
+ 	 No qualifying bean of type [test.logic.HelloLogic] is defined: expected single matching bean but found 2:
+ 	 helloLogic,hellologic -->
+	<bean name="hellologic" class="test.logic.HelloLogic">
+		<property name="speaker2">
+			<ref local="JapaneseBId" />
+		</property>
+	</bean>
+
+	<!-- 
 	<bean name="HelloBid" class="test.logic.Hello">
 		<property name="target">
 			<ref local="HelloLogicBid" />

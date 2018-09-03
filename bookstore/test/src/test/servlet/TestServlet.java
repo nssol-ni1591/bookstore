@@ -10,10 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import test.dao.Speaker;
-import test.logic.Hello;
 import test.logic.HelloLogic;
 
 /**
@@ -24,8 +23,8 @@ public class TestServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	@Autowired Speaker speaker;
-	@Autowired Hello logic;
+	@Autowired @Qualifier("HelloLogicBId") HelloLogic logic;
+	//@Autowired HelloLogic logic;	// NG
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -45,8 +44,18 @@ public class TestServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append(logic.hello()).append(" Served at: ").append(request.getContextPath());
-		response.getWriter().append(speaker.say()).append(" Served at: ").append(request.getContextPath());
+		response.setContentType("text/plain;charset=utf-8");
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+		response.getWriter().println();
+
+		response.getWriter().append("hello1: ").append(logic.hello1());
+		response.getWriter().println();
+
+		response.getWriter().append("hello2: ").append(logic.hello2());
+		response.getWriter().println();
+
+		response.getWriter().append("hello3: ").append(logic.hello3());
+		response.getWriter().println();
 	}
 
 	/**
@@ -56,4 +65,8 @@ public class TestServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
+	public void setLogic(HelloLogic logic) {
+		System.out.println("setLogic: logic=" + logic);
+		this.logic = logic;
+	}
 }
