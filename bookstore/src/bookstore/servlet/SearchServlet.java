@@ -13,10 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bookstore.logic.BookLogic;
-import bookstore.logic.wrapper.BookLogicWrapper;
+import bookstore.logic.jpa.BookLogicWrapper;
 import bookstore.util.Messages;
 import bookstore.vbean.VBook;
 
+/*
+ * Logic LayerÇÃéQè∆Ç≈DAOÇêÿë÷Ç¶ÇÈ
+ * ÅEjdbc native - bookstore.logic.wrapper.xxxxLogicWrapper
+ * ÅEeclipselink - bookstore.logic.jpa.xxxxLogicWrapper
+ */
 public class SearchServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;

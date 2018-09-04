@@ -49,10 +49,9 @@ public class TCustomer  implements java.io.Serializable {
        this.torders = torders;
     }
    
-     @Id 
-
-    
-    @Column(name="ID", nullable=false, precision=22, scale=0, insertable=false, updatable=false)
+    @Id 
+    //@Column(name="ID", nullable=false, precision=22, scale=0, insertable=false, updatable=false)
+    @Column(name="ID", nullable=false, precision=22, scale=0)
     public int getId() {
         return this.id;
     }

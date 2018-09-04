@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 import bookstore.dao.OrderDAO;
@@ -14,7 +15,8 @@ import bookstore.pbean.TOrder;
 public class OrderDAOImpl implements OrderDAO {
 
 	@PersistenceContext(unitName = "BookStore")
-	private EntityManager em;
+	//private EntityManager em;
+	private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager();
 
 	@Override
 	public List<TOrder> retrieveOrders(List<String> orderIdList) {

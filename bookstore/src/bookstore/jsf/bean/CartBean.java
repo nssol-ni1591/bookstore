@@ -28,7 +28,7 @@ public class CartBean {
 
 
 	public CartBean() {
-		System.out.println("CartAction<init>: called.");
+		System.out.println("CartBean<init>: called.");
 	}
 
 	public SessionBean getSession() {
@@ -50,7 +50,7 @@ public class CartBean {
 	}
 
 	public String checkCart() {
-		System.out.println("CartAction.checkCart: this=" + this);
+		System.out.println("CartBean.checkCart: this=" + this);
 
 		List<String> cart = session.getCart();
 		if (cart == null || cart.isEmpty()) {
@@ -69,7 +69,7 @@ public class CartBean {
 	}
 
 	public String clearCart() {
-		System.out.println("CartAction.clearCart: this=" + this);
+		System.out.println("CartBean.clearCart: this=" + this);
 
 		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"info.cart.clear", "[info.cart.clear]Ç≈Ç∑ÅB");

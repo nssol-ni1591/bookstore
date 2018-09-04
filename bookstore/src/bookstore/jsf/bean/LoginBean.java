@@ -4,6 +4,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -40,11 +42,11 @@ public class LoginBean {
 	}
 
 	public String login() {
-		System.out.println("LoginAction.login: this=" + this);
+		System.out.println("LoginBean.login: this=" + this);
 
 		// password match
 		if (!customerLogic.isPasswordMatched(getUid(), getPasswd())) {
-			// Account Mismached
+			// Account mismatched
 			//setMessage("error.login.pwmismatch");
 			// new FacesMessage(メッセージレベル, サマリーメッセージ, 詳細メッセージ);
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -60,10 +62,11 @@ public class LoginBean {
 	}
 
 	public void setSession(SessionBean session) {
+		System.out.println("LoginBean.setSession: session=" + session + ", this=" + this);
 		this.session = session;
 	}
 	public void setCustomerLogic(CustomerLogic customerLogic) {
-		System.out.println("LoginAction.setCustomerLogic: customerLogic=" + customerLogic);
+		System.out.println("LoginBean.setCustomerLogic: customerLogic=" + customerLogic + ", this=" + this);
 		this.customerLogic = customerLogic;
 	}
 }

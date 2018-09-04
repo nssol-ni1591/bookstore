@@ -11,9 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bookstore.logic.CustomerLogic;
-import bookstore.logic.wrapper.CustomerLogicWrapper;
+import bookstore.logic.jpa.CustomerLogicWrapper;
 import bookstore.util.Messages;
 
+/*
+ * Logic LayerÇÃéQè∆Ç≈DAOÇêÿë÷Ç¶ÇÈ
+ * ÅEjdbc native - bookstore.logic.wrapper.xxxxLogicWrapper
+ * ÅEeclipselink - bookstore.logic.jpa.xxxxLogicWrapper
+ */
 public class CreateUserServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;

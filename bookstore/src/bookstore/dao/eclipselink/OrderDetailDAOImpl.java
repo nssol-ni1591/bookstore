@@ -1,6 +1,7 @@
 package bookstore.dao.eclipselink;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 import bookstore.dao.OrderDetailDAO;
@@ -11,7 +12,8 @@ import bookstore.pbean.TOrderDetail;
 public class OrderDetailDAOImpl implements OrderDetailDAO {
 
 	@PersistenceContext(unitName = "BookStore")
-	private EntityManager em;
+	//private EntityManager em;
+	private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager();
 
 	@Override
 	public void createOrderDetail(TOrder inOrder, TBook inBook) {

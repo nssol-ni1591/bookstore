@@ -267,4 +267,65 @@
 	</bean>
 	 -->
 
+	<!-- JSF Layer -->
+
+	<!-- session -->
+	<bean id="sessionBId" class="bookstore.session.SessionBean">
+	</bean>
+
+	<!-- Action -->
+	<bean name="accountAction" class="bookstore.jsf.bean.AccountBean">
+		<property name="customerLogic">
+			<ref local="LogicCustomerImplBId" />
+		</property>
+	</bean>
+
+	<bean name="cartBean" class="bookstore.jsf.bean.CartBean">
+		<property name="session">
+			<ref local="sessionBId" />
+		</property>
+		<property name="bookLogic">
+			<ref local="LogicBookImplBId" />
+		</property>
+	</bean>
+
+	<bean name="loginBean" class="bookstore.jsf.bean.LoginBean" >
+		<property name="session">
+			<ref local="sessionBId" />
+		</property>
+		<property name="customerLogic">
+			<ref local="LogicCustomerImplBId" />
+		</property>
+	</bean>
+
+	<bean name="logoutBean" class="bookstore.jsf.bean.LogoutBean">
+		<property name="session">
+			<ref local="sessionBId" />
+		</property>
+	</bean>
+
+	<bean name="orderBean" class="bookstore.jsf.bean.OrderBean">
+		<property name="session">
+			<ref local="sessionBId" />
+		</property>
+		<property name="bookLogic">
+			<ref local="LogicBookImplBId" />
+		</property>
+		<property name="customerLogic">
+			<ref local="LogicCustomerImplBId" />
+		</property>
+		<property name="orderLogic">
+			<ref local="LogicOrderImplBId" />
+		</property>
+	</bean>
+
+	<bean name="searchBean" class="bookstore.jsf.bean.SearchBean">
+		<property name="session">
+			<ref local="sessionBId" />
+		</property>
+		<property name="bookLogic">
+			<ref local="LogicBookImplBId" />
+		</property>
+	</bean>
+
 </beans>

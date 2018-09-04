@@ -1,6 +1,7 @@
 package bookstore.dao.eclipselink;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import bookstore.dao.CustomerDAO;
@@ -9,7 +10,8 @@ import bookstore.pbean.TCustomer;
 public class CustomerDAOImpl implements CustomerDAO {
 
 	@PersistenceContext(unitName = "BookStore")
-	private EntityManager em;
+	//private EntityManager em;
+	private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager();
 
 	@Override
 	public int getCustomerNumberByUid(String inUid) {

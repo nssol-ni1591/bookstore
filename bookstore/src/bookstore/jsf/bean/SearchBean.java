@@ -30,7 +30,7 @@ public class SearchBean {
 
 
 	public SearchBean() {
-		System.out.println("SearchAction<init>: called.");
+		System.out.println("SearchBean<init>: called.");
 	}
 
 	public String getKeyword() {
@@ -49,21 +49,21 @@ public class SearchBean {
 			keyword = null;
 		}
 		bookList = bookLogic.createVBookList(foundBooks, session.getSelectedBooks());
-		System.out.println("SearchAction.getBookList: bookList.size=" + (bookList == null ? 0 : bookList.size()) + ", bookList=" + bookList);
+		System.out.println("SearchBean.getBookList: bookList.size=" + (bookList == null ? 0 : bookList.size()) + ", bookList=" + bookList);
 		return bookList;
 	}
 
 
 	public String search() {
-		System.out.println("SearchAction.search: this=" + this);
+		System.out.println("SearchBean.search: this=" + this);
 
 		if (session.getUid() == null) {
 			return "illegalSession";
 		}
 
-		System.out.println("SearchAction.search: keyword=" + getKeyword());
+		System.out.println("SearchBean.search: keyword=" + getKeyword());
 		List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(getKeyword());
-		System.out.println("SearchAction.search: foundBooks.size=" + (foundBooks == null ? 0 : foundBooks.size()) + ", foundBooks=" + foundBooks);
+		System.out.println("SearchBean.search: foundBooks.size=" + (foundBooks == null ? 0 : foundBooks.size()) + ", foundBooks=" + foundBooks);
 
 		if (foundBooks == null || foundBooks.isEmpty()) {
 			foundBooks = bookLogic.getAllBookISBNs();
@@ -73,7 +73,7 @@ public class SearchBean {
 		}
 
 		bookList = bookLogic.createVBookList(foundBooks, session.getSelectedBooks());
-		System.out.println("SearchAction.search: bookList.size=" + (bookList == null ? 0 : bookList.size()) + ", bookList=" + bookList);
+		System.out.println("SearchBean.search: bookList.size=" + (bookList == null ? 0 : bookList.size()) + ", bookList=" + bookList);
 
 		session.setFoundBooks(foundBooks);
 
@@ -81,20 +81,20 @@ public class SearchBean {
 	}
 
 	public String addToCart() {
-		System.out.println("AddToCartAction.addToCart: this=" + this);
+		System.out.println("SearchBean.addToCart: this=" + this);
 
 		if (session.getUid() == null) {
 			return "illegalSession";
 		}
 
 		List<String> cart = session.getCart();
-		System.out.println("SearchAction.addToCart: cart.size=" + (cart == null ? 0 : cart.size()) + ", cart=" + cart);
+		System.out.println("SearchBean.addToCart: cart.size=" + (cart == null ? 0 : cart.size()) + ", cart=" + cart);
 
 		List<String> foundBooks = session.getFoundBooks();
-		System.out.println("SearchAction.addToCart: foundBooks.size=" + (foundBooks == null ? 0 : foundBooks.size()) + ", foundBooks=" + foundBooks);
+		System.out.println("SearchBean.addToCart: foundBooks.size=" + (foundBooks == null ? 0 : foundBooks.size()) + ", foundBooks=" + foundBooks);
 
 		List<String> selectedBooks = session.getSelectedBooks();
-		System.out.println("AddToCartAction.addToCart: selectedBooks.size=" + (selectedBooks == null ? 0 : selectedBooks.size()) + ", selectedBooks=" + selectedBooks);
+		System.out.println("SearchBean.addToCart: selectedBooks.size=" + (selectedBooks == null ? 0 : selectedBooks.size()) + ", selectedBooks=" + selectedBooks);
 		if (selectedBooks == null || selectedBooks.isEmpty()) {
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "error.selected.notfound", "[error.selected.notfound]‚Å‚·B");
 			FacesContext fc = FacesContext.getCurrentInstance();
@@ -127,19 +127,19 @@ public class SearchBean {
 
 		if ("true".equals(e.getNewValue().toString())) {
 			if (selectedBooks.contains(label)) {
-				System.out.println("SearchAction.selectValueChange: item found => skip. cb.label=" + cb.getLabel());
+				System.out.println("SearchBean.selectValueChange: item found => skip. cb.label=" + cb.getLabel());
 				return;
 			}
-			System.out.println("SearchAction.selectValueChange: item not found => add. cb.label=" + cb.getLabel());
+			System.out.println("SearchBean.selectValueChange: item not found => add. cb.label=" + cb.getLabel());
 			selectedBooks.add(label);
 		}
 		else {
 			if (selectedBooks.contains(label)) {
-				System.out.println("SearchAction.selectValueChange: item found => remove. cb.label=" + cb.getLabel());
+				System.out.println("SearchBean.selectValueChange: item found => remove. cb.label=" + cb.getLabel());
 				selectedBooks.remove(label);
 				return;
 			}
-			System.out.println("SearchAction.selectValueChange: item not found => skip. cb.label=" + cb.getLabel());
+			System.out.println("SearchBean.selectValueChange: item not found => skip. cb.label=" + cb.getLabel());
 		}
 	}
 
