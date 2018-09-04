@@ -36,7 +36,7 @@ public class DB {
 		String driver = props.getProperty(env + ".driver");
 		String url = props.getProperty(env + ".url");
 
-		log.log(Level.FINE, "jdbc.env={0}, url={1}, driver={2}", new Object[] { env, url, driver });
+		log.log(Level.INFO, "jdbc.env={0}, url={1}, driver={2}", new Object[] { env, url, driver });
 
 		if (driver != null && !driver.isEmpty()) {
 			// derby, ojdbc8‚Ìê‡‚ÍJDBC4.0‚É‘Î‰‚µ‚Ä‚¢‚é‚Ì‚ÅClass.forName()‚Í•K—v‚È‚¢

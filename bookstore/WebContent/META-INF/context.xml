@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+	<Resource
+		name="jdbc/bookstoreDS"
+		auth="Container"
+		type="javax.sql.DataSource"
+		factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+		maxActive="5"
+		maxIdle="2"
+		maxWait="-1"
+		username="bookstore"
+		password="bookstore"
+		driverClassName="org.apache.derby.jdbc.ClientDriver"
+		url="jdbc:derby://localhost:1527/bookstore" />
+</Context>

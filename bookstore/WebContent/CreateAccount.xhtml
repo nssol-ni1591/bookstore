@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="resources/templates/template.xhtml">
+	<ui:define name="title">
+	アカウント作成
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form>
+			<h:panelGrid border="1" columns="2">
+				<h:outputText value="氏名:"></h:outputText>
+
+				<h:inputText value="#{accountBean.name}"></h:inputText>
+				<h:outputText value="E-Mail:"></h:outputText>
+				<h:inputText value="#{accountBean.email}"></h:inputText>
+				<h:outputText value="ログイン名:"></h:outputText>
+				<h:inputText value="#{accountBean.account}"></h:inputText>
+				<h:outputText value="パスワード:"></h:outputText>
+				<h:inputSecret value="#{accountBean.passwd}"></h:inputSecret>
+				<h:outputText value="パスワード（確認）:"></h:outputText>
+				<h:inputSecret value="#{accountBean.passwd2}"></h:inputSecret>
+
+			</h:panelGrid>
+			<h:messages></h:messages>
+			<br />
+			<h:commandButton value="アカウント作成" action="#{accountBean.create()}"></h:commandButton>
+			<h:commandButton value="リセット" type="reset"></h:commandButton>
+		</h:form>
+		<a href="Login.xhtml">トップへ</a>
+	</ui:define>
+
+</ui:composition>
+</html>
