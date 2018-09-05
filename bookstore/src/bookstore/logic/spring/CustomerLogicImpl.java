@@ -1,6 +1,7 @@
-package bookstore.logic;
+package bookstore.logic.spring;
 
 import bookstore.dao.CustomerDAO;
+import bookstore.logic.CustomerLogic;
 import bookstore.pbean.TCustomer;
 import bookstore.vbean.VCustomer;
 import org.apache.commons.codec.digest.DigestUtils;

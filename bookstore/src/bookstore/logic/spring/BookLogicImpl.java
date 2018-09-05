@@ -1,4 +1,4 @@
-package bookstore.logic;
+package bookstore.logic.spring;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import bookstore.dao.BookDAO;
+import bookstore.logic.BookLogic;
 import bookstore.pbean.TBook;
 import bookstore.vbean.VBook;
 import bookstore.vbean.VCheckout;

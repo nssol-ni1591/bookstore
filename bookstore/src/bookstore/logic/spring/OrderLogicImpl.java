@@ -1,4 +1,4 @@
-package bookstore.logic;
+package bookstore.logic.spring;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,6 +12,7 @@ import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
 import bookstore.dao.OrderDAO;
 import bookstore.dao.OrderDetailDAO;
+import bookstore.logic.OrderLogic;
 import bookstore.pbean.TBook;
 import bookstore.pbean.TCustomer;
 import bookstore.pbean.TOrder;
