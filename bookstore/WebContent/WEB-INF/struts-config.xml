@@ -29,7 +29,7 @@
 				scope="request"
 				validate="true"
 				input="/createAccount.vm" >
-			<forward name="UserCreated" path="/index.vm" />
+			<forward name="UserCreated" path="/Login.vm" />
 			<forward name="illegalCreateUser" path="/createAccount.vm" />
 		</action>
 
@@ -38,7 +38,7 @@
 				name="LoginActionName"
 				scope="request" >
 			<forward name="LoginSuccess" path="/BookStore.vm" />
-			<forward name="illegalLogin" path="/index.vm" />
+			<forward name="illegalLogin" path="/Login.vm" />
 		</action>
 
 		<action	path="/AddToCartAction"

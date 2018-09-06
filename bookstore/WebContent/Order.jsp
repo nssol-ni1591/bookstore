@@ -68,7 +68,7 @@
 	E-Mail:	<%= customer.getEmail() %>	<br>
 
 	<br>
-	<a href="index.jsp">トップに戻る</a>
+	<a href="Login.jsp">トップに戻る</a>
 </body>
 
 </html>

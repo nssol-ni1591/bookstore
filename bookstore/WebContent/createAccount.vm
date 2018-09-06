@@ -35,7 +35,7 @@
 		<br>
 	#end
 
-	<a href="$link.setRelative("/index.vm" )">トップへ</a>
+	<a href="$link.setRelative("/Login.vm" )">トップへ</a>
 
 </body>
 

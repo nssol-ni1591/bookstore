@@ -49,7 +49,7 @@ public class LoginServlet extends HttpServlet {
 			// Account mismatched
 			errors.add("illegallogin", "error.login.pwmismatch");
 
-			dispatcher = req.getRequestDispatcher("index.jsp");
+			dispatcher = req.getRequestDispatcher("Login.jsp");
 		}
 		else {
 			BookLogic bookLogic = new BookLogicWrapper();

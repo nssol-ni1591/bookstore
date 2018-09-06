@@ -54,7 +54,7 @@
 	E-Mail:	$Customer.email	<br>
 
 	<br>
-	<a href="$link.setRelative( "/index.vm" )">トップに戻る</a>
+	<a href="$link.setRelative( "/Login.vm" )">トップに戻る</a>
 </body>
 
 </html>

@@ -70,7 +70,7 @@ public class CreateUserServlet extends HttpServlet {
 			dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
 		}
 		else {
-			dispatcher = req.getRequestDispatcher("index.jsp");
+			dispatcher = req.getRequestDispatcher("Login.jsp");
 		}
 		try {
 			dispatcher.forward(req, res);

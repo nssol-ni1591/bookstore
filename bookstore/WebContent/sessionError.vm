@@ -14,7 +14,7 @@
 	タイムアウトしました。
 	<br>
 	<br>
-	<a href="$link.setRelative( "/index.vm" )">トップ</a>に戻る。	
+	<a href="$link.setRelative( "/Login.vm" )">トップ</a>に戻る。	
 
 </body>
 

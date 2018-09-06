@@ -41,6 +41,6 @@ h2 {
 		<br>
 	<% } %>
 
-	<a href="index.jsp">トップへ</a>
+	<a href="Login.jsp">トップへ</a>
 </body>
 </html>

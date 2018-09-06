@@ -18,7 +18,7 @@ h2 {
 	%>
 	<h2>ログアウトしました</h2>
 
-	<a href="index.jsp">トップへ</a>
+	<a href="Login.jsp">トップへ</a>
 
 </body>
 
