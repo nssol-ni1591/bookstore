@@ -25,26 +25,36 @@ public class LoginBean {
 	private String uid;
 	private String passwd;
 
+	private static final boolean DEBUG = false;
+
 	public String getUid() {
-		System.out.println("LoginBean.getUid: uid=" + uid + ", this=" + this);
+		if (DEBUG)
+			System.out.println("LoginBean.getUid: uid=" + uid + ", this=" + this);
 		return uid;
 	}
 	public void setUid(String uid) {
-		System.out.println("LoginBean.setUid: uid=" + uid + ", this=" + this);
+		if (DEBUG)
+			System.out.println("LoginBean.setUid: uid=" + uid + ", this=" + this);
 		this.uid = uid;
 	}
 
 	public String getPasswd() {
-		System.out.println("LoginBean.getPasswd: passwd=" + passwd + ", this=" + this);
+		if (DEBUG)
+			System.out.println("LoginBean.getPasswd: passwd=" + passwd + ", this=" + this);
 		return passwd;
 	}
 	public void setPasswd(String passwd) {
-		System.out.println("LoginBean.setPasswd: passwd=" + passwd + ", this=" + this);
+		if (DEBUG)
+			System.out.println("LoginBean.setPasswd: passwd=" + passwd + ", this=" + this);
 		this.passwd = passwd;
 	}
 
 	public String login() {
 		System.out.println("LoginBean.login: uid=" + uid + ", passwd=" + passwd + ", this=" + this);
+
+		// getSession()
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		HttpSession session = (HttpSession) externalContext.getSession(true);
 
 		// password match
 		if (!customerLogic.isPasswordMatched(getUid(), getPasswd())) {
@@ -58,15 +68,12 @@ public class LoginBean {
 			fc.addMessage(null, fm);
 			return "Login";
 		}
-		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-		HttpSession session = (HttpSession) externalContext.getSession(true);
-		session.setAttribute("Login", uid);
-
 		List<String> productList = bookLogic.getAllBookISBNs();
 		List<VBook> productListView = bookLogic.createVBookList(productList, null);
 
-		session.setAttribute("ProductList", productList);
-		session.setAttribute("ProductListView", productListView);
+		session.setAttribute("Login", uid);
+		//session.setAttribute("ProductList", productList);
+		//session.setAttribute("ProductListView", productListView);
 		return "BookStore";
 	}
 

@@ -65,8 +65,8 @@ public class OrderBean {
 		itemsToBuy = bookLogic.createVCheckout(cart);
 
 		session.setAttribute("Cart", null);
-		session.setAttribute("FoundBooks", null);
-		session.setAttribute("SelectedBooks", null);
+		//session.setAttribute("FoundBooks", null);
+		//session.setAttribute("SelectedBooks", null);
 		return "Order";
 	}
 
@@ -80,8 +80,8 @@ public class OrderBean {
 		}
 
 		@SuppressWarnings("unchecked")
-		List<String> selectedItems = (List<String>)session.getAttribute("Cart");
-		if (selectedItems == null || selectedItems.isEmpty()) {
+		List<String> cart = (List<String>)session.getAttribute("Cart");
+		if (cart == null || cart.isEmpty()) {
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					"error.cart.noselected", "[error.cart.noselected]Ç≈Ç∑ÅB");
 			FacesContext fc = FacesContext.getCurrentInstance();
@@ -89,7 +89,7 @@ public class OrderBean {
 			return "BookStore";
 		}
 
-		itemsToBuy = bookLogic.createVCheckout(selectedItems);
+		itemsToBuy = bookLogic.createVCheckout(cart);
 		return "Check";
 	}
 

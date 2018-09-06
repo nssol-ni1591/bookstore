@@ -19,7 +19,7 @@
 			<h:commandButton value="検索" action="#{bookStoreBean.search}"></h:commandButton>
 
 			<br/>
-			<h:messages></h:messages>
+			<h:messages style="color:red;font-weight=bold;"></h:messages>
 			<hr />
 			<h:dataTable id="table" border="1" value="#{bookStoreBean.bookList}" var="book">
 				<h:column id="column1">
