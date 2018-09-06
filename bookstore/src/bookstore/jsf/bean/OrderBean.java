@@ -35,10 +35,12 @@ public class OrderBean {
 	}
 
 	public VCustomer getVcustomer() {
+		/*
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		HttpSession session = (HttpSession) externalContext.getSession(false);
 		String uid = (String) session.getAttribute("Login");
 		vcustomer = customerLogic.createVCustomer(uid);
+		*/
 		return vcustomer;
 	}
 

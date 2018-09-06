@@ -1,9 +1,10 @@
 package bookstore.jsf.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 import javax.faces.context.ExternalContext;
@@ -19,10 +20,12 @@ import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 @Named
-@RequestScoped
-public class BookStoreBean {
+@SessionScoped
+public class BookStoreBean implements Serializable {
 
-	@Inject @UsedWeld private BookLogic bookLogic;
+	private static final long serialVersionUID = -1L;
+
+	@Inject @UsedWeld private transient BookLogic bookLogic;
 
 	private String keyword;
 

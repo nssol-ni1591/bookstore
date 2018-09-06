@@ -1,8 +1,7 @@
 package bookstore.dao.eclipselink;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import bookstore.annotation.UsedEclipselink;
@@ -12,9 +11,12 @@ import bookstore.pbean.TCustomer;
 @UsedEclipselink
 public class CustomerDAOImpl implements CustomerDAO {
 
-	@PersistenceContext(unitName = "BookStore")
-	//private EntityManager em;
-	private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager();
+	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
+	//@PersistenceContext(unitName = "BookStore") private EntityManager em;
+	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager();
+	@Inject private EntityManager em;
+
+	private static final boolean DEBUG = false;
 
 	@Override
 	public int getCustomerNumberByUid(String inUid) {
@@ -26,7 +28,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 	@Override
 	public TCustomer findCustomerByUid(String inUid) {
-		System.out.println("CustomerDAOImpl.findCustomerByUid: inUid=" + inUid);
+		if (DEBUG)
+			System.out.println("CustomerDAOImpl.findCustomerByUid: inUid=" + inUid);
 		Query q = em
 				.createQuery("select c from TCustomer c where c.username=:username");
 		q.setParameter("username", inUid);

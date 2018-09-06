@@ -1,9 +1,9 @@
 package bookstore.dao.eclipselink;
 
 import java.util.List;
+
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import bookstore.annotation.UsedEclipselink;
@@ -13,9 +13,12 @@ import bookstore.pbean.TBook;
 @UsedEclipselink
 public class BookDAOImpl implements BookDAO {
 
-	@PersistenceContext(unitName = "BookStore")
-	//private EntityManager em;
-	private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager();
+	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
+	//@PersistenceContext(unitName = "BookStore") private EntityManager em;
+	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager();
+	@Inject private EntityManager em;
+
+	private static final boolean DEBUG = false;
 
 	@Override
 	public int getPriceByISBNs(List<String> inISBNList) {
@@ -23,7 +26,8 @@ public class BookDAOImpl implements BookDAO {
 				.createQuery("select sum( book.price ) from TBook book where book.isbn in :SELECTED_ITEMS");
 		q.setParameter("SELECTED_ITEMS", inISBNList);
 		Object o = q.getSingleResult();
-		System.out.println("eclipselink.BookDAOImpl.getPriceByISBNs: sum=" + o);
+		if (DEBUG)
+			System.out.println("eclipselink.BookDAOImpl.getPriceByISBNs: sum=" + o);
 		return ((Long) q.getSingleResult()).intValue();
 	}
 
@@ -36,15 +40,17 @@ public class BookDAOImpl implements BookDAO {
 
 		@SuppressWarnings("unchecked")
 		List<TBook> list = q.getResultList();
-		System.out.println("eclipselink.BookDAOImpl.retrieveBooksByKeyword: keyword="
-				+ inKeyword + ", size=" + list.size());
+		if (DEBUG)
+			System.out.println("eclipselink.BookDAOImpl.retrieveBooksByKeyword: keyword="
+					+ inKeyword + ", size=" + list.size());
 		return list;
 	}
 
 	@Override
 	public List<TBook> retrieveBooksByISBNs(List<String> inISBNList) {
-		System.out.println("eclipselink.BookDAOImpl.retrieveBooksByISBNs: inISBNList="
-				+ inISBNList);
+		if (DEBUG)
+			System.out.println("eclipselink.BookDAOImpl.retrieveBooksByISBNs: inISBNList="
+					+ inISBNList);
 
 		Query q;
 		if (inISBNList == null) {
