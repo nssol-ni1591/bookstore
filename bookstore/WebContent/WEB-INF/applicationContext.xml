@@ -10,7 +10,9 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
 	<context:annotation-config />
+	<!-- 
 	<context:component-scan base-package="bookstore" />
+	 -->
 
 	<!-- SessionFactory -->
 	<bean id="sessionFactory"
@@ -175,24 +177,20 @@
 
 	<!-- Logic Layer Implement -->
 	<!-- autowired設定によりコメントアウト化ができた部分 -->
-	<!-- 
-	<bean id="LogicCustomerImplBId" class="bookstore.logic.CustomerLogicImpl">
+	<!-- Weldと共有化させる場合、Springが制御をとってしまうのでcomponent-scanを無効化した影響で定義を有効化する -->
+	<bean id="LogicCustomerImplBId" class="bookstore.logic.spring.CustomerLogicWrapper">
 		<property name="customerdao">
 			<ref local="CustomerDAOBId" />
 		</property>
 	</bean>
-	 -->
 
-	<!-- 
-	<bean id="LogicBookImplBId" class="bookstore.logic.BookLogicImpl">
+	<bean id="LogicBookImplBId" class="bookstore.logic.spring.BookLogicWrapper">
 		<property name="bookdao">
 			<ref local="BookDAOBId" />
 		</property>
 	</bean>
-	 -->
 
-	<!-- 
-	<bean id="LogicOrderImplBId" class="bookstore.logic.OrderLogicImpl">
+	<bean id="LogicOrderImplBId" class="bookstore.logic.spring.OrderLogicWrapper">
 		<property name="bookdao">
 			<ref local="BookDAOBId" />
 		</property>
@@ -206,7 +204,6 @@
 			<ref local="OrderDetailDAOBId" />
 		</property>
 	</bean>
-	 -->
 
 
 	<!-- Struts Action -->
@@ -266,66 +263,5 @@
 		</property>
 	</bean>
 	 -->
-
-	<!-- JSF Layer -->
-
-	<!-- session -->
-	<bean id="sessionBId" class="bookstore.session.SessionBean">
-	</bean>
-
-	<!-- Action -->
-	<bean name="accountAction" class="bookstore.jsf.bean.AccountBean">
-		<property name="customerLogic">
-			<ref local="LogicCustomerImplBId" />
-		</property>
-	</bean>
-
-	<bean name="cartBean" class="bookstore.jsf.bean.CartBean">
-		<property name="session">
-			<ref local="sessionBId" />
-		</property>
-		<property name="bookLogic">
-			<ref local="LogicBookImplBId" />
-		</property>
-	</bean>
-
-	<bean name="loginBean" class="bookstore.jsf.bean.LoginBean" >
-		<property name="session">
-			<ref local="sessionBId" />
-		</property>
-		<property name="customerLogic">
-			<ref local="LogicCustomerImplBId" />
-		</property>
-	</bean>
-
-	<bean name="logoutBean" class="bookstore.jsf.bean.LogoutBean">
-		<property name="session">
-			<ref local="sessionBId" />
-		</property>
-	</bean>
-
-	<bean name="orderBean" class="bookstore.jsf.bean.OrderBean">
-		<property name="session">
-			<ref local="sessionBId" />
-		</property>
-		<property name="bookLogic">
-			<ref local="LogicBookImplBId" />
-		</property>
-		<property name="customerLogic">
-			<ref local="LogicCustomerImplBId" />
-		</property>
-		<property name="orderLogic">
-			<ref local="LogicOrderImplBId" />
-		</property>
-	</bean>
-
-	<bean name="searchBean" class="bookstore.jsf.bean.SearchBean">
-		<property name="session">
-			<ref local="sessionBId" />
-		</property>
-		<property name="bookLogic">
-			<ref local="LogicBookImplBId" />
-		</property>
-	</bean>
 
 </beans>

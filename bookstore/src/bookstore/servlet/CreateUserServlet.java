@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bookstore.logic.CustomerLogic;
-import bookstore.logic.jpa.CustomerLogicWrapper;
+import bookstore.logic.weld.CustomerLogicWrapper;
 import bookstore.util.Messages;
 
 /*

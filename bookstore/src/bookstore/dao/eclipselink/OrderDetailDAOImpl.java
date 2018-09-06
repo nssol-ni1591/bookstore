@@ -4,11 +4,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
+import bookstore.annotation.UsedEclipselink;
 import bookstore.dao.OrderDetailDAO;
 import bookstore.pbean.TBook;
 import bookstore.pbean.TOrder;
 import bookstore.pbean.TOrderDetail;
 
+@UsedEclipselink
 public class OrderDetailDAOImpl implements OrderDetailDAO {
 
 	@PersistenceContext(unitName = "BookStore")

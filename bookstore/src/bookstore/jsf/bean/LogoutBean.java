@@ -1,24 +1,22 @@
 package bookstore.jsf.bean;
 
-import bookstore.session.SessionBean;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-
-@Component("logoutBean")
-@Scope("request")
+@Named
+@RequestScoped
 public class LogoutBean {
 
-	private SessionBean session;
-
 	public String logout() {
-		session.setUid(null);
-		return "gotoLogout";
-	}
-
-	public void setSession(SessionBean session) {
-		this.session = session;
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		HttpSession session = (HttpSession) externalContext.getSession(false);
+		if (session != null) {
+			session.invalidate();
+		}
+		return "Logout";
 	}
 
 }

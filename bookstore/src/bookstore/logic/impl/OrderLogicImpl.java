@@ -1,12 +1,8 @@
-package bookstore.logic.spring;
+package bookstore.logic.impl;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
@@ -18,13 +14,12 @@ import bookstore.pbean.TCustomer;
 import bookstore.pbean.TOrder;
 import bookstore.vbean.VOrder;
 
-@Component("LogicOrderImplBId")
 public class OrderLogicImpl implements OrderLogic {
 
-	@Autowired @Qualifier("BookDAOBId") BookDAO bookdao;
-	@Autowired @Qualifier("CustomerDAOBId") CustomerDAO customerdao;
-	@Autowired @Qualifier("OrderDAOBId")OrderDAO orderdao;
-	@Autowired @Qualifier("OrderDetailDAOBId")OrderDetailDAO odetaildao;
+	private BookDAO bookdao;
+	private CustomerDAO customerdao;
+	private OrderDAO orderdao;
+	private OrderDetailDAO odetaildao;
 
 	public void orderBooks(String inUid, List<String> inISBNs) {
 
@@ -50,19 +45,19 @@ public class OrderLogicImpl implements OrderLogic {
 		return orderList;
 	}
 
-	public void setBookdao(BookDAO bookdao) {
+	protected void setBookdao(BookDAO bookdao) {
 		this.bookdao = bookdao;
 	}
 
-	public void setCustomerdao(CustomerDAO customerdao) {
+	protected void setCustomerdao(CustomerDAO customerdao) {
 		this.customerdao = customerdao;
 	}
 
-	public void setOrderdao(OrderDAO orderdao) {
+	protected void setOrderdao(OrderDAO orderdao) {
 		this.orderdao = orderdao;
 	}
 
-	public void setOrderdetaildao(OrderDetailDAO odetaildao) {
+	protected void setOrderdetaildao(OrderDetailDAO odetaildao) {
 		this.odetaildao = odetaildao;
 	}
 

@@ -1,24 +1,25 @@
 package bookstore.jsf.bean;
 
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
+import bookstore.annotation.UsedWeld;
 import bookstore.logic.CustomerLogic;
 
-@Component("accountBean")
-@Scope("request")
+@Named
+@RequestScoped
 public class AccountBean {
+
+	@Inject @UsedWeld private CustomerLogic customerLogic;
 
 	private String account;
 	private String name;
 	private String email;
 	private String passwd;
 	private String passwd2;
-
-	CustomerLogic customerLogic;
 
 	public String getAccount() {
 		return account;
@@ -60,23 +61,6 @@ public class AccountBean {
 		this.passwd2 = passwd2;
 	}
 
-	/*
-	 * public ActionErrors validate(ActionMapping mapping, HttpServletRequest
-	 * req) {
-	 *
-	 * ActionErrors errors = null; if (getName() == null || getName().equals("")
-	 * || getEmail() == null || getEmail().equals("") || getAccount() == null ||
-	 * getAccount().equals("") || getPasswd() == null || getPasswd().equals("")
-	 * || getPasswd2() == null || getPasswd2().equals("")) {
-	 *
-	 * errors = new ActionErrors();
-	 *
-	 * errors.add("illegalcreateuser", new ActionMessage(
-	 * "error.createuser.hasempty")); }
-	 *
-	 * return (errors); }
-	 */
-
 	public String create() {
 		String passwd = getPasswd();
 		String passwd2 = getPasswd2();
@@ -116,13 +100,10 @@ public class AccountBean {
 					"[error.createuser.cannotcreate]Ç≈Ç∑ÅB");
 			FacesContext fc = FacesContext.getCurrentInstance();
 			fc.addMessage(null, fm);
-			return "illegalCreateUser";
+			return "CreateAccount";
 		}
 
-		return "UserCreated";
+		return "BookStore";
 	}
 
-	public void setCustomerLogic(CustomerLogic inCustomerLogic) {
-		this.customerLogic = inCustomerLogic;
-	}
 }

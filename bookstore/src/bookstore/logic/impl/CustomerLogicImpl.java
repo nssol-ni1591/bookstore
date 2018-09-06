@@ -1,21 +1,24 @@
-package bookstore.logic.spring;
+package bookstore.logic.impl;
 
 import bookstore.dao.CustomerDAO;
 import bookstore.logic.CustomerLogic;
 import bookstore.pbean.TCustomer;
 import bookstore.vbean.VCustomer;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
-@Component("LogicCustomerImplBId")
+import org.apache.commons.codec.digest.DigestUtils;
+
 public class CustomerLogicImpl implements CustomerLogic {
 
-	@Autowired @Qualifier("CustomerDAOBId") CustomerDAO customerdao;
+	private CustomerDAO customerdao;
+
+	public CustomerLogicImpl() {
+		System.out.println("impl.CustomerLogicImpl<init>:");
+	}
 
 	public boolean isAlreadyExsited(String inUid) {
-		return customerdao.getCustomerNumberByUid(inUid) != 0;
+		int count = customerdao.getCustomerNumberByUid(inUid);
+		System.out.println("CustomerLogicImpl.isAlreadyExsited: count=" + count);
+		return count != 0;
 	}
 
 	public boolean createCustomer(String inUid, String inPassword, String inName, String inEmail) {
@@ -38,6 +41,7 @@ public class CustomerLogicImpl implements CustomerLogic {
 		}
 
 		TCustomer customer = customerdao.findCustomerByUid(inUid);
+		System.out.println("CustomerLogicImpl.isPasswordMatched: customer=" + customer);
 		return customer.getPasswordmd5().equals(getStringDigest(inPassword));
 	}
 
@@ -49,7 +53,7 @@ public class CustomerLogicImpl implements CustomerLogic {
 		return DigestUtils.md5Hex(inString + "digested");
 	}
 
-	public void setCustomerdao(CustomerDAO inCdao) {
+	protected void setCustomerdao(CustomerDAO inCdao) {
 		this.customerdao = inCdao;
 	}
 

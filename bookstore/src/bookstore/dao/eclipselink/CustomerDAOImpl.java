@@ -4,9 +4,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+import bookstore.annotation.UsedEclipselink;
 import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;
 
+@UsedEclipselink
 public class CustomerDAOImpl implements CustomerDAO {
 
 	@PersistenceContext(unitName = "BookStore")

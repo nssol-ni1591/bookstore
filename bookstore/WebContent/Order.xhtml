@@ -18,7 +18,7 @@
 			<br />
 			商品:
 			<br />
-			<h:dataTable id="table" border="1" value="#{orderBean.bookList}" var="book">
+			<h:dataTable id="table" border="1" value="#{orderBean.itemsToBuy.selecteditems}" var="book">
 				<h:column id="column2">
 					<f:facet name="header">
 						<h:outputText value="title"></h:outputText>
@@ -45,7 +45,9 @@
 				</h:column>
 			</h:dataTable>
 
-			合計: #{cartBean.total} 円<br />
+			<h:outputText value="合計:"></h:outputText>
+			<h:outputText value="#{orderBean.itemsToBuy.total}"></h:outputText>
+			<h:outputText value="円"></h:outputText>
 			<br />
 			<br />
 			お客様情報
@@ -59,8 +61,9 @@
 			</h:panelGrid>		
 
 			<h:form>
-				<h:commandButton value="再検索" action="BookStore"></h:commandButton>
-
+				<h:commandButton value="再検索" action="#{bookStoreBean.clearCart}"></h:commandButton>
+			</h:form>
+			<h:form>
 				<h:commandButton value="ログアウト" action="#{logoutBean.logout}"></h:commandButton>
 			</h:form>
 

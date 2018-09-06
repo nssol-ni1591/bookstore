@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="Windows-31J" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -9,7 +9,7 @@
 
 <ui:composition template="resources/templates/template.xhtml">
 	<ui:define name="title">
-	è³¼å…¥å•†å“
+	w“ü¤•i
 	</ui:define>
 
 	<ui:define name="content">
@@ -18,45 +18,46 @@
 			<br />
 			<br />
 
-	ä»¥ä¸‹ãŒè³¼å…¥ã™ã‚‹å•†å“ã¨åˆè¨ˆã§ã™ã€‚
+	ˆÈ‰º‚ªw“ü‚·‚é¤•i‚Æ‡Œv‚Å‚·B
 	<br />
-			<h:dataTable id="table" border="1" value="#{cartBean.bookList}" var="book">
+			<h:dataTable id="table" border="1" value="#{orderBean.itemsToBuy.selecteditems}" var="book">
 				<h:column id="column2">
 					<f:facet name="header">
-						<h:outputText value="ã‚¿ã‚¤ãƒˆãƒ«"></h:outputText>
+						<h:outputText value="ƒ^ƒCƒgƒ‹"></h:outputText>
 					</f:facet>
 					<h:outputText id="bookTitle" value="#{book.title}"></h:outputText>
 				</h:column>
 				<h:column id="column3">
 					<f:facet name="header">
-						<h:outputText value="è‘—è€…"></h:outputText>
+						<h:outputText value="’˜ŽÒ"></h:outputText>
 					</f:facet>
 					<h:outputText id="bookAuthor" value="#{book.author}"></h:outputText>
 				</h:column>
 				<h:column id="column4">
 					<f:facet name="header">
-						<h:outputText value="å‡ºç‰ˆç¤¾"></h:outputText>
+						<h:outputText value="o”ÅŽÐ"></h:outputText>
 					</f:facet>
 					<h:outputText id="bookPublisher" value="#{book.publisher}"></h:outputText>
 				</h:column>
 				<h:column id="column5">
 					<f:facet name="header">
-						<h:outputText value="ä¾¡æ ¼"></h:outputText>
+						<h:outputText value="‰¿Ši"></h:outputText>
 					</f:facet>
-					<h:outputText id="bookPrice" value="#{book.price}"></h:outputText> å††
+					<h:outputText id="bookPrice" value="#{book.price}"></h:outputText> ‰~
 				</h:column>
 			</h:dataTable>
 
 			<br />
 			<h:messages/>
 			<br />
-			åˆè¨ˆ: #{cartBean.total} å††
+			<h:outputText value="‡Œv:"></h:outputText>
+			<h:outputText value="#{orderBean.itemsToBuy.total}"></h:outputText>
+			<h:outputText value="‰~"></h:outputText>
 			<br />
 			<br />
-			<h:inputHidden value="#{cartBean.total}"/>
-			<h:commandButton value="æ³¨æ–‡ã™ã‚‹" action="#{orderBean.order}"></h:commandButton>
-			<h:commandButton value="æˆ»ã‚‹" action="BookStore"></h:commandButton>
-			<h:commandButton value="ç©ºã«ã™ã‚‹" action="#{cartBean.clearCart}"></h:commandButton>
+			<h:commandButton value="’•¶‚·‚é" action="#{orderBean.order}"></h:commandButton>
+			<h:commandButton value="–ß‚é" action="BookStore.xhtml"></h:commandButton>
+			<h:commandButton value="‹ó‚É‚·‚é" action="#{bookStoreBean.clearCart}"></h:commandButton>
 		</h:form>
 	</ui:define>
 </ui:composition>

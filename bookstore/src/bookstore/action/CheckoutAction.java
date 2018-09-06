@@ -43,7 +43,6 @@ public class CheckoutAction extends Action {
 		}
 
 		httpSession.setAttribute("ItemsToBuy", bookLogic.createVCheckout(selectedItems));
-
 		return (mapping.findForward("ToCheck"));
 	}
 

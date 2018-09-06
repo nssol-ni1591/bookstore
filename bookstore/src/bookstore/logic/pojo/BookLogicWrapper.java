@@ -1,8 +1,10 @@
-package bookstore.logic.wrapper;
+package bookstore.logic.pojo;
 
+import bookstore.annotation.UsedPojo;
 import bookstore.dao.impl.BookDAOImpl;
-import bookstore.logic.BookLogicImpl;
+import bookstore.logic.impl.BookLogicImpl;
 
+@UsedPojo
 public class BookLogicWrapper extends BookLogicImpl {
 
 	public BookLogicWrapper() {

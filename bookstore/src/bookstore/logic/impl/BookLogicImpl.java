@@ -1,12 +1,8 @@
-package bookstore.logic.spring;
+package bookstore.logic.impl;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import bookstore.dao.BookDAO;
 import bookstore.logic.BookLogic;
@@ -14,10 +10,9 @@ import bookstore.pbean.TBook;
 import bookstore.vbean.VBook;
 import bookstore.vbean.VCheckout;
 
-@Component("LogicBookImplBId")
 public class BookLogicImpl implements BookLogic {
 
-	@Autowired @Qualifier("BookDAOBId") BookDAO bookdao;
+	private BookDAO bookdao;
 
 	public List<String> getAllBookISBNs() {
 
@@ -93,7 +88,7 @@ public class BookLogicImpl implements BookLogic {
 		return (inCart);
 	}
 
-	public void setBookdao(BookDAO bookdao) {
+	protected void setBookdao(BookDAO bookdao) {
 		this.bookdao = bookdao;
 	}
 

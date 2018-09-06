@@ -8,10 +8,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
+import bookstore.annotation.UsedEclipselink;
 import bookstore.dao.OrderDAO;
 import bookstore.pbean.TCustomer;
 import bookstore.pbean.TOrder;
 
+@UsedEclipselink
 public class OrderDAOImpl implements OrderDAO {
 
 	@PersistenceContext(unitName = "BookStore")

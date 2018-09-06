@@ -1,48 +1,50 @@
 package bookstore.jsf.bean;
 
+import java.util.List;
+
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
+import bookstore.annotation.UsedWeld;
+import bookstore.logic.BookLogic;
 import bookstore.logic.CustomerLogic;
-import bookstore.session.SessionBean;
+import bookstore.vbean.VBook;
 
-@ManagedBean(name="loginBean")
-@Component("loginBean")
-@Scope("request")
+@Named
+@RequestScoped
 public class LoginBean {
 
-	private SessionBean session;
-
-	private CustomerLogic customerLogic;
+	@Inject @UsedWeld private CustomerLogic customerLogic;
+	@Inject @UsedWeld private BookLogic bookLogic;
 
 	private String uid;
 	private String passwd;
 
-
 	public String getUid() {
+		System.out.println("LoginBean.getUid: uid=" + uid + ", this=" + this);
 		return uid;
 	}
-
 	public void setUid(String uid) {
+		System.out.println("LoginBean.setUid: uid=" + uid + ", this=" + this);
 		this.uid = uid;
 	}
 
 	public String getPasswd() {
+		System.out.println("LoginBean.getPasswd: passwd=" + passwd + ", this=" + this);
 		return passwd;
 	}
-
 	public void setPasswd(String passwd) {
+		System.out.println("LoginBean.setPasswd: passwd=" + passwd + ", this=" + this);
 		this.passwd = passwd;
 	}
 
 	public String login() {
-		System.out.println("LoginBean.login: this=" + this);
+		System.out.println("LoginBean.login: uid=" + uid + ", passwd=" + passwd + ", this=" + this);
 
 		// password match
 		if (!customerLogic.isPasswordMatched(getUid(), getPasswd())) {
@@ -54,19 +56,18 @@ public class LoginBean {
 			FacesContext fc = FacesContext.getCurrentInstance();
 			// addMessage(コンポーネントID, FacesMessage) 関連付けるコンポーネントがない場合はnull
 			fc.addMessage(null, fm);
-			return "illegalLogin";
+			return "Login";
 		}
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		HttpSession session = (HttpSession) externalContext.getSession(true);
+		session.setAttribute("Login", uid);
 
-		session.setUid(uid);
-		return "gotoLogin";
+		List<String> productListAll = bookLogic.getAllBookISBNs();
+		List<VBook> vProductList = bookLogic.createVBookList(productListAll, null);
+
+		session.setAttribute("ProductList", productListAll);
+		session.setAttribute("ProductListView", vProductList);
+		return "BookStore";
 	}
 
-	public void setSession(SessionBean session) {
-		System.out.println("LoginBean.setSession: session=" + session + ", this=" + this);
-		this.session = session;
-	}
-	public void setCustomerLogic(CustomerLogic customerLogic) {
-		System.out.println("LoginBean.setCustomerLogic: customerLogic=" + customerLogic + ", this=" + this);
-		this.customerLogic = customerLogic;
-	}
 }

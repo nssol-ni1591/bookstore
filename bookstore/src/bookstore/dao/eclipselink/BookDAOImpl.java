@@ -5,9 +5,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+import bookstore.annotation.UsedEclipselink;
 import bookstore.dao.BookDAO;
 import bookstore.pbean.TBook;
 
+@UsedEclipselink
 public class BookDAOImpl implements BookDAO {
 
 	@PersistenceContext(unitName = "BookStore")

@@ -15,18 +15,18 @@
 	<ui:define name="content">
 		<h:form>
 			<h:outputText value="検索:"></h:outputText>
-			<h:inputText value="#{searchBean.keyword}"></h:inputText>
-			<h:commandButton value="検索" action="#{searchBean.search}"></h:commandButton>
+			<h:inputText value="#{bookStoreBean.keyword}"></h:inputText>
+			<h:commandButton value="検索" action="#{bookStoreBean.search}"></h:commandButton>
 
 			<br/>
 			<h:messages></h:messages>
 			<hr />
-			<h:dataTable id="table" border="1" value="#{searchBean.bookList}" var="book">
+			<h:dataTable id="table" border="1" value="#{bookStoreBean.bookList}" var="book">
 				<h:column id="column1">
 					<f:facet name="header">
 						<h:outputText value="選択"></h:outputText>
 					</f:facet>
-					<h:selectBooleanCheckbox label="#{book.isbn}" value="#{book.selected}" valueChangeListener="#{searchBean.selectValueChange}">
+					<h:selectBooleanCheckbox label="#{book.isbn}" value="#{book.selected}" valueChangeListener="#{bookStoreBean.selectValueChange}">
 					</h:selectBooleanCheckbox>
 				</h:column>
 				<h:column id="column2">
@@ -55,11 +55,11 @@
 				</h:column>
 			</h:dataTable>
 
-			<h:commandButton value="カートに追加" action="#{searchBean.addToCart}"></h:commandButton>
+			<h:commandButton value="カートに追加" action="#{bookStoreBean.addToCart}"></h:commandButton>
 
-			<h:commandButton value="カートを空に" action="#{cartBean.clearCart}"></h:commandButton>
+			<h:commandButton value="カートを空に" action="#{bookStoreBean.clearCart}"></h:commandButton>
 
-			<h:commandButton value="商品購入" action="#{cartBean.checkCart}"></h:commandButton>
+			<h:commandButton value="商品購入" action="#{orderBean.checkOrder}"></h:commandButton>
 
 			<h:commandButton value="ログアウト" action="#{logoutBean.logout}"></h:commandButton>
 		</h:form>
