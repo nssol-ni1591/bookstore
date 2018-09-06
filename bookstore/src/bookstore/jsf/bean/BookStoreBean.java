@@ -22,10 +22,10 @@ import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 @Named
-@RequestScoped
+@SessionScoped
 public class BookStoreBean implements Serializable {
 
-	private static final long serialVersionUID = -1L;
+	private static final long serialVersionUID = 1L;
 
 	@Inject @UsedWeld private BookLogic bookLogic;
 
@@ -34,8 +34,11 @@ public class BookStoreBean implements Serializable {
 	// 表示用
 	private List<VBook> bookList;
 
-	//private List<String> productList;
-	//private List<VBook> productListView;
+	private List<String> productList;
+	private List<VBook> productListView;
+
+	private List<String> selectedItems;
+
 
 	private static final boolean DEBUG_DATA = true;
 	private static final boolean DEBUG_EVENT = true;
@@ -50,6 +53,14 @@ public class BookStoreBean implements Serializable {
 	}
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
+	}
+
+	public List<String> getProductList() {
+		return productList;
+	}
+
+	public List<VBook> getProductListView() {
+		return productListView;
 	}
 
 	public List<VBook> getBookList() {
@@ -89,9 +100,9 @@ public class BookStoreBean implements Serializable {
 		}
 
 		if (DEBUG_DATA)
-			System.out.println("BookStoreBean.search: keyword=" + getKeyword());
+			System.out.println("BookStoreBean.search: keyword=" + keyword);
 
-		List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(getKeyword());
+		List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(keyword);
 		if (foundBooks == null || foundBooks.isEmpty()) {
 			foundBooks = bookLogic.getAllBookISBNs();
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "error.search.notfound", "[error.search.notfound]です。");
@@ -107,8 +118,14 @@ public class BookStoreBean implements Serializable {
 		if (DEBUG_DATA)
 			System.out.println("BookStoreBean.search: productListView.size=" + (productListView == null ? 0 : productListView.size()) + ", productListView=" + productListView);
 
+		// 検索結果から外れたselected状態にあったItemが、次のaddToCartでカートに追加されるのを防ぐため、addToCartの対象を絞り込む
 		session.setAttribute("ProductList", foundBooks);
+		// ならば、search時にcartの内容でselectedItemsを更新しても同じでは？ ⇒無理っぽい？
 		session.setAttribute("ProductListView", productListView);
+
+		// @SessionScopeにしたので初期化する必要があり
+		setKeyword("");
+		selectedItems = null;
 		return "BookStore";
 	}
 
@@ -133,12 +150,12 @@ public class BookStoreBean implements Serializable {
 		if (DEBUG_DATA)
 			System.out.println("BookStoreBean.addToCart: productList.size=" + productList.size() + ", productList=" + productList);
 
-		@SuppressWarnings("unchecked")
-		List<String> selectedItems = (List<String>)session.getAttribute("selectedItems");
+		//@SuppressWarnings("unchecked")
+		//List<String> selectedItems = (List<String>)session.getAttribute("selectedItems");
 		if (DEBUG_DATA)
 			System.out.println("BookStoreBean.addToCart: selectedItems.size=" + (selectedItems == null ? 0 : selectedItems.size()) + ", selectedItems=" + selectedItems);
 		if (selectedItems == null || selectedItems.isEmpty()) {
-			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "error.selected.notfound", "[error.selected.notfound]です。");
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "error.addtocart.notselected", "[error.addtocart.notselected]です。");
 			FacesContext fc = FacesContext.getCurrentInstance();
 			fc.addMessage(null, fm);
 			return "BookStore";
@@ -148,6 +165,7 @@ public class BookStoreBean implements Serializable {
 		session.setAttribute("Cart", newCart);
 		if (DEBUG_DATA)
 			System.out.println("BookStoreBean.addToCart: newCart.size=" + newCart.size() + ", newCart=" + newCart);
+		selectedItems = null;
 
 		FacesContext fc = FacesContext.getCurrentInstance();
 		for (String book : newCart) {
@@ -179,7 +197,8 @@ public class BookStoreBean implements Serializable {
 
 		session.removeAttribute("Cart");
 		session.removeAttribute("ProductListView");
-		session.removeAttribute("selectedItems");
+		//session.removeAttribute("selectedItems");
+		selectedItems = null;
 
 		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"info.cart.clear", "[info.cart.clear]です。");
@@ -199,8 +218,8 @@ public class BookStoreBean implements Serializable {
 
 		HtmlSelectBooleanCheckbox cb = (HtmlSelectBooleanCheckbox)e.getSource();
 		String label = cb.getLabel();
-		@SuppressWarnings("unchecked")
-		List<String> selectedItems = (List<String>)session.getAttribute("selectedItems");
+		//@SuppressWarnings("unchecked")
+		//List<String> selectedItems = (List<String>)session.getAttribute("selectedItems");
 		if (selectedItems == null) {
 			if (DEBUG_EVENT)
 				System.out.println("BookStoreBean: created selectedItems");
@@ -211,23 +230,25 @@ public class BookStoreBean implements Serializable {
 			if (selectedItems.contains(label)) {
 				if (DEBUG_EVENT)
 					System.out.println("BookStoreBean.selectValueChange: item found => skip. cb.label=" + cb.getLabel());
-				return;
 			}
-			if (DEBUG_EVENT)
-				System.out.println("BookStoreBean.selectValueChange: item not found => add. cb.label=" + cb.getLabel());
-			selectedItems.add(label);
-			session.setAttribute("selectedItems", selectedItems);
+			else {
+				if (DEBUG_EVENT)
+					System.out.println("BookStoreBean.selectValueChange: item not found => add. cb.label=" + cb.getLabel());
+				selectedItems.add(label);
+				//session.setAttribute("selectedItems", selectedItems);
+			}
 		}
 		else {
 			if (selectedItems.contains(label)) {
 				if (DEBUG_EVENT)
 					System.out.println("BookStoreBean.selectValueChange: item found => remove. cb.label=" + cb.getLabel());
 				selectedItems.remove(label);
-				session.setAttribute("selectedItems", selectedItems);
-				return;
+				//session.setAttribute("selectedItems", selectedItems);
 			}
-			if (DEBUG_EVENT)
-				System.out.println("BookStoreBean.selectValueChange: item not found => skip. cb.label=" + cb.getLabel());
+			else {
+				if (DEBUG_EVENT)
+					System.out.println("BookStoreBean.selectValueChange: item not found => skip. cb.label=" + cb.getLabel());
+			}
 		}
 	}
 
