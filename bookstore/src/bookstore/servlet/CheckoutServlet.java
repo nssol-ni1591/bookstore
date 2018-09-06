@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bookstore.logic.BookLogic;
-import bookstore.logic.weld.BookLogicWrapper;
+import bookstore.logic.pojo.BookLogicWrapper;
 import bookstore.util.Messages;
 
 /*

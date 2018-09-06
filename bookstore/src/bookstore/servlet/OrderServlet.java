@@ -14,8 +14,8 @@ import javax.servlet.http.HttpSession;
 
 import bookstore.logic.CustomerLogic;
 import bookstore.logic.OrderLogic;
-import bookstore.logic.weld.CustomerLogicWrapper;
-import bookstore.logic.weld.OrderLogicWrapper;
+import bookstore.logic.pojo.CustomerLogicWrapper;
+import bookstore.logic.pojo.OrderLogicWrapper;
 
 /*
  * Logic LayerÇÃéQè∆Ç≈DAOÇêÿë÷Ç¶ÇÈ

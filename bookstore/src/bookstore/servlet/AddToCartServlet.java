@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bookstore.logic.BookLogic;
-import bookstore.logic.weld.BookLogicWrapper;
+import bookstore.logic.pojo.BookLogicWrapper;
 import bookstore.util.Messages;
 import bookstore.vbean.VBook;
 
@@ -59,7 +59,11 @@ public class AddToCartServlet extends HttpServlet {
 			if (selecteItemsArray != null && selecteItemsArray.length != 0) {
 				selectedItems = Arrays.asList(selecteItemsArray);
 
+				System.out.println("AddToCartServlet: productList.size=" + productList.size() + ", productList=" + productList);
+				System.out.println("AddToCartServlet: selectedItems.size=" + selectedItems.size() + ", selectedItems=" + selectedItems);
+				System.out.println("AddToCartServlet: cart.size=" + cart.size() + ", cart=" + cart);
 				List<String> newCart = bookLogic.createCart(productList, selectedItems, cart);
+				System.out.println("AddToCartServlet: newCart.size=" + newCart.size() + ", newCart=" + newCart);
 
 				httpSession.setAttribute("Cart", newCart);
 
