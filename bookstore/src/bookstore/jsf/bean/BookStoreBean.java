@@ -2,8 +2,10 @@ package bookstore.jsf.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
@@ -20,21 +22,27 @@ import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 @Named
-@SessionScoped
+@RequestScoped
 public class BookStoreBean implements Serializable {
 
 	private static final long serialVersionUID = -1L;
 
-	@Inject @UsedWeld private transient BookLogic bookLogic;
+	@Inject @UsedWeld private BookLogic bookLogic;
 
 	private String keyword;
 
 	// 表示用
 	private List<VBook> bookList;
 
+	//private List<String> productList;
+	//private List<VBook> productListView;
+
+	private static final boolean DEBUG_DATA = true;
+	private static final boolean DEBUG_EVENT = true;
+
 
 	public BookStoreBean() {
-		System.out.println("BookStoreBean<init>: called.");
+		System.out.println("BookStoreBean<init>: this=" + this);
 	}
 
 	public String getKeyword() {
@@ -45,26 +53,31 @@ public class BookStoreBean implements Serializable {
 	}
 
 	public List<VBook> getBookList() {
+
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		HttpSession session = (HttpSession) externalContext.getSession(false);
 		if (session == null) {
 			return new ArrayList<>();
 		}
 
-		@SuppressWarnings("unchecked")
-		List<String> foundBooks = (List<String>)session.getAttribute("FoundBooks");
-		if (foundBooks == null || foundBooks.isEmpty()) {
-			foundBooks = bookLogic.getAllBookISBNs();
-			session.setAttribute("FoundBooks", foundBooks);
+		bookList = (List<VBook>)session.getAttribute("ProductListView");
+		if (bookList != null) {
+			if (DEBUG_DATA)
+				System.out.println("BookStoreBean.getBookList(1): bookList.size=" + bookList.size() + ", bookList=" + bookList);
+			return bookList;
+		}
+
+		List<String> productList = (List<String>)session.getAttribute("ProductList");
+		if (productList == null || productList.isEmpty()) {
+			productList = bookLogic.getAllBookISBNs();
+			session.setAttribute("ProductList", productList);
 			keyword = null;
 		}
-		@SuppressWarnings("unchecked")
-		List<String> selectedBooks = (List<String>)session.getAttribute("SelectedBooks");
-		bookList = bookLogic.createVBookList(foundBooks, selectedBooks);
-		System.out.println("BookStoreBean.getBookList: bookList.size=" + (bookList == null ? 0 : bookList.size()) + ", bookList=" + bookList);
+		bookList = bookLogic.createVBookList(productList, null);
+		if (DEBUG_DATA)
+			System.out.println("BookStoreBean.getBookList(2): bookList.size=" + bookList.size() + ", bookList=" + bookList);
 		return bookList;
 	}
-
 
 	public String search() {
 		System.out.println("BookStoreBean.search: this=" + this);
@@ -75,10 +88,10 @@ public class BookStoreBean implements Serializable {
 			return "sessionError.html";
 		}
 
-		System.out.println("BookStoreBean.search: keyword=" + getKeyword());
-		List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(getKeyword());
-		System.out.println("BookStoreBean.search: foundBooks.size=" + (foundBooks == null ? 0 : foundBooks.size()) + ", foundBooks=" + foundBooks);
+		if (DEBUG_DATA)
+			System.out.println("BookStoreBean.search: keyword=" + getKeyword());
 
+		List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(getKeyword());
 		if (foundBooks == null || foundBooks.isEmpty()) {
 			foundBooks = bookLogic.getAllBookISBNs();
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "error.search.notfound", "[error.search.notfound]です。");
@@ -86,56 +99,72 @@ public class BookStoreBean implements Serializable {
 			fc.addMessage(null, fm);
 		}
 		@SuppressWarnings("unchecked")
-		List<String> selectedBooks = (List<String>)session.getAttribute("SelectedBooks");
-		bookList = bookLogic.createVBookList(foundBooks, selectedBooks);
-		System.out.println("BookStoreBean.search: bookList.size=" + (bookList == null ? 0 : bookList.size()) + ", bookList=" + bookList);
+		List<String> cart = (List<String>) session.getAttribute("Cart");
+		if (DEBUG_DATA)
+			System.out.println("BookStoreBean.search: cart.size=" + (cart == null ? 0 : cart.size()) + ", cart=" + cart);
 
-		session.setAttribute("FoundBooks", foundBooks);
+		List<VBook> productListView = bookLogic.createVBookList(foundBooks, cart);
+		if (DEBUG_DATA)
+			System.out.println("BookStoreBean.search: productListView.size=" + (productListView == null ? 0 : productListView.size()) + ", productListView=" + productListView);
+
+		session.setAttribute("ProductList", foundBooks);
+		session.setAttribute("ProductListView", productListView);
 		return "BookStore";
 	}
 
 	public String addToCart() {
-		System.out.println("BookStoreBean.addToCart: this=" + this);
-
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		HttpSession session = (HttpSession) externalContext.getSession(false);
 		if (session == null) {
 			return "sessionError.html";
 		}
+		System.out.println("BookStoreBean.addToCart: this=" + this + ", session=" + session);
 
 		@SuppressWarnings("unchecked")
 		List<String> cart = (List<String>)session.getAttribute("Cart");
-		System.out.println("BookStoreBean.addToCart: cart.size=" + (cart == null ? 0 : cart.size()) + ", cart=" + cart);
+		if (cart == null) {
+			cart = new ArrayList<>();
+		}
+		if (DEBUG_DATA)
+			System.out.println("BookStoreBean.addToCart: cart.size=" + cart.size() + ", cart=" + cart);
 
 		@SuppressWarnings("unchecked")
-		List<String> foundBooks = (List<String>)session.getAttribute("FoundBooks");
-		System.out.println("BookStoreBean.addToCart: foundBooks.size=" + (foundBooks == null ? 0 : foundBooks.size()) + ", foundBooks=" + foundBooks);
+		List<String> productList = (List<String>)session.getAttribute("ProductList");
+		if (DEBUG_DATA)
+			System.out.println("BookStoreBean.addToCart: productList.size=" + productList.size() + ", productList=" + productList);
 
 		@SuppressWarnings("unchecked")
-		List<String> selectedBooks = (List<String>)session.getAttribute("SelectedBooks");
-		System.out.println("BookStoreBean.addToCart: selectedBooks.size=" + (selectedBooks == null ? 0 : selectedBooks.size()) + ", selectedBooks=" + selectedBooks);
-		if (selectedBooks == null || selectedBooks.isEmpty()) {
+		List<String> selectedItems = (List<String>)session.getAttribute("selectedItems");
+		if (DEBUG_DATA)
+			System.out.println("BookStoreBean.addToCart: selectedItems.size=" + (selectedItems == null ? 0 : selectedItems.size()) + ", selectedItems=" + selectedItems);
+		if (selectedItems == null || selectedItems.isEmpty()) {
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "error.selected.notfound", "[error.selected.notfound]です。");
 			FacesContext fc = FacesContext.getCurrentInstance();
 			fc.addMessage(null, fm);
 			return "BookStore";
 		}
 
-		// 新ロジックではselectedBooksが表示されていないBookのselectedを保持しているため旧cartの情報を引き渡す必要はない。
-		//List<String> newCart = bookLogic.createCart(foundBooks, selectedBooks, cart);
-		//System.out.println("SearchAction.addToCart: newCart.size=" + (newCart == null ? 0 : newCart.size()) + ", newCart=" + newCart);
+		List<String> newCart = bookLogic.createCart(productList, selectedItems, cart);
+		session.setAttribute("Cart", newCart);
+		if (DEBUG_DATA)
+			System.out.println("BookStoreBean.addToCart: newCart.size=" + newCart.size() + ", newCart=" + newCart);
 
 		FacesContext fc = FacesContext.getCurrentInstance();
-		for (String book : selectedBooks) {
+		for (String book : newCart) {
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "info.cart.books = " + book, "[info.cart.books] = " + book + "です。");
 			fc.addMessage(null, fm);
 		}
 
-		session.setAttribute("Cart", selectedBooks);
-		session.setAttribute("FoundBooks", null);
+		List<String> productListAll = bookLogic.getAllBookISBNs();
+		List<VBook> productListView = bookLogic.createVBookList(productListAll, newCart);
 
-		//bookList = bookLogic.createVBookList(null, selectedBooks);
-		//System.out.println("AddToCartAction.getBookList: bookList.size=" + (bookList == null ? 0 : bookList.size()) + ", bookList=" + bookList);
+		productListView.stream().forEach(book -> {
+			System.out.println(String.format("isbn=%s, title=%s, selected=%s", book.getIsbn(), book.getTitle(), book.isSelected()));
+		});
+
+		session.setAttribute("ProductList", productListAll);
+		session.setAttribute("ProductListView", productListView);
+
 		return "BookStore";
 	}
 
@@ -149,7 +178,8 @@ public class BookStoreBean implements Serializable {
 		}
 
 		session.removeAttribute("Cart");
-		session.removeAttribute("SelectedBooks");
+		session.removeAttribute("ProductListView");
+		session.removeAttribute("selectedItems");
 
 		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"info.cart.clear", "[info.cart.clear]です。");
@@ -170,29 +200,34 @@ public class BookStoreBean implements Serializable {
 		HtmlSelectBooleanCheckbox cb = (HtmlSelectBooleanCheckbox)e.getSource();
 		String label = cb.getLabel();
 		@SuppressWarnings("unchecked")
-		List<String> selectedBooks = (List<String>)session.getAttribute("SelectedBooks");
-		if (selectedBooks == null) {
-			System.out.println("BookStoreBean: created session");
-			selectedBooks = new ArrayList<>();
+		List<String> selectedItems = (List<String>)session.getAttribute("selectedItems");
+		if (selectedItems == null) {
+			if (DEBUG_EVENT)
+				System.out.println("BookStoreBean: created selectedItems");
+			selectedItems = new ArrayList<>();
 		}
 
 		if ("true".equals(e.getNewValue().toString())) {
-			if (selectedBooks.contains(label)) {
-				System.out.println("BookStoreBean.selectValueChange: item found => skip. cb.label=" + cb.getLabel());
+			if (selectedItems.contains(label)) {
+				if (DEBUG_EVENT)
+					System.out.println("BookStoreBean.selectValueChange: item found => skip. cb.label=" + cb.getLabel());
 				return;
 			}
-			System.out.println("BookStoreBean.selectValueChange: item not found => add. cb.label=" + cb.getLabel());
-			selectedBooks.add(label);
-			session.setAttribute("SelectedBooks", selectedBooks);
+			if (DEBUG_EVENT)
+				System.out.println("BookStoreBean.selectValueChange: item not found => add. cb.label=" + cb.getLabel());
+			selectedItems.add(label);
+			session.setAttribute("selectedItems", selectedItems);
 		}
 		else {
-			if (selectedBooks.contains(label)) {
-				System.out.println("BookStoreBean.selectValueChange: item found => remove. cb.label=" + cb.getLabel());
-				selectedBooks.remove(label);
-				session.setAttribute("SelectedBooks", selectedBooks);
+			if (selectedItems.contains(label)) {
+				if (DEBUG_EVENT)
+					System.out.println("BookStoreBean.selectValueChange: item found => remove. cb.label=" + cb.getLabel());
+				selectedItems.remove(label);
+				session.setAttribute("selectedItems", selectedItems);
 				return;
 			}
-			System.out.println("BookStoreBean.selectValueChange: item not found => skip. cb.label=" + cb.getLabel());
+			if (DEBUG_EVENT)
+				System.out.println("BookStoreBean.selectValueChange: item not found => skip. cb.label=" + cb.getLabel());
 		}
 	}
 
