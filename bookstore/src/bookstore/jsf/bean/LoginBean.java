@@ -62,11 +62,11 @@ public class LoginBean {
 		HttpSession session = (HttpSession) externalContext.getSession(true);
 		session.setAttribute("Login", uid);
 
-		List<String> productListAll = bookLogic.getAllBookISBNs();
-		List<VBook> vProductList = bookLogic.createVBookList(productListAll, null);
+		List<String> productList = bookLogic.getAllBookISBNs();
+		List<VBook> productListView = bookLogic.createVBookList(productList, null);
 
-		session.setAttribute("ProductList", productListAll);
-		session.setAttribute("ProductListView", vProductList);
+		session.setAttribute("ProductList", productList);
+		session.setAttribute("ProductListView", productListView);
 		return "BookStore";
 	}
 

@@ -76,4 +76,10 @@ public class VBook implements Serializable {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
+
+	@Override
+	public String toString() {
+		return isbn;
+	}
+
 }
