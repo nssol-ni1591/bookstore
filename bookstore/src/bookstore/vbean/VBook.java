@@ -79,7 +79,7 @@ public class VBook implements Serializable {
 
 	@Override
 	public String toString() {
-		return isbn;
+		return isbn + (selected ? "*" : "");
 	}
 
 }

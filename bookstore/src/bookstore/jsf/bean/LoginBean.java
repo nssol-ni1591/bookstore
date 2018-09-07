@@ -1,7 +1,5 @@
 package bookstore.jsf.bean;
 
-import java.util.List;
-
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
@@ -13,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import bookstore.annotation.UsedWeld;
 import bookstore.logic.BookLogic;
 import bookstore.logic.CustomerLogic;
-import bookstore.vbean.VBook;
+import bookstore.util.Messages;
 
 @Named
 @RequestScoped
@@ -59,21 +57,13 @@ public class LoginBean {
 		// password match
 		if (!customerLogic.isPasswordMatched(getUid(), getPasswd())) {
 			// Account mismatched
-			//setMessage("error.login.pwmismatch");
-			// new FacesMessage(メッセージレベル, サマリーメッセージ, 詳細メッセージ);
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"error.login.pwmismatch", "[error.login.pwmismatch]です。");
+					Messages.getMessage("error.login.pwmismatch"), "[error.login.pwmismatch]です。");
 			FacesContext fc = FacesContext.getCurrentInstance();
-			// addMessage(コンポーネントID, FacesMessage) 関連付けるコンポーネントがない場合はnull
 			fc.addMessage(null, fm);
 			return "Login";
 		}
-		List<String> productList = bookLogic.getAllBookISBNs();
-		List<VBook> productListView = bookLogic.createVBookList(productList, null);
-
 		session.setAttribute("Login", uid);
-		//session.setAttribute("ProductList", productList);
-		//session.setAttribute("ProductListView", productListView);
 		return "BookStore";
 	}
 

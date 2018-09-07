@@ -7,6 +7,7 @@ import java.util.List;
 
 import bookstore.logic.CustomerLogic;
 import bookstore.logic.OrderLogic;
+import bookstore.util.Messages;
 import bookstore.vbean.VCheckout;
 import bookstore.vbean.VCustomer;
 
@@ -35,16 +36,11 @@ public class OrderBean {
 	}
 
 	public VCustomer getVcustomer() {
-		/*
-		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-		HttpSession session = (HttpSession) externalContext.getSession(false);
-		String uid = (String) session.getAttribute("Login");
-		vcustomer = customerLogic.createVCustomer(uid);
-		*/
 		return vcustomer;
 	}
 
 	public String order() {
+		System.out.println("OrderBean.order: this=" + this);
 
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		HttpSession session = (HttpSession) externalContext.getSession(false);
@@ -65,8 +61,6 @@ public class OrderBean {
 		itemsToBuy = bookLogic.createVCheckout(cart);
 
 		session.setAttribute("Cart", null);
-		//session.setAttribute("FoundBooks", null);
-		//session.setAttribute("SelectedBooks", null);
 		return "Order";
 	}
 
@@ -83,7 +77,7 @@ public class OrderBean {
 		List<String> cart = (List<String>)session.getAttribute("Cart");
 		if (cart == null || cart.isEmpty()) {
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"error.cart.noselected", "[error.cart.noselected]Ç≈Ç∑ÅB");
+					Messages.getMessage("error.cart.noselected"), "[error.cart.noselected]Ç≈Ç∑ÅB");
 			FacesContext fc = FacesContext.getCurrentInstance();
 			fc.addMessage(null, fm);
 			return "BookStore";

@@ -8,6 +8,7 @@ import javax.inject.Named;
 
 import bookstore.annotation.UsedWeld;
 import bookstore.logic.CustomerLogic;
+import bookstore.util.Messages;
 
 @Named
 @RequestScoped
@@ -62,47 +63,52 @@ public class AccountBean {
 	}
 
 	public String create() {
-		String passwd = getPasswd();
-		String passwd2 = getPasswd2();
-
+		if (account == null || account.isEmpty()
+				|| passwd == null || passwd.isEmpty()
+				|| passwd2 == null || passwd2.isEmpty()
+				|| name == null || name.isEmpty()
+				|| email == null || email.isEmpty()
+				) {
+			// check empty field
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					Messages.getMessage("error.createuser.hasempty"),
+					"[error.createuser.hasempty]です。");
+			FacesContext fc = FacesContext.getCurrentInstance();
+			fc.addMessage(null, fm);
+			return "CreateAccount";
+		}
 		if (passwd.equals(passwd2) == false) {
 			// passwd and passwd2 not matched
-			// errors = new ActionMessages();
-			// errors.add( "illegalcreateuser",
-			// new ActionMessage( "error.createuser.pass2inmatch" ) );
-			// saveMessages( req, errors );
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"error.createuser.pass2inmatch",
+					Messages.getMessage("error.createuser.pass2inmatch"),
 					"[error.createuser.pass2inmatch]です。");
 			FacesContext fc = FacesContext.getCurrentInstance();
 			fc.addMessage(null, fm);
-			return "illegalCreateUser";
+			return "CreateAccount";
 		}
-
-		String account = getAccount();
-
 		if (customerLogic.isAlreadyExsited(account)) {
 			// user has already exsited
-			// new ActionMessage( "error.createuser.useralreadyexist" ) );
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"error.createuser.useralreadyexist",
+					Messages.getMessage("error.createuser.useralreadyexist"),
 					"[error.createuser.useralreadyexist]です。");
 			FacesContext fc = FacesContext.getCurrentInstance();
 			fc.addMessage(null, fm);
-			return "illegalCreateUser";
+			return "CreateAccount";
 		}
-
 		if (!customerLogic.createCustomer(account, passwd, getName(), getEmail())) {
 			// user was not created
-			//		"error.createuser.cannotcreate"));
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"error.createuser.cannotcreate",
+					Messages.getMessage("error.createuser.cannotcreate"),
 					"[error.createuser.cannotcreate]です。");
 			FacesContext fc = FacesContext.getCurrentInstance();
 			fc.addMessage(null, fm);
 			return "CreateAccount";
 		}
-
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				Messages.getMessage("info.createuser.success"),
+				"[info.createuser.success]です。");
+		FacesContext fc = FacesContext.getCurrentInstance();
+		fc.addMessage(null, fm);
 		return "BookStore";
 	}
 
