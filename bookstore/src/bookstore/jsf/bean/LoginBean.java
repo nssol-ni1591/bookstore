@@ -1,5 +1,8 @@
 package bookstore.jsf.bean;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
@@ -19,36 +22,28 @@ public class LoginBean {
 
 	@Inject @UsedWeld private CustomerLogic customerLogic;
 	@Inject @UsedWeld private BookLogic bookLogic;
+	@Inject private Logger log;
 
 	private String uid;
 	private String passwd;
 
-	private static final boolean DEBUG = false;
-
 	public String getUid() {
-		if (DEBUG)
-			System.out.println("LoginBean.getUid: uid=" + uid + ", this=" + this);
 		return uid;
 	}
 	public void setUid(String uid) {
-		if (DEBUG)
-			System.out.println("LoginBean.setUid: uid=" + uid + ", this=" + this);
 		this.uid = uid;
 	}
 
 	public String getPasswd() {
-		if (DEBUG)
-			System.out.println("LoginBean.getPasswd: passwd=" + passwd + ", this=" + this);
 		return passwd;
 	}
 	public void setPasswd(String passwd) {
-		if (DEBUG)
-			System.out.println("LoginBean.setPasswd: passwd=" + passwd + ", this=" + this);
 		this.passwd = passwd;
 	}
 
 	public String login() {
-		System.out.println("LoginBean.login: uid=" + uid + ", passwd=" + passwd + ", this=" + this);
+		log.log(Level.INFO, "uid={0}, pw={1}, this={2}"
+				, new Object[] { uid, passwd, this });
 
 		// getSession()
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
@@ -57,8 +52,9 @@ public class LoginBean {
 		// password match
 		if (!customerLogic.isPasswordMatched(getUid(), getPasswd())) {
 			// Account mismatched
-			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					Messages.getMessage("error.login.pwmismatch"), "[error.login.pwmismatch]Ç≈Ç∑ÅB");
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR
+					, Messages.getMessage("error.login.pwmismatch")
+					, "[error.login.pwmismatch]Ç≈Ç∑ÅB");
 			FacesContext fc = FacesContext.getCurrentInstance();
 			fc.addMessage(null, fm);
 			return "Login";

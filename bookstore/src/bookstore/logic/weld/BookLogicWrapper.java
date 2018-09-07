@@ -30,13 +30,6 @@ public class BookLogicWrapper extends BookLogicImpl implements Serializable {
 	 */
 	@Override
 	public List<String> createCart(List<String> inProductList, List<String> inSelectedList, List<String> inCart) {
-		/*
-		inCart.removeAll(inProductList);
-		if (inSelectedList != null && !inSelectedList.isEmpty()) {
-			inCart.addAll(inSelectedList)
-		}
-		*/
-		//inCart.removeAll(inProductList);
 		if (inSelectedList != null && !inSelectedList.isEmpty()) {
 			inSelectedList.stream()
 				.filter(p -> !inCart.contains(p))

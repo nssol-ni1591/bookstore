@@ -1,5 +1,7 @@
 package bookstore.logic.weld;
 
+import java.util.logging.Logger;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -14,12 +16,16 @@ import bookstore.logic.impl.CustomerLogicImpl;
 public class CustomerLogicWrapper extends CustomerLogicImpl {
 
 	@Inject @UsedEclipselink CustomerDAO customerdao;
-	//@ManagedProperty @UsedEclipselink CustomerDAO customerdao;
+	@Inject Logger log;
 
 	@PostConstruct
 	public void init() {
-		System.out.println("weld.CustomerLogicWrapper.init: customerdao=" + customerdao);
 		super.setCustomerdao(customerdao);
+	}
+	
+	@Override
+	protected Logger getLogger() {
+		return log;
 	}
 
 }

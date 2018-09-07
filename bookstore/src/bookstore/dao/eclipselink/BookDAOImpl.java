@@ -1,6 +1,8 @@
 package bookstore.dao.eclipselink;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -14,11 +16,10 @@ import bookstore.pbean.TBook;
 public class BookDAOImpl implements BookDAO {
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
-	//@PersistenceContext(unitName = "BookStore") private EntityManager em;
-	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager();
+	//@PersistenceContext(unitName = "BookStore") private EntityManager em
+	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager()
 	@Inject private EntityManager em;
-
-	private static final boolean DEBUG = false;
+	@Inject private Logger log;
 
 	@Override
 	public int getPriceByISBNs(List<String> inISBNList) {
@@ -26,8 +27,7 @@ public class BookDAOImpl implements BookDAO {
 				.createQuery("select sum( book.price ) from TBook book where book.isbn in :SELECTED_ITEMS");
 		q.setParameter("SELECTED_ITEMS", inISBNList);
 		Object o = q.getSingleResult();
-		if (DEBUG)
-			System.out.println("eclipselink.BookDAOImpl.getPriceByISBNs: sum=" + o);
+		log.log(Level.FINE, "getPriceByISBNs: sum={0}", o);
 		return ((Long) q.getSingleResult()).intValue();
 	}
 
@@ -40,17 +40,14 @@ public class BookDAOImpl implements BookDAO {
 
 		@SuppressWarnings("unchecked")
 		List<TBook> list = q.getResultList();
-		if (DEBUG)
-			System.out.println("eclipselink.BookDAOImpl.retrieveBooksByKeyword: keyword="
-					+ inKeyword + ", size=" + list.size());
+		log.log(Level.FINE, "keyword={0}, size={1}"
+				, new Object[] { inKeyword, list.size() });
 		return list;
 	}
 
 	@Override
 	public List<TBook> retrieveBooksByISBNs(List<String> inISBNList) {
-		if (DEBUG)
-			System.out.println("eclipselink.BookDAOImpl.retrieveBooksByISBNs: inISBNList="
-					+ inISBNList);
+		log.log(Level.FINE, "inISBNList={0}", inISBNList);
 
 		Query q;
 		if (inISBNList == null) {
@@ -60,29 +57,8 @@ public class BookDAOImpl implements BookDAO {
 			return resultList;
 		}
 
-		/*
-		 * StringBuffer sb = new StringBuffer(); ArrayList list = new
-		 * ArrayList<String>(); Iterator<String> it = inISBNList.iterator(); if
-		 * (it.hasNext()) { String isbn = it.next(); sb.append("'");
-		 * sb.append(isbn); sb.append("'"); list.add("'" + isbn + "'"); } while
-		 * (it.hasNext()) { String isbn = it.next(); sb.append(",'");
-		 * sb.append(isbn); sb.append("'"); list.add("'" + isbn + "'"); }
-		 * System.out.println("BookDAOImpl.retrieveBooksByISBNs: String=" +
-		 * sb.toString());
-		 * System.out.println("BookDAOImpl.retrieveBooksByISBNs: list=" +
-		 * list.toString());
-		 */
 		q = em.createQuery("select b from TBook b where b.isbn in :inISBNList");
-		// q =
-		// em.createQuery("select b from TBook b where b.isbn in ( :inISBNList )");
-		// q = em.createQuery("select b from TBook b where b.isbn in (" +
-		// sb.toString() + ")");
-
 		q.setParameter("inISBNList", inISBNList);
-		// q.setParameter("inISBNList", inISBNList.toString());
-		// q.setParameter("inISBNList", sb.toString());
-		// q.setParameter("inISBNList", list);
-
 		@SuppressWarnings("unchecked")
 		List<TBook> resultList = q.getResultList();
 		return resultList;

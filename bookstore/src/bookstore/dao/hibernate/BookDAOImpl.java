@@ -13,6 +13,7 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
+import bookstore.annotation.Log;
 import bookstore.dao.BookDAO;
 import bookstore.pbean.TBook;
 
@@ -20,6 +21,7 @@ import bookstore.pbean.TBook;
 public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 
 	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
+	@Log private static Logger log;
 
 	@Override
 	public int getPriceByISBNs(final List<String> inISBNList) {
@@ -58,8 +60,8 @@ public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 				Query retrieveQuery = session.createQuery("from TBook book where book.isbn in ( :ISBNS )");
 				retrieveQuery.setParameterList("ISBNS", inISBNList);
 
-				Logger.getLogger(BookDAOImpl.class.getName()).log(Level.INFO, "inISBNList={0}", retrieveQuery);
-				Logger.getLogger(BookDAOImpl.class.getName()).log(Level.INFO, "retrieveQuery={0}", retrieveQuery);
+				log.log(Level.INFO, "inISBNList={0}", retrieveQuery);
+				log.log(Level.INFO, "retrieveQuery={0}", retrieveQuery);
 				return retrieveQuery.list();
 				
 			});

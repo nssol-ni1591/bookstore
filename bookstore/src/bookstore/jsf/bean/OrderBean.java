@@ -4,6 +4,8 @@ import bookstore.annotation.UsedWeld;
 import bookstore.logic.BookLogic;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import bookstore.logic.CustomerLogic;
 import bookstore.logic.OrderLogic;
@@ -23,9 +25,12 @@ import javax.servlet.http.HttpSession;
 @RequestScoped
 public class OrderBean {
 
+	private static final String SESSION_ERROR = "sessionError.html";
+
 	@Inject @UsedWeld private BookLogic bookLogic;
 	@Inject @UsedWeld private CustomerLogic customerLogic;
 	@Inject @UsedWeld private OrderLogic orderLogic;
+	@Inject private Logger log;
 
 	private VCheckout itemsToBuy;
 	private VCustomer vcustomer;
@@ -40,17 +45,17 @@ public class OrderBean {
 	}
 
 	public String order() {
-		System.out.println("OrderBean.order: this=" + this);
+		log.log(Level.INFO, "this={0}", this);
 
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		HttpSession session = (HttpSession) externalContext.getSession(false);
 		if (session == null) {
-			return "sessionError.html";
+			return SESSION_ERROR;
 		}
 
 		String uid = (String) session.getAttribute("Login");
 		if (uid == null) {
-			return "sessionError.html";
+			return SESSION_ERROR;
 		}
 
 		@SuppressWarnings("unchecked")
@@ -65,19 +70,20 @@ public class OrderBean {
 	}
 
 	public String checkOrder() {
-		System.out.println("OrderBean.checkOrder: this=" + this);
+		log.log(Level.INFO, "this={0}", this);
 
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		HttpSession session = (HttpSession) externalContext.getSession(false);
 		if (session == null) {
-			return "sessionError.html";
+			return SESSION_ERROR;
 		}
 
 		@SuppressWarnings("unchecked")
 		List<String> cart = (List<String>)session.getAttribute("Cart");
 		if (cart == null || cart.isEmpty()) {
-			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					Messages.getMessage("error.cart.noselected"), "[error.cart.noselected]Ç≈Ç∑ÅB");
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR
+					, Messages.getMessage("error.cart.noselected")
+					, "[error.cart.noselected]Ç≈Ç∑ÅB");
 			FacesContext fc = FacesContext.getCurrentInstance();
 			fc.addMessage(null, fm);
 			return "BookStore";

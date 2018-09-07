@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import bookstore.annotation.Log;
 import bookstore.logic.BookLogic;
 import bookstore.logic.pojo.BookLogicWrapper;
 import bookstore.util.Messages;
@@ -27,6 +28,7 @@ import bookstore.vbean.VBook;
 public class AddToCartServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	@Log private static Logger log;
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) {
@@ -59,11 +61,16 @@ public class AddToCartServlet extends HttpServlet {
 			if (selecteItemsArray != null && selecteItemsArray.length != 0) {
 				selectedItems = Arrays.asList(selecteItemsArray);
 
-				System.out.println("AddToCartServlet: productList.size=" + productList.size() + ", productList=" + productList);
-				System.out.println("AddToCartServlet: selectedItems.size=" + selectedItems.size() + ", selectedItems=" + selectedItems);
-				System.out.println("AddToCartServlet: cart.size=" + cart.size() + ", cart=" + cart);
+				log.log(Level.INFO, "productList.size={0}, productList={1}"
+						, new Object[] { productList.size(), productList });
+				log.log(Level.INFO, "selectedItems.size={0}, selectedItems={1}"
+						, new Object[] { selectedItems.size(), selectedItems });
+				log.log(Level.INFO, "cart.size={0}, cart={1}"
+						, new Object[] { cart.size(), cart });
+
 				List<String> newCart = bookLogic.createCart(productList, selectedItems, cart);
-				System.out.println("AddToCartServlet: newCart.size=" + newCart.size() + ", newCart=" + newCart);
+				log.log(Level.INFO, "newCart.size={0}, newCart={1}"
+						, new Object[] { newCart.size(), newCart });
 
 				httpSession.setAttribute("Cart", newCart);
 

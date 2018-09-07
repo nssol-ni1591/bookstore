@@ -5,19 +5,19 @@ import bookstore.logic.CustomerLogic;
 import bookstore.pbean.TCustomer;
 import bookstore.vbean.VCustomer;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.apache.commons.codec.digest.DigestUtils;
 
-public class CustomerLogicImpl implements CustomerLogic {
+public abstract class CustomerLogicImpl implements CustomerLogic {
 
 	private CustomerDAO customerdao;
 
-	public CustomerLogicImpl() {
-		System.out.println("impl.CustomerLogicImpl<init>:");
-	}
 
 	public boolean isAlreadyExsited(String inUid) {
 		int count = customerdao.getCustomerNumberByUid(inUid);
-		System.out.println("CustomerLogicImpl.isAlreadyExsited: count=" + count);
+		getLogger().log(Level.INFO, "count={0}", count);
 		return count != 0;
 	}
 
@@ -41,7 +41,7 @@ public class CustomerLogicImpl implements CustomerLogic {
 		}
 
 		TCustomer customer = customerdao.findCustomerByUid(inUid);
-		System.out.println("CustomerLogicImpl.isPasswordMatched: customer=" + customer);
+		getLogger().log(Level.INFO, "customer={0}", customer);
 		return customer.getPasswordmd5().equals(getStringDigest(inPassword));
 	}
 
@@ -56,5 +56,7 @@ public class CustomerLogicImpl implements CustomerLogic {
 	protected void setCustomerdao(CustomerDAO inCdao) {
 		this.customerdao = inCdao;
 	}
+
+	protected abstract Logger getLogger();
 
 }

@@ -27,18 +27,22 @@ public class OrderLogicWrapper extends OrderLogicImpl {
 		super.setOrderdetaildao(odetaildao);
 	}
 
+	@Override
 	public void setBookdao(BookDAO bookdao) {
 		this.bookdao = bookdao;
 		super.setBookdao(bookdao);
 	}
+	@Override
 	public void setCustomerdao(CustomerDAO customerdao) {
 		this.customerdao = customerdao;
 		super.setCustomerdao(customerdao);
 	}
+	@Override
 	public void setOrderdao(OrderDAO orderdao) {
 		this.orderdao = orderdao;
 		super.setOrderdao(orderdao);
 	}
+	@Override
 	public void setOrderdetaildao(OrderDetailDAO odetaildao) {
 		this.odetaildao = odetaildao;
 		super.setOrderdetaildao(odetaildao);

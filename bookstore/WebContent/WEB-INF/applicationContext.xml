@@ -31,6 +31,8 @@
 		</property>
 	</bean>
 
+	<bean id="logger" class="bookstore.util.LogInjection" />
+
 
 	<!-- DAO -->
 	<bean id="BookDAOBId"

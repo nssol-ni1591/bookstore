@@ -20,17 +20,13 @@
 				<h:outputText value="パスワード"></h:outputText>
 				<h:inputSecret value="#{loginBean.passwd}"></h:inputSecret>
 			</h:panelGrid>
-			<br />
+			<hr />
 			<h:messages style="color:red;font-weight=bold;"></h:messages>
-			<br />
-			<br />
 			<h:commandButton value="ログイン" action="#{loginBean.login}" type="submit"></h:commandButton>
 			<h:commandButton value="リセット" type="reset"></h:commandButton>
-
 		</h:form>
-
-アカウントを作成していない人は<a href="CreateAccount.xhtml">こちら</a>
-
+		<hr />
+		<div>アカウントを作成していない人は<a href="CreateAccount.xhtml">こちら</a></div>
 	</ui:define>
 </ui:composition>
 

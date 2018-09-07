@@ -15,8 +15,9 @@ import bookstore.logic.CustomerLogic;
 
 public class CreateUserAction extends Action {
 
-	private CustomerLogic customerLogic;
 	private static final String ILLEGAL_CREATE_USER = "illegalCreateUser";
+
+	private CustomerLogic customerLogic;
 
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest req,
@@ -24,6 +25,7 @@ public class CreateUserAction extends Action {
 
 		CreateUserActionFormBean cuafb = (CreateUserActionFormBean) form;
 
+		String account = cuafb.getAccount();
 		String passwd = cuafb.getPasswd();
 		String passwd2 = cuafb.getPasswd2();
 
@@ -32,17 +34,15 @@ public class CreateUserAction extends Action {
 		if (!passwd.equals(passwd2)) {
 			// passwd and passwd2 not matched
 			errors = new ActionMessages();
-			errors.add(ILLEGAL_CREATE_USER, new ActionMessage("error.createuser.pass2inmatch"));
+			errors.add("illegalcreateuser", new ActionMessage("error.createuser.pass2inmatch"));
 			saveMessages(req, errors);
 			return (mapping.findForward(ILLEGAL_CREATE_USER));
 		}
 
-		String account = cuafb.getAccount();
-
 		if (customerLogic.isAlreadyExsited(account)) {
 			// user has already exsited
 			errors = new ActionMessages();
-			errors.add(ILLEGAL_CREATE_USER, new ActionMessage("error.createuser.useralreadyexist"));
+			errors.add("illegalcreateuser", new ActionMessage("error.createuser.useralreadyexist"));
 			saveMessages(req, errors);
 			return (mapping.findForward(ILLEGAL_CREATE_USER));
 		}
@@ -50,7 +50,7 @@ public class CreateUserAction extends Action {
 		if (!customerLogic.createCustomer(account, passwd, cuafb.getName(), cuafb.getEmail())) {
 			// user was not created
 			errors = new ActionMessages();
-			errors.add(ILLEGAL_CREATE_USER, new ActionMessage("error.createuser.cannotcreate"));
+			errors.add("illegalcreateuser", new ActionMessage("error.createuser.cannotcreate"));
 			saveMessages(req, errors);
 			return (mapping.findForward(ILLEGAL_CREATE_USER));
 		}

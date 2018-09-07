@@ -3,7 +3,10 @@ package bookstore.jsf.bean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
@@ -25,8 +28,12 @@ import javax.servlet.http.HttpSession;
 public class BookStoreBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private static final String SESSION_ERROR = "sessionError.html";
+	private static final String THIS_0 = "this={0}";
+	private static final String BOOKSTORE = "BookStore";
 
 	@Inject @UsedWeld private BookLogic bookLogic;
+	@Inject private transient Logger log;
 
 	private String keyword;
 
@@ -35,14 +42,16 @@ public class BookStoreBean implements Serializable {
 	private List<String> selectedItems;
 
 
-	private static final boolean DEBUG_DATA = true;
-	private static final boolean DEBUG_DATA_DETAIL = false;
-	private static final boolean DEBUG_EVENT = true;
-
-
 	public BookStoreBean() {
-		System.out.println("BookStoreBean<init>: this=" + this);
+		//log.log(Level.INFO, "this={0}", this)
+		//このタイミングでは早すぎる
 	}
+	
+	@PostConstruct
+	public void init() {
+		log.log(Level.INFO, THIS_0, this);
+	}
+	
 
 	public String getKeyword() {
 		return keyword;
@@ -61,8 +70,8 @@ public class BookStoreBean implements Serializable {
 
 	public List<VBook> getBookList() {
 		if (productListView != null) {
-			//i-f (DEBUG_DATA)
-			//	System.out.println("BookStoreBean.getBookList(1): bookList.size=" + productListView.size() + ", bookList=" + productListView)
+			log.log(Level.FINE, "(1): bookList.size={0}, bookList={1}"
+					, new Object[] { productListView.size(), productListView });
 			return productListView;
 		}
 
@@ -71,54 +80,57 @@ public class BookStoreBean implements Serializable {
 			productList = bookLogic.getAllBookISBNs();
 		}
 		productListView = bookLogic.createVBookList(productList, null);
-		if (DEBUG_DATA)
-			System.out.println("BookStoreBean.getBookList(2): bookList.size=" + productListView.size() + ", bookList=" + productListView);
+		log.log(Level.FINE, "(2): bookList.size={0}, bookList={1}"
+				, new Object[] { productListView.size(), productListView });
 		return productListView;
 	}
 
 	public String search() {
-		System.out.println("BookStoreBean.search: this=" + this);
+		log.log(Level.INFO, THIS_0, this);
 
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		HttpSession session = (HttpSession) externalContext.getSession(false);
 		if (session == null) {
-			return "sessionError.html";
+			return SESSION_ERROR;
 		}
 
-		if (DEBUG_DATA)
-			System.out.println("BookStoreBean.search: keyword=" + keyword);
+		log.log(Level.FINE, "keyword={0}", keyword);
 
 		List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(keyword);
 		if (foundBooks == null || foundBooks.isEmpty()) {
 			foundBooks = bookLogic.getAllBookISBNs();
-			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, Messages.getMessage("error.search.notfound"), "[error.search.notfound]です。");
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR
+					, Messages.getMessage("error.search.notfound")
+					, "[error.search.notfound]です。");
 			FacesContext fc = FacesContext.getCurrentInstance();
 			fc.addMessage(null, fm);
 		}
 		@SuppressWarnings("unchecked")
 		List<String> cart = (List<String>) session.getAttribute("Cart");
-		if (DEBUG_DATA)
-			System.out.println("BookStoreBean.search: cart.size=" + (cart == null ? 0 : cart.size()) + ", cart=" + cart);
+		log.log(Level.FINE, "cart.size={0}, cart={1}"
+				, new Object[] { cart == null ? 0 : cart.size(), cart });
 
 		productListView = bookLogic.createVBookList(foundBooks, cart);
-		if (DEBUG_DATA)
-			System.out.println("BookStoreBean.search: productListView.size=" + (productListView == null ? 0 : productListView.size()) + ", productListView=" + productListView);
+		log.log(Level.FINE, "productListView.size={0}, productListView={1}"
+				, new Object[] { productListView == null ? 0 : productListView.size(), productListView });
 
-		// 検索結果から外れたselected状態にあったItemが、次のaddToCartでカートに追加されるのを防ぐため、addToCartの対象を絞り込む
+		// 検索結果から外れたselected状態にあったItemが、
+		// 次のaddToCartでカートに追加されるのを防ぐため、
+		// addToCartの対象を絞り込む
 		productList = foundBooks;
 
 		// @SessionScopeにしたので初期化する必要があり
 		keyword = "";
-		return "BookStore";
+		return BOOKSTORE;
 	}
 
 	public String addToCart() {
-		System.out.println("BookStoreBean.addToCart: this=" + this);
+		log.log(Level.FINE, THIS_0, this);
 
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		HttpSession session = (HttpSession) externalContext.getSession(false);
 		if (session == null) {
-			return "sessionError.html";
+			return SESSION_ERROR;
 		}
 
 		@SuppressWarnings("unchecked")
@@ -126,50 +138,52 @@ public class BookStoreBean implements Serializable {
 		if (cart == null) {
 			cart = new ArrayList<>();
 		}
-		if (DEBUG_DATA)
-			System.out.println("BookStoreBean.addToCart: cart.size=" + cart.size() + ", cart=" + cart);
+		log.log(Level.FINE, "cart.size={0}, cart={1}", new Object[] { cart.size(), cart });
 
-		if (DEBUG_DATA)
-			System.out.println("BookStoreBean.addToCart: productList.size=" + productList.size() + ", productList=" + productList);
+		log.log(Level.FINE, "productList.size={0}, productList={1}"
+				, new Object[] { productList.size(), productList });
 
-		if (DEBUG_DATA)
-			System.out.println("BookStoreBean.addToCart: selectedItems.size=" + (selectedItems == null ? 0 : selectedItems.size()) + ", selectedItems=" + selectedItems);
+		log.log(Level.FINE, "selectedItems.size={0}, selectedItems={1}"
+				, new Object[] { selectedItems == null ? 0 : selectedItems.size(), selectedItems });
 		if (selectedItems == null || selectedItems.isEmpty()) {
-			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, Messages.getMessage("error.addtocart.notselected"), "error.addtocart.notselected");
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR
+					, Messages.getMessage("error.addtocart.notselected")
+					, "error.addtocart.notselected");
 			FacesContext fc = FacesContext.getCurrentInstance();
 			fc.addMessage(null, fm);
-			return "BookStore";
+			return BOOKSTORE;
 		}
 
 		List<String> newCart = bookLogic.createCart(productList, selectedItems, cart);
 		session.setAttribute("Cart", newCart);
-		if (DEBUG_DATA)
-			System.out.println("BookStoreBean.addToCart: newCart.size=" + newCart.size() + ", newCart=" + newCart);
+		log.log(Level.FINE, "newCart.size={0}, newCart={1}", new Object[] { newCart.size(),  newCart });
 
 		FacesContext fc = FacesContext.getCurrentInstance();
 		for (String book : newCart) {
-			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "info.cart.books = " + book, "[info.cart.books] = " + book + "です。");
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO
+					, "info.cart.books = " + book
+					, "[info.cart.books] = " + book + "です。");
 			fc.addMessage(null, fm);
 		}
 
 		productList = bookLogic.getAllBookISBNs();
 		productListView = bookLogic.createVBookList(productList, newCart);
 
-		if (DEBUG_DATA_DETAIL)
-			productListView.stream().forEach(book -> {
-				System.out.println(String.format("isbn=%s, title=%s, selected=%s", book.getIsbn(), book.getTitle(), book.isSelected()));
-			});
+		productListView.stream().forEach(book ->
+			log.log(Level.FINEST, "isbn={0}, title={1}, selected={2}"
+					, new Object[] { book.getIsbn(), book.getTitle(), book.isSelected() })
+				);
 
-		return "BookStore";
+		return BOOKSTORE;
 	}
 
 	public String clearCart() {
-		System.out.println("BookStoreBean.clearCart: this=" + this);
+		log.log(Level.FINE, THIS_0, this);
 
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		HttpSession session = (HttpSession) externalContext.getSession(false);
 		if (session == null) {
-			return "sessionError.html";
+			return SESSION_ERROR;
 		}
 
 		//productList = bookLogic.getAllBookISBNs()
@@ -180,44 +194,40 @@ public class BookStoreBean implements Serializable {
 		session.removeAttribute("Cart");
 		selectedItems = null;
 
-		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				Messages.getMessage("info.cart.clear"), "[info.cart.clear]です。");
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO
+				, Messages.getMessage("info.cart.clear")
+				, "[info.cart.clear]です。");
 		FacesContext fc = FacesContext.getCurrentInstance();
 		fc.addMessage(null, fm);
-		return "BookStore";
+		return BOOKSTORE;
 	}
 
 	public void selectValueChange(ValueChangeEvent e) {
-		System.out.println("BookStoreBean.selectValueChange: this=" + this);
+		log.log(Level.FINEST, THIS_0, this);
 
 		HtmlSelectBooleanCheckbox cb = (HtmlSelectBooleanCheckbox)e.getSource();
 		String label = cb.getLabel();
 		if (selectedItems == null) {
-			if (DEBUG_EVENT)
-				System.out.println("BookStoreBean: created selectedItems");
+			log.log(Level.FINEST, "created selectedItems");
 			selectedItems = new ArrayList<>();
 		}
 
 		if ("true".equals(e.getNewValue().toString())) {
 			if (selectedItems.contains(label)) {
-				if (DEBUG_EVENT)
-					System.out.println("BookStoreBean.selectValueChange: item found => skip. cb.label=" + cb.getLabel());
+				log.log(Level.FINEST, "item found => skip. cb.label={0}", cb.getLabel());
 			}
 			else {
-				if (DEBUG_EVENT)
-					System.out.println("BookStoreBean.selectValueChange: item not found => add. cb.label=" + cb.getLabel());
+				log.log(Level.FINEST, "item not found => add. cb.label={0}", cb.getLabel());
 				selectedItems.add(label);
 			}
 		}
 		else {
 			if (selectedItems.contains(label)) {
-				if (DEBUG_EVENT)
-					System.out.println("BookStoreBean.selectValueChange: item found => remove. cb.label=" + cb.getLabel());
+				log.log(Level.FINE, "item found => remove. cb.label={0}", cb.getLabel());
 				selectedItems.remove(label);
 			}
 			else {
-				if (DEBUG_EVENT)
-					System.out.println("BookStoreBean.selectValueChange: item not found => skip. cb.label=" + cb.getLabel());
+				log.log(Level.FINE, "item not found => skip. cb.label={0}", cb.getLabel());
 			}
 		}
 	}
