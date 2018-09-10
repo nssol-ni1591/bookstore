@@ -3,6 +3,7 @@ package bookstore.dao.eclipselink;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -12,6 +13,7 @@ import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;
 
 @UsedEclipselink
+@Dependent
 public class CustomerDAOImpl implements CustomerDAO {
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢

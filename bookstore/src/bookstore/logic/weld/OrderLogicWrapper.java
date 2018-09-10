@@ -1,6 +1,7 @@
 package bookstore.logic.weld;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import bookstore.annotation.UsedWeld;
@@ -12,6 +13,7 @@ import bookstore.dao.OrderDetailDAO;
 import bookstore.logic.impl.OrderLogicImpl;
 
 @UsedWeld
+@Dependent
 public class OrderLogicWrapper extends OrderLogicImpl {
 
 	@Inject @UsedEclipselink private BookDAO bookdao;

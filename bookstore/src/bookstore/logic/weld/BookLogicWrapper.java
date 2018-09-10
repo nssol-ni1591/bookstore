@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import bookstore.annotation.UsedWeld;
@@ -12,8 +13,12 @@ import bookstore.dao.BookDAO;
 import bookstore.logic.impl.BookLogicImpl;
 
 @UsedWeld
+@Dependent
 public class BookLogicWrapper extends BookLogicImpl implements Serializable {
 
+	/*
+	 * bookstore.jsf.bean.BookStoreBeanのスコープが@SessionScopeのためSerializedが必要
+	 */
 	private static final long serialVersionUID = 1L;
 
 	@Inject @UsedEclipselink private BookDAO bookdao;

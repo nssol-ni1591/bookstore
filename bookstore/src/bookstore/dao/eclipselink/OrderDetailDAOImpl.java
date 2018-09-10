@@ -1,5 +1,6 @@
 package bookstore.dao.eclipselink;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
@@ -10,6 +11,7 @@ import bookstore.pbean.TOrder;
 import bookstore.pbean.TOrderDetail;
 
 @UsedEclipselink
+@Dependent
 public class OrderDetailDAOImpl implements OrderDetailDAO {
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢

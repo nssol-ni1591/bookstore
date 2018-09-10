@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
@@ -13,6 +14,7 @@ import bookstore.pbean.TCustomer;
 import bookstore.pbean.TOrder;
 
 @UsedEclipselink
+@Dependent
 public class OrderDAOImpl implements OrderDAO {
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
