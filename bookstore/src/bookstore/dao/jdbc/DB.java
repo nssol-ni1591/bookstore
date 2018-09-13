@@ -1,4 +1,4 @@
-package bookstore.dao.impl;
+package bookstore.dao.jdbc;
 
 import java.io.IOException;
 import java.io.InputStream;

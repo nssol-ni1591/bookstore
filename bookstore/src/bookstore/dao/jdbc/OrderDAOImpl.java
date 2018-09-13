@@ -1,4 +1,4 @@
-package bookstore.dao.impl;
+package bookstore.dao.jdbc;
 
 import java.util.List;
 import java.util.logging.Level;

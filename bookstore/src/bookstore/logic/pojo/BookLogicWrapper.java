@@ -1,7 +1,7 @@
 package bookstore.logic.pojo;
 
 import bookstore.annotation.UsedPojo;
-import bookstore.dao.impl.BookDAOImpl;
+import bookstore.dao.jdbc.BookDAOImpl;
 import bookstore.logic.impl.BookLogicImpl;
 
 @UsedPojo

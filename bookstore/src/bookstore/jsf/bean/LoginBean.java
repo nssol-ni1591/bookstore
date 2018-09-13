@@ -21,7 +21,7 @@ import bookstore.util.Messages;
 public class LoginBean {
 
 	@Inject @UsedWeld private CustomerLogic customerLogic;
-	@Inject @UsedWeld private BookLogic bookLogic;
+	//@Inject @UsedWeld private BookLogic bookLogic;
 	@Inject private Logger log;
 
 	private String uid;
