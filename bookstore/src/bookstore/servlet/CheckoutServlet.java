@@ -24,6 +24,7 @@ import bookstore.util.Messages;
 public class CheckoutServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Logger.getLogger(CheckoutServlet.class.getName());
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) {
@@ -59,7 +60,7 @@ public class CheckoutServlet extends HttpServlet {
 			dispatcher.forward(req, res);
 		}
 		catch (ServletException | IOException e) {
-			Logger.getLogger(CheckoutServlet.class.getName()).log(Level.SEVERE, "", e);
+			log.log(Level.SEVERE, "", e);
 		}
 	}
 }

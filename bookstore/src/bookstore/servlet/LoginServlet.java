@@ -27,6 +27,7 @@ import bookstore.vbean.VBook;
 public class LoginServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	private static final Logger log =  Logger.getLogger(LoginServlet.class.getName());
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) {
@@ -70,8 +71,8 @@ public class LoginServlet extends HttpServlet {
 			httpSession.setAttribute("ProductList", productListAll);
 			httpSession.setAttribute("ProductListView", vProductList);
 
-			Logger.getLogger(LoginServlet.class.getName()).log(Level.INFO, "doPost: productListAll={0}", productListAll);
-			Logger.getLogger(LoginServlet.class.getName()).log(Level.INFO, "doPost: ProductListView={0}", vProductList);
+			log.log(Level.INFO, "doPost: productListAll={0}", productListAll);
+			log.log(Level.INFO, "doPost: ProductListView={0}", vProductList);
 
 			dispatcher = req.getRequestDispatcher("BookStore.jsp");
 		}
@@ -79,7 +80,7 @@ public class LoginServlet extends HttpServlet {
 			dispatcher.forward(req, res);
 		}
 		catch (ServletException | IOException e) {
-			Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, "", e);
+			log.log(Level.SEVERE, "", e);
 		}
 	}
 

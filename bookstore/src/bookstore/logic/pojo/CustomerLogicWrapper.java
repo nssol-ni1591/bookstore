@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 import bookstore.annotation.UsedPojo;
 import bookstore.dao.CustomerDAO;
-import bookstore.dao.impl.CustomerDAOImpl;
+import bookstore.dao.jdbc.CustomerDAOImpl;
 import bookstore.logic.impl.CustomerLogicImpl;
 
 @UsedPojo

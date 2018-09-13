@@ -25,6 +25,7 @@ import bookstore.logic.pojo.OrderLogicWrapper;
 public class OrderServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Logger.getLogger(OrderServlet.class.getName());
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) {
@@ -59,7 +60,7 @@ public class OrderServlet extends HttpServlet {
 			dispatcher.forward(req, res);
 		}
 		catch (ServletException | IOException e) {
-			Logger.getLogger(OrderServlet.class.getName()).log(Level.SEVERE, "", e);
+			log.log(Level.SEVERE, "", e);
 		}
 	}
 }

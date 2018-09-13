@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Resource id="jdbc/bookstoreDS" type="javax.sql.DataSource">
+    jdbcDriver org.apache.derby.jdbc.ClientDriver
+    jdbcUrl jdbc:derby://localhost:1527/bookstore
+    userName bookstore
+    password bookstore
+</Resource>

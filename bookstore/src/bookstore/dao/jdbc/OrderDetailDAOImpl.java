@@ -1,4 +1,4 @@
-package bookstore.dao.impl;
+package bookstore.dao.jdbc;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -13,6 +13,8 @@ import bookstore.pbean.TOrder;
 
 public class OrderDetailDAOImpl implements OrderDetailDAO {
 
+	private static final Logger log = Logger.getLogger(OrderDetailDAOImpl.class.getName());
+
 	public void createOrderDetail(TOrder inOrder, TBook inBook) {
 
 		Connection con = null;
@@ -23,11 +25,11 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 			pst.setInt(1, inOrder.getId());
 			pst.setInt(2, inBook.getId());
 			if (!pst.execute()) {
-				Logger.getLogger(OrderDetailDAOImpl.class.getName()).log(Level.SEVERE, "failed sql: {0}", pst);
+				log.log(Level.SEVERE, "failed sql: {0}", pst);
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			Logger.getLogger(OrderDetailDAOImpl.class.getName()).log(Level.SEVERE, "", e);
+			log.log(Level.SEVERE, "", e);
 		}
 		finally {
 			DB.close(OrderDetailDAOImpl.class.getName(), null, pst, con);

@@ -22,6 +22,8 @@ import bookstore.util.Messages;
 public class CreateUserServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Logger.getLogger(CreateUserServlet.class.getName());
+
 	private static final String ILLEGAL_CREATE_USER = "illegalCreateUser";
 	private static final String CREATE_ACCOUNT_JSP = "createAccount.jsp";
 
@@ -76,7 +78,7 @@ public class CreateUserServlet extends HttpServlet {
 			dispatcher.forward(req, res);
 		}
 		catch (ServletException | IOException e) {
-			Logger.getLogger(CreateUserServlet.class.getName()).log(Level.SEVERE, "", e);
+			log.log(Level.SEVERE, "", e);
 		}
 	}
 }

@@ -1,10 +1,10 @@
 package bookstore.logic.pojo;
 
 import bookstore.annotation.UsedPojo;
-import bookstore.dao.impl.BookDAOImpl;
-import bookstore.dao.impl.CustomerDAOImpl;
-import bookstore.dao.impl.OrderDAOImpl;
-import bookstore.dao.impl.OrderDetailDAOImpl;
+import bookstore.dao.jdbc.BookDAOImpl;
+import bookstore.dao.jdbc.CustomerDAOImpl;
+import bookstore.dao.jdbc.OrderDAOImpl;
+import bookstore.dao.jdbc.OrderDetailDAOImpl;
 import bookstore.logic.impl.OrderLogicImpl;
 
 @UsedPojo

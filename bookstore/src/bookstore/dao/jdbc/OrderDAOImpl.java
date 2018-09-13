@@ -1,4 +1,4 @@
-package bookstore.dao.impl;
+package bookstore.dao.jdbc;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -19,6 +19,8 @@ import bookstore.pbean.TOrder;
 
 public class OrderDAOImpl implements OrderDAO {
 
+	private static final Logger log = Logger.getLogger(OrderDAOImpl.class.getName());
+
 	public TOrder createOrder(TCustomer inCustomer) {
 
 		TOrder saveOrder = new TOrder();
@@ -36,7 +38,7 @@ public class OrderDAOImpl implements OrderDAO {
 			pst.setInt(1, inCustomer.getId());
 			pst.setDate(2, new java.sql.Date(saveOrder.getOrderday().getTime()));
 			if (!pst.execute()) {
-				Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, "failed sql: {0}", pst);
+				log.log(Level.SEVERE, "failed sql: {0}", pst);
 				return null;
 			}
 			pst2 = con.prepareStatement("select AUTOINCREMENTVALUE, COLUMNNAME, AUTOINCREMENTSTART, AUTOINCREMENTINC"
@@ -47,11 +49,11 @@ public class OrderDAOImpl implements OrderDAO {
 				saveOrder.setId(rs2.getInt(1));
 			}
 			else {
-				Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, "failed get id: {0}", pst2);
+				log.log(Level.SEVERE, "failed get id: {0}", pst2);
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, "", e);
+			log.log(Level.SEVERE, "", e);
 		}
 		finally {
 			DB.close(OrderDAOImpl.class.getName(), rs, pst, con);
@@ -87,7 +89,7 @@ public class OrderDAOImpl implements OrderDAO {
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			Logger.getLogger(OrderDAOImpl.class.getName()).log(Level.SEVERE, "", e);
+			log.log(Level.SEVERE, "", e);
 		}
 		finally {
 			DB.close(OrderDAOImpl.class.getName(), rs, pst, con);
