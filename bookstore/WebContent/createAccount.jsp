@@ -4,6 +4,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=Windows-31J">
+	<title>アカウント作成</title>
 </head>
 <style>
 h2 {

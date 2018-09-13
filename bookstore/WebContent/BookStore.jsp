@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=Windows-31J" pageEncoding="windows-31j" %>
-<%@page import="java.util.List" %>
 <%@page import="java.util.Iterator" %>
+<%@page import="java.util.List" %>
 <%@page import="java.util.Map" %>
 <%@page import="bookstore.vbean.VBook" %>
 
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=Windows-31J" />
+	<title>商品一覧</title>
 </head>
 <style>
 h2 {
