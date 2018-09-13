@@ -1,14 +1,15 @@
-<%@page import="bookstore.vbean.VCustomer"%>
 <%@ page language="java" contentType="text/html; charset=Windows-31J" pageEncoding="windows-31j" %>
-<%@page import="java.util.List" %>
 <%@page import="java.util.Iterator" %>
+<%@page import="java.util.List" %>
 <%@page import="java.util.Map" %>
 <%@page import="bookstore.vbean.VBook" %>
 <%@page import="bookstore.vbean.VCheckout" %>
+<%@page import="bookstore.vbean.VCustomer"%>
 
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=Windows-31J">
+	<title>注文確定</title>
 </head>
 
 <body>

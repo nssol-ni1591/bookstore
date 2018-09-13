@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=Windows-31J" pageEncoding="windows-31j" %>
-<%@page import="java.util.List" %>
 <%@page import="java.util.Iterator" %>
+<%@page import="java.util.List" %>
 <%@page import="java.util.Map" %>
 <%@page import="bookstore.vbean.VBook" %>
 <%@page import="bookstore.vbean.VCheckout" %>
@@ -8,6 +8,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=Windows-31J">
+	<title>購入商品</title>
 </head>
 
 <body>
