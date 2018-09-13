@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.naming.NamingException;
+
 import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;
 
@@ -29,7 +31,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 				return rs.getInt(1);
 			}
 		}
-		catch (ClassNotFoundException | IOException | SQLException e) {
+		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
 			log.log(Level.SEVERE, "", e);
 		}
 		finally {
@@ -57,7 +59,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 				return new TCustomer(id, username, passwordmd5, name, email);
 			}
 		}
-		catch (ClassNotFoundException | IOException | SQLException e) {
+		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
 			log.log(Level.SEVERE, "", e);
 		}
 		finally {
@@ -84,7 +86,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 				log.log(Level.SEVERE, "failed sql: {0}", pst);
 			}
 		}
-		catch (ClassNotFoundException | IOException | SQLException e) {
+		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
 			log.log(Level.SEVERE, "", e);
 		}
 		finally {

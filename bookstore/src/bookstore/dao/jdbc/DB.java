@@ -12,6 +12,11 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 public class DB {
 
 	private static final Logger log = Logger.getLogger(DB.class.getName());
@@ -22,7 +27,7 @@ public class DB {
 
 	/*
 	 */
-	public static Connection createConnection() throws ClassNotFoundException, SQLException, IOException {
+	public static Connection createConnection2() throws ClassNotFoundException, SQLException, IOException {
 		Properties props = new Properties();
 		InputStream is = DB.class.getResourceAsStream("/META-INF/jdbc.properties");
 		if (is != null) {
@@ -45,6 +50,12 @@ public class DB {
 		}
 
 		return DriverManager.getConnection(url, username, password);
+	}
+	public static Connection createConnection() throws ClassNotFoundException, SQLException, IOException, NamingException {
+		Context context = new InitialContext();
+		DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/bookstoreDS");
+		Connection con = ds.getConnection();
+		return con;
 	}
 
 	public static void close(String className, ResultSet rs, PreparedStatement pst, Connection con) {

@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.naming.NamingException;
+
 import bookstore.dao.OrderDetailDAO;
 import bookstore.pbean.TBook;
 import bookstore.pbean.TOrder;
@@ -28,7 +30,7 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 				log.log(Level.SEVERE, "failed sql: {0}", pst);
 			}
 		}
-		catch (ClassNotFoundException | IOException | SQLException e) {
+		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
 			log.log(Level.SEVERE, "", e);
 		}
 		finally {
