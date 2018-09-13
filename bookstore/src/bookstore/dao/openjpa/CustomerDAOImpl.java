@@ -18,13 +18,15 @@ import bookstore.pbean.TCustomer;
 public class CustomerDAOImpl implements CustomerDAO {
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
-	@PersistenceContext(unitName = "BookStore") private EntityManager em;
+	@PersistenceContext(unitName = "BookStore2") private EntityManager em;
 	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager()
 	//@Inject private EntityManager em
 	@Inject private Logger log;
 
 	@Override
 	public int getCustomerNumberByUid(String inUid) {
+		log.log(Level.INFO, "inUid={0}, em={1}", new Object[] { inUid, em.getClass().getName() });
+
 		Query q = em
 				.createQuery("select c from TCustomer c where c.username=:username");
 		q.setParameter("username", inUid);

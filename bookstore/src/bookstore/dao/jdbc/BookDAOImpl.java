@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.naming.NamingException;
+
 import bookstore.dao.BookDAO;
 import bookstore.pbean.TBook;
 
@@ -32,7 +34,7 @@ public class BookDAOImpl implements BookDAO {
 				return rs.getInt(1);
 			}
 		}
-		catch (ClassNotFoundException | IOException | SQLException e) {
+		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
 			log.log(Level.SEVERE, "", e);
 		}
 		finally {
@@ -65,7 +67,7 @@ public class BookDAOImpl implements BookDAO {
 				booksList.add(new TBook(id, isbn, title, author, publisher, price));
 			}
 		}
-		catch (ClassNotFoundException | IOException | SQLException e) {
+		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
 			log.log(Level.SEVERE, "", e);
 		}
 		finally {
@@ -101,7 +103,7 @@ public class BookDAOImpl implements BookDAO {
 				booksList.add(new TBook(id, isbn, title, author, publisher, price));
 			}
 		}
-		catch (ClassNotFoundException | IOException | SQLException e) {
+		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
 			log.log(Level.SEVERE, "", e);
 		}
 		finally {

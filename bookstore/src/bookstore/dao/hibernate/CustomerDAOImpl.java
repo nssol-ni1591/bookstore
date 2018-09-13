@@ -1,5 +1,8 @@
 package bookstore.dao.hibernate;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,15 +11,19 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
+import bookstore.annotation.Log;
 import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;
 
 @Repository("CustomerDAOImplBId")
 public class CustomerDAOImpl extends HibernateDaoSupport implements CustomerDAO {
 
+	@Log private static Logger log;
+
 	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
 
 	public int getCustomerNumberByUid(final String inUid) {
+		log.log(Level.INFO, "inUid={0}, sessionFactory={1}", new Object[] { inUid, sessionFactory.getClass().getName() });
 
 		HibernateTemplate ht = getHibernateTemplate();
 		return ht.execute(session -> {

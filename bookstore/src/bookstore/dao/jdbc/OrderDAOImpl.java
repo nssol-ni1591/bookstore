@@ -3,6 +3,9 @@ package bookstore.dao.jdbc;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.naming.NamingException;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -52,7 +55,7 @@ public class OrderDAOImpl implements OrderDAO {
 				log.log(Level.SEVERE, "failed get id: {0}", pst2);
 			}
 		}
-		catch (ClassNotFoundException | IOException | SQLException e) {
+		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
 			log.log(Level.SEVERE, "", e);
 		}
 		finally {
@@ -88,7 +91,7 @@ public class OrderDAOImpl implements OrderDAO {
 				orderList.add(new TOrder(id, custormer, orderDay));
 			}
 		}
-		catch (ClassNotFoundException | IOException | SQLException e) {
+		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
 			log.log(Level.SEVERE, "", e);
 		}
 		finally {

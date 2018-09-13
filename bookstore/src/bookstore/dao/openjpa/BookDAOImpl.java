@@ -18,7 +18,7 @@ import bookstore.pbean.TBook;
 @Dependent
 public class BookDAOImpl implements BookDAO {
 
-	@PersistenceContext(unitName = "BookStore") private EntityManager em;
+	@PersistenceContext(unitName = "BookStore2") private EntityManager em;
 	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager()
 	@Inject private Logger log;
 

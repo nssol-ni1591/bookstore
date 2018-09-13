@@ -3,6 +3,7 @@ package bookstore.jsf.bean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
@@ -11,15 +12,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
-import bookstore.annotation.UsedWeld;
-import bookstore.logic.CustomerLogic;
+import bookstore.logic.ejb.CustomerLogicWrapper;
 import bookstore.util.Messages;
 
-@Named(value="loginBean")
+@Named(value="loginBean2")
 @RequestScoped
-public class LoginBean {
+public class LoginBean2 {
 
-	@Inject @UsedWeld private CustomerLogic customerLogic;
+	@EJB private CustomerLogicWrapper customerLogic;
 	@Inject private Logger log;
 
 	private String uid;

@@ -15,7 +15,7 @@ import bookstore.pbean.TOrderDetail;
 public class OrderDetailDAOImpl implements OrderDetailDAO {
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
-	@PersistenceContext(unitName = "BookStore") private EntityManager em;
+	@PersistenceContext(unitName = "BookStore2") private EntityManager em;
 	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager()
 	//@Inject private EntityManager em
 
