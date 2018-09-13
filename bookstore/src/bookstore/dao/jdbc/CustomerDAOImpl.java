@@ -13,6 +13,8 @@ import bookstore.pbean.TCustomer;
 
 public class CustomerDAOImpl implements CustomerDAO {
 
+	private static final Logger log = Logger.getLogger(CustomerDAOImpl.class.getName());
+
 	public int getCustomerNumberByUid(final String inUid) {
 
 		Connection con = null;
@@ -28,7 +30,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, "", e);
+			log.log(Level.SEVERE, "", e);
 		}
 		finally {
 			DB.close(OrderDAOImpl.class.getName(), rs, pst, con);
@@ -56,7 +58,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, "", e);
+			log.log(Level.SEVERE, "", e);
 		}
 		finally {
 			DB.close(OrderDAOImpl.class.getName(), rs, pst, con);
@@ -79,11 +81,11 @@ public class CustomerDAOImpl implements CustomerDAO {
 			pst.setString(3, inName);
 			pst.setString(4, inEmail);
 			if (!pst.execute()) {
-				Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, "failed sql: {0}", pst);
+				log.log(Level.SEVERE, "failed sql: {0}", pst);
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			Logger.getLogger(CustomerDAOImpl.class.getName()).log(Level.SEVERE, "", e);
+			log.log(Level.SEVERE, "", e);
 		}
 		finally {
 			DB.close(OrderDAOImpl.class.getName(), null, pst, con);

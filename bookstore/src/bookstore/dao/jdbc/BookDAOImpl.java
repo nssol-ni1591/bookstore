@@ -15,6 +15,8 @@ import bookstore.pbean.TBook;
 
 public class BookDAOImpl implements BookDAO {
 
+	private static final Logger log = Logger.getLogger(BookDAOImpl.class.getName());
+
 	@Override
 	public int getPriceByISBNs(final List<String> inISBNList) {
 		Connection con = null;
@@ -31,7 +33,7 @@ public class BookDAOImpl implements BookDAO {
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, "", e);
+			log.log(Level.SEVERE, "", e);
 		}
 		finally {
 			DB.close(BookDAOImpl.class.getName(), rs, pst, con);
@@ -64,7 +66,7 @@ public class BookDAOImpl implements BookDAO {
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, "", e);
+			log.log(Level.SEVERE, "", e);
 		}
 		finally {
 			DB.close(BookDAOImpl.class.getName(), rs, pst, con);
@@ -100,7 +102,7 @@ public class BookDAOImpl implements BookDAO {
 			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException e) {
-			Logger.getLogger(BookDAOImpl.class.getName()).log(Level.SEVERE, "", e);
+			log.log(Level.SEVERE, "", e);
 		}
 		finally {
 			DB.close(BookDAOImpl.class.getName(), rs, pst, con);

@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import bookstore.annotation.Log;
 import bookstore.logic.BookLogic;
 import bookstore.logic.pojo.BookLogicWrapper;
 import bookstore.util.Messages;
@@ -28,7 +27,7 @@ import bookstore.vbean.VBook;
 public class AddToCartServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	@Log private static Logger log;
+	private static final Logger log =  Logger.getLogger(AddToCartServlet.class.getName());
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) {
@@ -90,7 +89,7 @@ public class AddToCartServlet extends HttpServlet {
 			dispatcher.forward(req, res);
 		}
 		catch (ServletException | IOException e) {
-			Logger.getLogger(AddToCartServlet.class.getName()).log(Level.SEVERE, "", e);
+			log.log(Level.SEVERE, "", e);
 		}
 	}
 }

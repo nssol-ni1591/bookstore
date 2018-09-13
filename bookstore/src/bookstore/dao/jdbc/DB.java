@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 
 public class DB {
 
+	private static final Logger log = Logger.getLogger(DB.class.getName());
+
 	private DB() {
 		// Do nothing
 	}
@@ -21,8 +23,6 @@ public class DB {
 	/*
 	 */
 	public static Connection createConnection() throws ClassNotFoundException, SQLException, IOException {
-		final Logger log = Logger.getLogger(DB.class.getName());
-
 		Properties props = new Properties();
 		InputStream is = DB.class.getResourceAsStream("/META-INF/jdbc.properties");
 		if (is != null) {
@@ -53,7 +53,7 @@ public class DB {
 				rs.close();
 			}
 			catch (SQLException e) {
-				Logger.getLogger(className).log(Level.SEVERE, e.getMessage());
+				log.log(Level.SEVERE, e.getMessage());
 			}
 		}
 		if (pst != null) {
@@ -61,7 +61,7 @@ public class DB {
 				pst.close();
 			}
 			catch (SQLException e) {
-				Logger.getLogger(className).log(Level.SEVERE, e.getMessage());
+				log.log(Level.SEVERE, e.getMessage());
 			}
 		}
 		if (con != null) {
@@ -69,7 +69,7 @@ public class DB {
 				con.close();
 			}
 			catch (SQLException e) {
-				Logger.getLogger(className).log(Level.SEVERE, e.getMessage());
+				log.log(Level.SEVERE, e.getMessage());
 			}
 		}
 
