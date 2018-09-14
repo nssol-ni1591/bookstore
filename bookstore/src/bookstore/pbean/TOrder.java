@@ -46,8 +46,8 @@ public class TOrder  implements java.io.Serializable {
        this.tCustomer = tCustomer;
        this.orderday = orderday;
        this.tOrderDetails = tOrderDetails;
-    }
-   
+	}
+
 	@Id 
     @Column(name="ID", nullable=false, precision=22, scale=0)
     public int getId() {

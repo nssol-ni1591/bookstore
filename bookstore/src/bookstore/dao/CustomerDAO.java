@@ -2,7 +2,7 @@ package bookstore.dao;
 
 import bookstore.pbean.TCustomer;
 
-public interface CustomerDAO{
+public interface CustomerDAO {
 
 	public int getCustomerNumberByUid(String inUid);
 
@@ -11,5 +11,6 @@ public interface CustomerDAO{
 	public void saveCustomer(String inUid,
 			String inPasswordMD5,
 			String inName,
-			String inEmail );
+			String inEmail);
+
 }

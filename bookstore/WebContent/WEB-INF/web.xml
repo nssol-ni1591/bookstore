@@ -27,8 +27,11 @@
 	<listener>
 		<listener-class>com.sun.faces.config.ConfigureListener</listener-class>
 	</listener>
-
-
+	<!-- tomeeでは不要
+	<listener>
+		<listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
+	</listener> 
+	 -->
 	<context-param>
 		<description>State saving method: 'client' or 'server' (=default). See
 			JSF Specification 2.5.2</description>

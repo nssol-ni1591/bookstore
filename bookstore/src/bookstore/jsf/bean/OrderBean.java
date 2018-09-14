@@ -33,15 +33,6 @@ public class OrderBean {
 	@Inject @UsedWeld private OrderLogic orderLogic;
 	@Inject private Logger log;
 
-	private List<String> orderIds;
-
-	public List<String> getOrderIds() {
-		return orderIds;
-	}
-	public void setOrderId(List<String> orderIds) {
-		this.orderIds = orderIds;
-	}
-
 	private VCheckout itemsToBuy;
 	private VCustomer vcustomer;
 	private List<VOrder> orders;
@@ -108,7 +99,7 @@ public class OrderBean {
 	public String listOrders() {
 		log.log(Level.INFO, "this={0}", this);
 
-		orders = orderLogic.listOrders(orderIds);
+		orders = orderLogic.listOrders(null);
 
 		return "OrderList";
 	}

@@ -5,7 +5,7 @@ import bookstore.pbean.TOrder;
 
 import java.util.List;
 
-public interface OrderDAO{
+public interface OrderDAO {
 
 	public TOrder createOrder(TCustomer inCustomer);
 
