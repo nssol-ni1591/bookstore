@@ -13,6 +13,7 @@ import bookstore.util.Messages;
 import bookstore.vbean.VCheckout;
 import bookstore.vbean.VCustomer;
 import bookstore.vbean.VOrder;
+import bookstore.vbean.VOrderDetail;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -35,7 +36,9 @@ public class OrderBean {
 
 	private VCheckout itemsToBuy;
 	private VCustomer vcustomer;
+
 	private List<VOrder> orders;
+	private List<VOrderDetail> details;
 
 	public VCheckout getItemsToBuy() {
 		return itemsToBuy;
@@ -43,8 +46,12 @@ public class OrderBean {
 	public VCustomer getVcustomer() {
 		return vcustomer;
 	}
+
 	public List<VOrder> getOrders() {
 		return orders;
+	}
+	public List<VOrderDetail> getDetails() {
+		return details;
 	}
 
 	public String order() {
@@ -100,6 +107,7 @@ public class OrderBean {
 		log.log(Level.INFO, "this={0}", this);
 
 		orders = orderLogic.listOrders(null);
+		details = orderLogic.listOrderDetails(null);
 
 		return "OrderList";
 	}

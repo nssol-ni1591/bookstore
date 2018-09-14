@@ -46,7 +46,7 @@ public class TOrderDetail  implements java.io.Serializable {
         this.id = id;
     }
 
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="BOOK_ID_FK", nullable=false)
     public TBook getTBook() {
         return this.tBook;
@@ -56,7 +56,7 @@ public class TOrderDetail  implements java.io.Serializable {
         this.tBook = tBook;
     }
 
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="ORDER_ID_FK", nullable=false)
     public TOrder getTOrder() {
         return this.tOrder;

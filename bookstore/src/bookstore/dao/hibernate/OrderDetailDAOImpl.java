@@ -16,12 +16,11 @@ public class OrderDetailDAOImpl extends HibernateDaoSupport implements OrderDeta
 
 	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
 
-	public void createOrderDetail(TOrder inOrder, TBook inBook) {
-
+	public TOrderDetail createOrderDetail(TOrder inOrder, TBook inBook) {
 		TOrderDetail saveOrderDetail = new TOrderDetail();
-
 		saveOrderDetail.setTOrder(inOrder);
 		saveOrderDetail.setTBook(inBook);
 		getHibernateTemplate().save(saveOrderDetail);
+		return saveOrderDetail;
 	}
 }

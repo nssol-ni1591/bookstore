@@ -40,6 +40,26 @@
 				</h:column>
 			</h:dataTable>
 
+			<h:dataTable id="table2" border="1" value="#{orderBean.details}" var="d">
+				<h:column id="column6">
+					<f:facet name="header">
+						<h:outputText value="detail_id"></h:outputText>
+					</f:facet>
+					<h:outputText id="detail_id" value="#{d.id}"></h:outputText>
+				</h:column>
+				<h:column id="column7">
+					<f:facet name="header">
+						<h:outputText value="detail_book"></h:outputText>
+					</f:facet>
+					<h:outputText id="detail_book" value="#{d.VBook.title}"></h:outputText>
+				</h:column>
+				<h:column id="column8">
+					<f:facet name="header">
+						<h:outputText value="detail_order"></h:outputText>
+					</f:facet>
+					<h:outputText id="detail_order" value="#{d.VOrder.id}"></h:outputText>
+				</h:column>
+			</h:dataTable>
 			<br />
 
 			<h:form>

@@ -1,8 +1,11 @@
 package bookstore.dao.eclipselink;
 
+import java.util.List;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import bookstore.annotation.UsedEclipselink;
 import bookstore.dao.OrderDetailDAO;
@@ -20,11 +23,18 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 	@Inject private EntityManager em;
 
 	@Override
-	public void createOrderDetail(TOrder inOrder, TBook inBook) {
+	public TOrderDetail createOrderDetail(TOrder inOrder, TBook inBook) {
 		TOrderDetail orderDetail = new TOrderDetail();
 		orderDetail.setTOrder(inOrder);
 		orderDetail.setTBook(inBook);
 		em.persist(orderDetail);
+		return orderDetail;
+	}
+
+	@Override
+	public List<TOrderDetail> listOrderDetails(List<String> orders) {
+		Query query = em.createQuery("select d from TOrderDetail d");
+	    return query.getResultList();
 	}
 
 }

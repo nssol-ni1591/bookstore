@@ -12,15 +12,17 @@ import javax.naming.NamingException;
 import bookstore.dao.OrderDetailDAO;
 import bookstore.pbean.TBook;
 import bookstore.pbean.TOrder;
+import bookstore.pbean.TOrderDetail;
 
 public class OrderDetailDAOImpl implements OrderDetailDAO {
 
 	private static final Logger log = Logger.getLogger(OrderDetailDAOImpl.class.getName());
 
-	public void createOrderDetail(TOrder inOrder, TBook inBook) {
+	public TOrderDetail createOrderDetail(TOrder inOrder, TBook inBook) {
 
 		Connection con = null;
 		PreparedStatement pst = null;
+		TOrderDetail orderDetail = null;
 		try {
 			con = DB.createConnection();
 			pst = con.prepareStatement("insert into T_Order (order_id_fk, book_id_fk) values (?,?)");
@@ -29,6 +31,11 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 			if (!pst.execute()) {
 				log.log(Level.SEVERE, "failed sql: {0}", pst);
 			}
+			else {
+				orderDetail = new TOrderDetail();
+				orderDetail.setTOrder(inOrder);
+				orderDetail.setTBook(inBook);
+			}
 		}
 		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
 			log.log(Level.SEVERE, "", e);
@@ -36,6 +43,7 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 		finally {
 			DB.close(OrderDetailDAOImpl.class.getName(), null, pst, con);
 		}
+		return orderDetail;
 	}
 
 }

@@ -20,11 +20,12 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 	//@Inject private EntityManager em
 
 	@Override
-	public void createOrderDetail(TOrder inOrder, TBook inBook) {
+	public TOrderDetail createOrderDetail(TOrder inOrder, TBook inBook) {
 		TOrderDetail orderDetail = new TOrderDetail();
 		orderDetail.setTOrder(inOrder);
 		orderDetail.setTBook(inBook);
 		em.persist(orderDetail);
+		return orderDetail;
 	}
 
 }

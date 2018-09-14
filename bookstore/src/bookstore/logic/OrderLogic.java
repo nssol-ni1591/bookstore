@@ -3,6 +3,7 @@ package bookstore.logic;
 import java.util.List;
 
 import bookstore.vbean.VOrder;
+import bookstore.vbean.VOrderDetail;
 
 public interface OrderLogic {
 
@@ -10,5 +11,8 @@ public interface OrderLogic {
 
 	// add by gohdo.
 	public List<VOrder> listOrders(List<String> orderIdList);
+	default List<VOrderDetail> listOrderDetails(List<String> orders) {
+		return null;
+	}
 
 }
