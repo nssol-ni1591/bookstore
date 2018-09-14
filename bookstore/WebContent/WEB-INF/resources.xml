@@ -7,6 +7,15 @@
 		jdbcUrl jdbc:derby://localhost:1527/bookstore
 		userName bookstore
 		password bookstore
+		jtaManaged = true
+	</Resource>
+
+	<Resource id="jdbc/bookstoreDSnonJTA" type="javax.sql.DataSource">
+		jdbcDriver org.apache.derby.jdbc.ClientDriver
+		jdbcUrl jdbc:derby://localhost:1527/bookstore
+		userName bookstore
+		password bookstore
+		jtaManaged = false
 	</Resource>
 
 </Resources>

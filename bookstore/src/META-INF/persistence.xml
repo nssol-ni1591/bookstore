@@ -14,7 +14,7 @@
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
 		<jta-data-source>jdbc/bookstoreDS</jta-data-source>
-		<non-jta-data-source>jdbc/bookstoreDS</non-jta-data-source>
+		<non-jta-data-source>jdbc/bookstoreDSnonJTA</non-jta-data-source>
 
 		<class>bookstore.pbean.TBook</class>
 		<class>bookstore.pbean.TCustomer</class>
@@ -24,17 +24,12 @@
 		<properties>
 			<!-- <property name="eclipselink.ddl-generation" value="create-tables" /> -->
 			<!-- <property name="eclipselink.ddl-generation.output-mode" value="database" /> -->
-			<!-- <property name="openjpa.ConnectionURL" value="jdbc:derby://localhost:1527/bookstore"/> 
-				<property name="openjpa.ConnectionDriverName" value="org.apache.derby.jdbc.ClientDriver"/> 
-				<property name="openjpa.ConnectionUserName" value="bookstore"/>
-				<property name="openjpa.ConnectionPassword" value="bookstore"/>
-				<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO"/> -->
 			<!-- 
-			<property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/bookstore" />
-			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver" />
-			<property name="javax.persistence.jdbc.name" value="bookstore" />
-			<property name="javax.persistence.jdbc.password" value="bookstore" />
-			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
+				<property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/bookstore" />
+				<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver" />
+				<property name="javax.persistence.jdbc.name" value="bookstore" />
+				<property name="javax.persistence.jdbc.password" value="bookstore" />
+				<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 			 -->
 		</properties>
 	</persistence-unit>
@@ -43,7 +38,7 @@
 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
 
 		<jta-data-source>jdbc/bookstoreDS</jta-data-source>
-		<non-jta-data-source>jdbc/bookstoreDS</non-jta-data-source>
+		<non-jta-data-source>jdbc/bookstoreDSnonJTA</non-jta-data-source>
 
 		<class>bookstore.pbean.TBook</class>
 		<class>bookstore.pbean.TCustomer</class>
@@ -54,17 +49,11 @@
 			<!-- <property name="eclipselink.ddl-generation" value="create-tables" /> -->
 			<!-- <property name="eclipselink.ddl-generation.output-mode" value="database" /> -->
 			<!-- 
-			<property name="openjpa.ConnectionURL" value="jdbc:derby://localhost:1527/bookstore"/> 
-			<property name="openjpa.ConnectionDriverName" value="org.apache.derby.jdbc.ClientDriver"/> 
-			<property name="openjpa.ConnectionUserName" value="bookstore"/>
-			<property name="openjpa.ConnectionPassword" value="bookstore"/>
-			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
-			 -->
-			<!-- 
-			<property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/bookstore" />
-			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver" />
-			<property name="javax.persistence.jdbc.name" value="bookstore" />
-			<property name="javax.persistence.jdbc.password" value="bookstore" />
+				<property name="openjpa.ConnectionURL" value="jdbc:derby://localhost:1527/bookstore"/> 
+				<property name="openjpa.ConnectionDriverName" value="org.apache.derby.jdbc.ClientDriver"/> 
+				<property name="openjpa.ConnectionUserName" value="bookstore"/>
+				<property name="openjpa.ConnectionPassword" value="bookstore"/>
+				<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 			 -->
 		</properties>
 	</persistence-unit>

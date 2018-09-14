@@ -7,7 +7,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 
-<ui:composition template="resources/templates/template2.xhtml">
+<ui:composition template="resources/templates/template3.xhtml">
 	<ui:define name="title">
 	ログイン
 	</ui:define>
@@ -16,13 +16,13 @@
 		<h:form>
 			<h:panelGrid border="1" columns="2">
 				<h:outputText value="ユーザ名"></h:outputText>
-				<h:inputText value="#{loginBean2.uid}"></h:inputText>
+				<h:inputText value="#{loginBean3.uid}"></h:inputText>
 				<h:outputText value="パスワード"></h:outputText>
-				<h:inputSecret value="#{loginBean2.passwd}"></h:inputSecret>
+				<h:inputSecret value="#{loginBean3.passwd}"></h:inputSecret>
 			</h:panelGrid>
 			<hr />
 			<h:messages style="color:red;font-weight=bold;"></h:messages>
-			<h:commandButton value="ログイン" action="#{loginBean2.login}" type="submit"></h:commandButton>
+			<h:commandButton value="ログイン" action="#{loginBean3.login}" type="submit"></h:commandButton>
 			<h:commandButton value="リセット" type="reset"></h:commandButton>
 		</h:form>
 		<hr />

@@ -1,8 +1,10 @@
 package bookstore.logic.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
@@ -12,6 +14,7 @@ import bookstore.logic.OrderLogic;
 import bookstore.pbean.TBook;
 import bookstore.pbean.TCustomer;
 import bookstore.pbean.TOrder;
+import bookstore.pbean.TOrderDetail;
 import bookstore.vbean.VOrder;
 
 public class OrderLogicImpl implements OrderLogic {
@@ -26,6 +29,7 @@ public class OrderLogicImpl implements OrderLogic {
 		TCustomer customer = customerdao.findCustomerByUid(inUid);
 		TOrder order = orderdao.createOrder(customer);
 
+		Set<TOrderDetail> details = new HashSet<>();
 		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(inISBNs).iterator();
 		while (iter.hasNext()) {
 			TBook book = iter.next();
@@ -35,7 +39,7 @@ public class OrderLogicImpl implements OrderLogic {
 
 	public List<VOrder> listOrders(List<String> orderIdList) {
 		List<VOrder> orderList = new ArrayList<>();
-		Iterator<TOrder> iter = orderdao.retrieveOrders(null).iterator();
+		Iterator<TOrder> iter = orderdao.retrieveOrders(orderIdList).iterator();
 
 		while (iter.hasNext()) {
 			TOrder currentOrder = iter.next();
