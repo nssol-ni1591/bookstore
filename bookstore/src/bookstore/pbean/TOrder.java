@@ -46,11 +46,9 @@ public class TOrder  implements java.io.Serializable {
        this.tCustomer = tCustomer;
        this.orderday = orderday;
        this.tOrderDetails = tOrderDetails;
-    }
-   
-     @Id 
+	}
 
-    
+	@Id 
     @Column(name="ID", nullable=false, precision=22, scale=0)
     public int getId() {
         return this.id;
@@ -80,6 +78,9 @@ public class TOrder  implements java.io.Serializable {
         this.orderday = orderday;
     }
 
+    //@OneToMany(fetch=FetchType.LAZY, mappedBy="TOrder")
+	// mappedbyは、双方向の参照をもつ場合に指定する
+	// この場合は、親⇒子への片方向なのでmappedbyは不要？
     @OneToMany(fetch=FetchType.LAZY, mappedBy="TOrder")
     public Set<TOrderDetail> getTOrderDetails() {
         return this.tOrderDetails;

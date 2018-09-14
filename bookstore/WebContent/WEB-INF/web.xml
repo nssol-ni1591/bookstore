@@ -43,6 +43,7 @@
 		<param-value>resources.application</param-value>
 	</context-param>
 
+	<!-- mapping servlet and connection pool -->
 	<resource-ref>
 		<description>DB Connection</description>
 		<res-ref-name>jdbc/bookstoreDS</res-ref-name>

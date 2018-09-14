@@ -12,6 +12,7 @@ import bookstore.logic.OrderLogic;
 import bookstore.util.Messages;
 import bookstore.vbean.VCheckout;
 import bookstore.vbean.VCustomer;
+import bookstore.vbean.VOrder;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -34,14 +35,16 @@ public class OrderBean {
 
 	private VCheckout itemsToBuy;
 	private VCustomer vcustomer;
-
+	private List<VOrder> orders;
 
 	public VCheckout getItemsToBuy() {
 		return itemsToBuy;
 	}
-
 	public VCustomer getVcustomer() {
 		return vcustomer;
+	}
+	public List<VOrder> getOrders() {
+		return orders;
 	}
 
 	public String order() {
@@ -91,6 +94,14 @@ public class OrderBean {
 
 		itemsToBuy = bookLogic.createVCheckout(cart);
 		return "Check";
+	}
+
+	public String listOrders() {
+		log.log(Level.INFO, "this={0}", this);
+
+		orders = orderLogic.listOrders(null);
+
+		return "OrderList";
 	}
 
 }

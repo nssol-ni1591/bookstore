@@ -26,6 +26,7 @@ public class DB {
 	}
 
 	/*
+	 * コネクションを自分で管理
 	 */
 	public static Connection createConnection2() throws ClassNotFoundException, SQLException, IOException {
 		Properties props = new Properties();
@@ -51,6 +52,9 @@ public class DB {
 
 		return DriverManager.getConnection(url, username, password);
 	}
+	/*
+	 * コネクションプール
+	 */
 	public static Connection createConnection() throws ClassNotFoundException, SQLException, IOException, NamingException {
 		Context context = new InitialContext();
 		DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/bookstoreDS");

@@ -24,6 +24,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 	@Override
 	public int getCustomerNumberByUid(String inUid) {
+		log.log(Level.INFO, "inUid={0}, em={1}", new Object[] { inUid, em.getClass().getName() });
 		Query q = em
 				.createQuery("select c from TCustomer c where c.username=:username");
 		q.setParameter("username", inUid);

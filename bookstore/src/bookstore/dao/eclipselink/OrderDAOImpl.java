@@ -43,8 +43,7 @@ public class OrderDAOImpl implements OrderDAO {
 	@Override
 	public TOrder createOrder(TCustomer inCustomer) {
 		TOrder order = new TOrder();
-		order.setOrderday(new Timestamp(Calendar.getInstance()
-				.getTimeInMillis()));
+		order.setOrderday(new Timestamp(Calendar.getInstance().getTimeInMillis()));
 		order.setTCustomer(inCustomer);
 		em.persist(order);
 		return order;

@@ -12,16 +12,14 @@ import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 import bookstore.annotation.UsedWeld;
-import bookstore.logic.BookLogic;
 import bookstore.logic.CustomerLogic;
 import bookstore.util.Messages;
 
-@Named
+@Named(value="loginBean")
 @RequestScoped
 public class LoginBean {
 
 	@Inject @UsedWeld private CustomerLogic customerLogic;
-	//@Inject @UsedWeld private BookLogic bookLogic;
 	@Inject private Logger log;
 
 	private String uid;

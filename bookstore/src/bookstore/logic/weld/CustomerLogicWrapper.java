@@ -22,7 +22,7 @@ public class CustomerLogicWrapper extends CustomerLogicImpl {
 	public void init() {
 		super.setCustomerdao(customerdao);
 	}
-	
+
 	@Override
 	protected Logger getLogger() {
 		return log;

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 public class Messages extends HashMap<String, String> {
 
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Logger.getLogger(Messages.class.getName());
 	private static final Properties props = new Properties();
 	
 	private transient HttpServletRequest request;
@@ -25,7 +26,7 @@ public class Messages extends HashMap<String, String> {
 			}
 		}
 		catch (IOException e) {
-			Logger.getLogger(Messages.class.getName()).log(Level.SEVERE, "", e);
+			log.log(Level.SEVERE, "", e);
 		}
 	}
 

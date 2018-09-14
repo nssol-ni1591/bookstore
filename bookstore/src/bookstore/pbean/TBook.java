@@ -114,7 +114,10 @@ public class TBook  implements java.io.Serializable {
         this.price = price;
     }
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="TBook")
+    //@OneToMany(fetch=FetchType.LAZY, mappedBy="TBook")
+	// mappedbyは、双方向の参照をもつ場合に指定する
+	// この場合は、親⇒子への片方向なのでmappedbyは不要？
+    @OneToMany(fetch=FetchType.LAZY)
     public Set<TOrderDetail> getTOrderDetails() {
         return this.tOrderDetails;
     }
