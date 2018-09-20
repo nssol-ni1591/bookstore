@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import bookstore.annotation.UsedEclipselink;
@@ -18,9 +19,9 @@ import bookstore.pbean.TBook;
 public class BookDAOImpl implements BookDAO {
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
-	//@PersistenceContext(unitName = "BookStore") private EntityManager em
+	@PersistenceContext(unitName = "BookStore") private EntityManager em;
 	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager()
-	@Inject private EntityManager em;
+	//@Inject private EntityManager em;
 	@Inject private Logger log;
 
 	@Override

@@ -23,11 +23,13 @@
         <property name="price" type="int">
             <column name="PRICE" not-null="true" />
         </property>
+        <!-- 
         <set name="TOrderDetails" inverse="true" lazy="true" table="T_ORDER_DETAIL" fetch="select">
             <key>
                 <column name="BOOK_ID_FK" not-null="true" />
             </key>
             <one-to-many class="bookstore.pbean.TOrderDetail" />
         </set>
+         -->
     </class>
 </hibernate-mapping>

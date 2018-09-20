@@ -1,6 +1,7 @@
 package bookstore.servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,11 +46,11 @@ public class LoginServlet extends HttpServlet {
 
 		RequestDispatcher dispatcher;
 
+		try {
 		// check password
 		if (!customerLogic.isPasswordMatched(account, passwd)) {
 			// Account mismatched
 			errors.add("illegallogin", "error.login.pwmismatch");
-
 			dispatcher = req.getRequestDispatcher("Login.jsp");
 		}
 		else {
@@ -75,6 +76,11 @@ public class LoginServlet extends HttpServlet {
 			log.log(Level.INFO, "doPost: ProductListView={0}", vProductList);
 
 			dispatcher = req.getRequestDispatcher("BookStore.jsp");
+		}
+		}
+		catch (SQLException e) {
+			errors.add("illegallogin", "error.system.exception");
+			dispatcher = req.getRequestDispatcher("Login.jsp");
 		}
 		try {
 			dispatcher.forward(req, res);

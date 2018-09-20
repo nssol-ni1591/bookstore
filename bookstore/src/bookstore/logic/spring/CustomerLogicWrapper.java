@@ -3,9 +3,8 @@ package bookstore.logic.spring;
 import bookstore.annotation.Log;
 import bookstore.annotation.UsedSpring;
 import bookstore.dao.CustomerDAO;
-import bookstore.logic.impl.CustomerLogicImpl;
+import bookstore.logic.AbstractCustomerLogic;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,23 +13,22 @@ import org.springframework.stereotype.Component;
 
 @UsedSpring
 @Component("LogicCustomerImplBId")
-public class CustomerLogicWrapper extends CustomerLogicImpl {
-
-	@Log private static Logger log;
+public class CustomerLogicWrapper extends AbstractCustomerLogic {
 
 	@Autowired @Qualifier("CustomerDAOBId") CustomerDAO customerdao;
+	@Log private static Logger log;
 
 	@Override
-	public void setCustomerdao(CustomerDAO inCdao) {
-		if (log != null)
-			log.log(Level.INFO, "customerdao={0}", customerdao);
-		this.customerdao = inCdao;
-		super.setCustomerdao(customerdao);
+	protected CustomerDAO getCustomerDAO() {
+		return customerdao;
 	}
-
 	@Override
 	protected Logger getLogger() {
 		return log;
+	}
+
+	public void setCustomerdao(CustomerDAO customerdao) {
+		this.customerdao = customerdao;
 	}
 
 }

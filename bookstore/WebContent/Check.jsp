@@ -17,7 +17,17 @@
 	<h2>購入商品</h2>
 	</center>
 
-	<br><br>
+	<br>
+	<% if (request.getAttribute("errors") != null) {
+		Map<String, String> errors = (Map<String, String>)request.getAttribute("errors"); %>
+		<br>
+		<font color="red">
+			<%= errors.get("orderalert") %>
+		</font>
+		<br>
+		<br>
+	<% } %>
+	<br>
 	
 	以下が購入する商品と合計です。
 	<br>

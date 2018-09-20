@@ -1,6 +1,7 @@
 package bookstore.servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,21 +46,24 @@ public class SearchServlet extends HttpServlet {
 			dispatcher = req.getRequestDispatcher("sessionError.html");
 		}
 		else {
-			BookLogic bookLogic = new BookLogicWrapper();
-			@SuppressWarnings("unchecked")
-			List<String> cart = (List<String>) httpSession.getAttribute("Cart");
-			List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(keyword);
-
-			if (foundBooks == null || foundBooks.isEmpty()) {
-				foundBooks = bookLogic.getAllBookISBNs();
-
-				errors.add("productalart", "error.search.notfound");
+			try {
+				BookLogic bookLogic = new BookLogicWrapper();
+				@SuppressWarnings("unchecked")
+				List<String> cart = (List<String>) httpSession.getAttribute("Cart");
+				List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(keyword);
+	
+				if (foundBooks == null || foundBooks.isEmpty()) {
+					foundBooks = bookLogic.getAllBookISBNs();
+					errors.add("productalart", "error.search.notfound");
+				}
+				List<VBook> vProductList = bookLogic.createVBookList(foundBooks, cart);
+	
+				httpSession.setAttribute("ProductList", foundBooks);
+				httpSession.setAttribute("ProductListView", vProductList);
 			}
-			List<VBook> vProductList = bookLogic.createVBookList(foundBooks, cart);
-
-			httpSession.setAttribute("ProductList", foundBooks);
-			httpSession.setAttribute("ProductListView", vProductList);
-
+			catch (SQLException e) {
+				errors.add("productalart", "error.system,exception");
+			}
 			dispatcher = req.getRequestDispatcher("BookStore.jsp");
 		}
 		try {

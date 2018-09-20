@@ -35,9 +35,7 @@ public class CustomerDAOImpl extends HibernateDaoSupport implements CustomerDAO 
 	}
 
 	public TCustomer findCustomerByUid(final String inUid) {
-
 		HibernateTemplate ht = getHibernateTemplate();
-
 		return ht.execute(session -> {
 			Query priceQuery = session
 					.createQuery("from TCustomer customer where customer.username like :USERNAME");
@@ -46,8 +44,7 @@ public class CustomerDAOImpl extends HibernateDaoSupport implements CustomerDAO 
 		});
 	}
 
-	public void saveCustomer(String inUid, String inPasswordMD5, String inName,
-			String inEmail) {
+	public void saveCustomer(String inUid, String inPasswordMD5, String inName, String inEmail) {
 		TCustomer saveCustomer = new TCustomer();
 
 		saveCustomer.setUsername(inUid);

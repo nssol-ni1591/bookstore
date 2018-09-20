@@ -1,29 +1,24 @@
 package bookstore.logic.pojo;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import bookstore.annotation.UsedPojo;
 import bookstore.dao.CustomerDAO;
 import bookstore.dao.jdbc.CustomerDAOImpl;
-import bookstore.logic.impl.CustomerLogicImpl;
+import bookstore.logic.AbstractCustomerLogic;
 
 @UsedPojo
-public class CustomerLogicWrapper extends CustomerLogicImpl {
+public class CustomerLogicWrapper extends AbstractCustomerLogic {
 
-	private static Logger log;
-
-	public CustomerLogicWrapper() {
-		CustomerDAO customerdao = new CustomerDAOImpl();
-		getLogger().log(Level.INFO, "customerdao={0}", customerdao);
-		super.setCustomerdao(customerdao);
-	}
+	private final CustomerDAO customerdao = new CustomerDAOImpl();
+	private static final Logger log = Logger.getLogger(CustomerLogicWrapper.class.getName());
 
 	@Override
+	protected CustomerDAO getCustomerDAO() {
+		return customerdao;
+	}
+	@Override
 	protected Logger getLogger() {
-		if (log == null) {
-			return Logger.getLogger(CustomerLogicWrapper.class.getName());
-		}
 		return log;
 	}
 

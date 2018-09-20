@@ -59,6 +59,7 @@ public class DB {
 		Context context = new InitialContext();
 		DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/bookstoreDS");
 		Connection con = ds.getConnection();
+		con.setAutoCommit(false);
 		return con;
 	}
 

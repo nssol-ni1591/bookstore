@@ -31,6 +31,7 @@
 		<property name="email" type="string">
 			<column name="EMAIL" length="256" not-null="true" />
 		</property>
+		<!-- 
 		<set name="TOrders" inverse="true" lazy="true" table="T_ORDER"
 			fetch="select">
 			<key>
@@ -39,5 +40,6 @@
 			</key>
 			<one-to-many class="bookstore.pbean.TOrder" />
 		</set>
+		 -->
 	</class>
 </hibernate-mapping>

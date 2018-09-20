@@ -1,5 +1,6 @@
 package bookstore.action;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +26,7 @@ public class AddToCartAction extends Action {
 	public ActionForward execute(ActionMapping mapping
 			, ActionForm form
 			, HttpServletRequest req
-			, HttpServletResponse res) {
+			, HttpServletResponse res) throws SQLException {
 
 		HttpSession httpSession = req.getSession(false);
 		if (httpSession == null) {

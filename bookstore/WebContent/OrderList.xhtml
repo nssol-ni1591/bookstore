@@ -13,6 +13,7 @@
 		</ui:define>
 
 		<ui:define name="content">
+			<h:outputText>T_Orderテーブル</h:outputText>
 			<h:dataTable id="table" border="1" value="#{orderBean.orders}" var="order">
 				<h:column id="column2">
 					<f:facet name="header">
@@ -40,6 +41,7 @@
 				</h:column>
 			</h:dataTable>
 
+			<h:outputText>T_OrderDetailテーブル</h:outputText>
 			<h:dataTable id="table2" border="1" value="#{orderBean.details}" var="d">
 				<h:column id="column6">
 					<f:facet name="header">

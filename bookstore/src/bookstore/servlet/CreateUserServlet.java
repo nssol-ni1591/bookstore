@@ -1,6 +1,7 @@
 package bookstore.servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,33 +47,39 @@ public class CreateUserServlet extends HttpServlet {
 
 		RequestDispatcher dispatcher;
 
-		if (account == null || account.isEmpty()
-				|| passwd == null || passwd.isEmpty()
-				|| passwd2 == null || passwd2.isEmpty()
-				|| name == null || name.isEmpty()
-				|| email == null || email.isEmpty()
-				) {
-			// check empty field
-			errors.add(ILLEGAL_CREATE_USER, "error.createuser.hasempty");
-			dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
+		try {
+			if (account == null || account.isEmpty()
+					|| passwd == null || passwd.isEmpty()
+					|| passwd2 == null || passwd2.isEmpty()
+					|| name == null || name.isEmpty()
+					|| email == null || email.isEmpty()
+					) {
+				// check empty field
+				errors.add(ILLEGAL_CREATE_USER, "error.createuser.hasempty");
+				dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
+			}
+			else if (!passwd.equals(passwd2)) {
+				// passwd and passwd2 not matched
+				errors.add(ILLEGAL_CREATE_USER, "error.createuser.pass2inmatch");
+				dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
+			}
+			else if (customerLogic.isAlreadyExsited(account)) {
+				// user has already exsited
+				errors.add(ILLEGAL_CREATE_USER, "error.createuser.useralreadyexist");
+				dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
+			}
+			else if (!customerLogic.createCustomer(account, passwd, name, email)) {
+				// user was not created
+				errors.add(ILLEGAL_CREATE_USER, "error.createuser.cannotcreate");
+				dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
+			}
+			else {
+				dispatcher = req.getRequestDispatcher("Login.jsp");
+			}
 		}
-		else if (!passwd.equals(passwd2)) {
-			// passwd and passwd2 not matched
-			errors.add(ILLEGAL_CREATE_USER, "error.createuser.pass2inmatch");
+		catch (SQLException e) {
+			errors.add(ILLEGAL_CREATE_USER, "error.system.exception");
 			dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
-		}
-		else if (customerLogic.isAlreadyExsited(account)) {
-			// user has already exsited
-			errors.add(ILLEGAL_CREATE_USER, "error.createuser.useralreadyexist");
-			dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
-		}
-		else if (!customerLogic.createCustomer(account, passwd, name, email)) {
-			// user was not created
-			errors.add(ILLEGAL_CREATE_USER, "error.createuser.cannotcreate");
-			dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
-		}
-		else {
-			dispatcher = req.getRequestDispatcher("Login.jsp");
 		}
 		try {
 			dispatcher.forward(req, res);

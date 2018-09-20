@@ -1,21 +1,23 @@
-package bookstore.logic.impl;
+package bookstore.logic;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 
 import bookstore.dao.BookDAO;
-import bookstore.logic.BookLogic;
 import bookstore.pbean.TBook;
 import bookstore.vbean.VBook;
 import bookstore.vbean.VCheckout;
 
-public class BookLogicImpl implements BookLogic {
+public abstract class AbstractBookLogic implements BookLogic {
 
-	private BookDAO bookdao;
+	protected abstract BookDAO getBookDAO();
+	protected abstract Logger getLogger();
 
-	public List<String> getAllBookISBNs() {
-
+	public List<String> getAllBookISBNs() throws SQLException {
+		BookDAO bookdao = getBookDAO();
 		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(null).iterator();
 		List<String> isbns = new ArrayList<>();
 
@@ -27,8 +29,8 @@ public class BookLogicImpl implements BookLogic {
 		return isbns;
 	}
 
-	public List<String> retrieveBookISBNsByKeyword(String inKeyword) {
-
+	public List<String> retrieveBookISBNsByKeyword(String inKeyword) throws SQLException {
+		BookDAO bookdao = getBookDAO();
 		Iterator<TBook> iter = bookdao.retrieveBooksByKeyword(inKeyword).iterator();
 		List<String> isbns = new ArrayList<>();
 
@@ -39,8 +41,8 @@ public class BookLogicImpl implements BookLogic {
 		return isbns;
 	}
 
-	public List<VBook> createVBookList(List<String> inProductList, List<String> inSelectedList) {
-
+	public List<VBook> createVBookList(List<String> inProductList, List<String> inSelectedList) throws SQLException {
+		BookDAO bookdao = getBookDAO();
 		List<VBook> vArrayList = new ArrayList<>();
 		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(inProductList).iterator();
 
@@ -59,8 +61,8 @@ public class BookLogicImpl implements BookLogic {
 		return vArrayList;
 	}
 
-	public VCheckout createVCheckout(List<String> inSelectedList) {
-
+	public VCheckout createVCheckout(List<String> inSelectedList) throws SQLException {
+		BookDAO bookdao = getBookDAO();
 		VCheckout vc = new VCheckout();
 		vc.setTotal(bookdao.getPriceByISBNs(inSelectedList));
 
@@ -86,10 +88,6 @@ public class BookLogicImpl implements BookLogic {
 			inCart.addAll(inSelectedList);
 		}
 		return (inCart);
-	}
-
-	protected void setBookdao(BookDAO bookdao) {
-		this.bookdao = bookdao;
 	}
 
 }

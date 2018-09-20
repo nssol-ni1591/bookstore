@@ -62,6 +62,7 @@
 				name="OrderActionName"
 				scope="request" >
 			<forward name="OrderSuccess" path="/Order.vm" />
+			<forward name="OrderFailed" path="/Check.vm" />
 		</action>
 
 		<action	path="/SearchAction"

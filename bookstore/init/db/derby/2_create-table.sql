@@ -1,4 +1,5 @@
-connect 'jdbc:derby:c:/opt/java-bin/db-derby-10.13.1.1-bin/db/bookstore;user=bookstore;password=bookstore';
+--connect 'jdbc:derby:c:/opt/java-bin/db-derby-10.13.1.1-bin/db/bookstore;user=bookstore;password=bookstore';
+connect 'jdbc:derby://localhost:1527/bookstore;user=bookstore;password=bookstore';
 
 set schema bookstore;
 
@@ -46,6 +47,9 @@ create table t_order(
 	, orderday timestamp
 		--with time zone
 		not null
+--	, detail_id_fk integer not null
+--		constraint order_detail_id_constraint
+--		references t_order_detail(id)
 );
 
 create table t_order_detail(
@@ -54,10 +58,10 @@ create table t_order_detail(
 		primary key
 		--unique
 		not null
-	, order_id_fk integer not null
-		constraint detail_order_id_constraint
-		references t_order(id)
 	, book_id_fk integer not null
 		constraint defail_book_id_constraint
 		references t_book(id)
+	, order_id_fk integer not null
+		constraint detail_order_id_constraint
+		references t_order(id)
 );

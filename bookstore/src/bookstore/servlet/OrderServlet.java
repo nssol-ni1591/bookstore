@@ -1,6 +1,7 @@
 package bookstore.servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,6 +17,7 @@ import bookstore.logic.CustomerLogic;
 import bookstore.logic.OrderLogic;
 import bookstore.logic.pojo.CustomerLogicWrapper;
 import bookstore.logic.pojo.OrderLogicWrapper;
+import bookstore.util.Messages;
 
 /*
  * Logic LayerÇÃéQè∆Ç≈DAOÇêÿë÷Ç¶ÇÈ
@@ -50,11 +52,17 @@ public class OrderServlet extends HttpServlet {
 			@SuppressWarnings("unchecked")
 			List<String> cart = (List<String>)httpSession.getAttribute("Cart");
 
-			orderLogic.orderBooks(uid, cart);
-
-			req.setAttribute("Customer", customerLogic.createVCustomer(uid));
-
-			dispatcher = req.getRequestDispatcher("Order.jsp");
+			try {
+				orderLogic.orderBooks(uid, cart);
+				req.setAttribute("Customer", customerLogic.createVCustomer(uid));
+				dispatcher = req.getRequestDispatcher("Order.jsp");
+			}
+			catch (SQLException e) {
+				log.log(Level.SEVERE, "", e);
+				Messages errors = new Messages(req);
+				errors.add("orderalert", "error.system.exception");
+				dispatcher = req.getRequestDispatcher("Check.jsp");
+			}
 		}
 		try {
 			dispatcher.forward(req, res);

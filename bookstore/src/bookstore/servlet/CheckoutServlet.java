@@ -1,6 +1,7 @@
 package bookstore.servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,13 +48,18 @@ public class CheckoutServlet extends HttpServlet {
 			List<String> selectedItems = (List<String>) httpSession.getAttribute("Cart");
 			if (selectedItems == null || selectedItems.isEmpty()) {
 				errors.add("productalart", "error.checkout.noselected");
-
 				dispatcher = req.getRequestDispatcher("BookStore.jsp");
 			}
 			else {
-				BookLogic bookLogic = new BookLogicWrapper();
-				httpSession.setAttribute("ItemsToBuy", bookLogic.createVCheckout(selectedItems));
-				dispatcher = req.getRequestDispatcher("Check.jsp");
+				try {
+					BookLogic bookLogic = new BookLogicWrapper();
+					httpSession.setAttribute("ItemsToBuy", bookLogic.createVCheckout(selectedItems));
+					dispatcher = req.getRequestDispatcher("Check.jsp");
+				}
+				catch (SQLException e) {
+					errors.add("productalart", "error.system.exception");
+					dispatcher = req.getRequestDispatcher("BookStore.jsp");
+				}
 			}
 		}
 		try {

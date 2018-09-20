@@ -14,11 +14,13 @@
         <property name="orderday" type="timestamp">
             <column name="ORDERDAY" length="11" not-null="true" />
         </property>
+        <!-- 
         <set name="TOrderDetails" inverse="true" lazy="true" table="T_ORDER_DETAIL" fetch="select">
             <key>
                 <column name="ORDER_ID_FK" precision="22" scale="0" not-null="true" />
             </key>
             <one-to-many class="bookstore.pbean.TOrderDetail" />
         </set>
+         -->
     </class>
 </hibernate-mapping>

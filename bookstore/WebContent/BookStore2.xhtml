@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="resources/templates/template2.xhtml">
+	<ui:define name="title">
+	商品一覧
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form>
+			<h:outputText value="検索:"></h:outputText>
+			<h:inputText value="#{bookStoreBean2.keyword}"></h:inputText>
+			<h:commandButton value="検索" action="#{bookStoreBean2.search}"></h:commandButton>
+
+			<br/>
+			<h:messages style="color:red;font-weight=bold;"></h:messages>
+			<hr />
+			<h:dataTable id="table" border="1" value="#{bookStoreBean2.bookList}" var="book">
+				<h:column id="column1">
+					<f:facet name="header">
+						<h:outputText value="選択"></h:outputText>
+					</f:facet>
+					<h:selectBooleanCheckbox label="#{book.isbn}" value="#{book.selected}" valueChangeListener="#{bookStoreBean2.selectValueChange}">
+					</h:selectBooleanCheckbox>
+				</h:column>
+				<h:column id="column2">
+					<f:facet name="header">
+						<h:outputText value="タイトル"></h:outputText>
+					</f:facet>
+					<h:outputText id="bookTitle" value="#{book.title}"></h:outputText>
+				</h:column>
+				<h:column id="column3">
+					<f:facet name="header">
+						<h:outputText value="著者"></h:outputText>
+					</f:facet>
+					<h:outputText id="bookAuthor" value="#{book.author}"></h:outputText>
+				</h:column>
+				<h:column id="column4">
+					<f:facet name="header">
+						<h:outputText value="出版社"></h:outputText>
+					</f:facet>
+					<h:outputText id="bookPublisher" value="#{book.publisher}"></h:outputText>
+				</h:column>
+				<h:column id="column5">
+					<f:facet name="header">
+						<h:outputText value="価格"></h:outputText>
+					</f:facet>
+					<h:outputText id="bookPrice" value="#{book.price}"></h:outputText> 円
+				</h:column>
+			</h:dataTable>
+			<br></br>
+
+			<h:commandButton value="カートに追加" action="#{bookStoreBean2.addToCart}"></h:commandButton>
+
+			<h:commandButton value="カートを空に" action="#{bookStoreBean2.clearCart}"></h:commandButton>
+
+			<h:commandButton value="商品購入" action="#{orderBean2.checkOrder}"></h:commandButton>
+
+			<h:commandButton value="注文一覧" action="#{orderBean2.listOrders}"></h:commandButton>
+
+			<h:commandButton value="ログアウト" action="#{logoutBean.logout}"></h:commandButton>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+</html>

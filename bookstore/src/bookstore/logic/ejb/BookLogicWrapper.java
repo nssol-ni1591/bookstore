@@ -1,30 +1,33 @@
 package bookstore.logic.ejb;
 
-import bookstore.annotation.UsedEjb;
 import bookstore.annotation.UsedOpenJpa;
 import bookstore.dao.BookDAO;
-import bookstore.logic.impl.BookLogicImpl;
+import bookstore.logic.BookLogic;
+import bookstore.logic.AbstractBookLogic;
 
 import java.util.List;
+import java.util.logging.Logger;
 
-import javax.annotation.PostConstruct;
+import javax.ejb.Local;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-@UsedEjb
 @Stateless
-public class BookLogicWrapper extends BookLogicImpl {
-
-	/*
-	 * bookstore.jsf.bean.BookStoreBeanのスコープが@SessionScopeのためSerializedが必要
-	 */
-	//private static final long serialVersionUID = 1L
+@LocalBean
+@Local(BookLogic.class)
+public class BookLogicWrapper extends AbstractBookLogic {
 
 	@Inject @UsedOpenJpa private BookDAO bookdao;
+	@Inject private Logger log;
 
-	@PostConstruct
-	public void init() {
-		super.setBookdao(bookdao);
+	@Override
+	protected BookDAO getBookDAO() {
+		return bookdao;
+	}
+	@Override
+	protected Logger getLogger() {
+		return log;
 	}
 
 	/*

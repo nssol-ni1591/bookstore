@@ -1,6 +1,7 @@
 package bookstore.servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -73,11 +74,17 @@ public class AddToCartServlet extends HttpServlet {
 
 				httpSession.setAttribute("Cart", newCart);
 
-				List<String> productListAll = bookLogic.getAllBookISBNs();
-				List<VBook> vProductList = bookLogic.createVBookList(productListAll, newCart);
-
-				httpSession.setAttribute("ProductList", productListAll);
-				httpSession.setAttribute("ProductListView", vProductList);
+				try {
+					List<String> productListAll = bookLogic.getAllBookISBNs();
+					List<VBook> vProductList = bookLogic.createVBookList(productListAll, newCart);
+	
+					httpSession.setAttribute("ProductList", productListAll);
+					httpSession.setAttribute("ProductListView", vProductList);
+				}
+				catch (SQLException e) {
+					Messages errors = new Messages(req);
+					errors.add("productalart", "error.system.exception");
+				}
 			}
 			else {
 				Messages errors = new Messages(req);

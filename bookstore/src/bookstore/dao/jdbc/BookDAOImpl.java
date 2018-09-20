@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.naming.NamingException;
 
@@ -17,10 +15,10 @@ import bookstore.pbean.TBook;
 
 public class BookDAOImpl implements BookDAO {
 
-	private static final Logger log = Logger.getLogger(BookDAOImpl.class.getName());
+	//private static final Logger log = Logger.getLogger(BookDAOImpl.class.getName());
 
 	@Override
-	public int getPriceByISBNs(final List<String> inISBNList) {
+	public int getPriceByISBNs(final List<String> inISBNList) throws SQLException {
 		Connection con = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -34,8 +32,8 @@ public class BookDAOImpl implements BookDAO {
 				return rs.getInt(1);
 			}
 		}
-		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
-			log.log(Level.SEVERE, "", e);
+		catch (ClassNotFoundException | IOException | NamingException e) {
+			throw new SQLException(e);
 		}
 		finally {
 			DB.close(BookDAOImpl.class.getName(), rs, pst, con);
@@ -44,7 +42,7 @@ public class BookDAOImpl implements BookDAO {
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByKeyword(String inKeyword) {
+	public List<TBook> retrieveBooksByKeyword(String inKeyword) throws SQLException {
 		String keyword = "%" + inKeyword + "%";
 		Connection con = null;
 		PreparedStatement pst = null;
@@ -64,11 +62,19 @@ public class BookDAOImpl implements BookDAO {
 				String author = rs.getString(4);
 				String publisher = rs.getString(5);
 				int price = rs.getInt(6);
-				booksList.add(new TBook(id, isbn, title, author, publisher, price));
+				//booksList.add(new TBook(id, isbn, title, author, publisher, price));
+				TBook book = new TBook();
+				book.setId(id);
+				book.setIsbn(isbn);
+				book.setTitle(title);
+				book.setAuthor(author);
+				book.setPublisher(publisher);
+				book.setPrice(price);
+				booksList.add(book);
 			}
 		}
-		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
-			log.log(Level.SEVERE, "", e);
+		catch (ClassNotFoundException | IOException | NamingException e) {
+			throw new SQLException(e);
 		}
 		finally {
 			DB.close(BookDAOImpl.class.getName(), rs, pst, con);
@@ -77,7 +83,7 @@ public class BookDAOImpl implements BookDAO {
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByISBNs(final List<String> inISBNList) {
+	public List<TBook> retrieveBooksByISBNs(final List<String> inISBNList) throws SQLException {
 		Connection con = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -100,11 +106,19 @@ public class BookDAOImpl implements BookDAO {
 				String author = rs.getString(4);
 				String publisher = rs.getString(5);
 				int price = rs.getInt(6);
-				booksList.add(new TBook(id, isbn, title, author, publisher, price));
+				//booksList.add(new TBook(id, isbn, title, author, publisher, price));
+				TBook book = new TBook();
+				book.setId(id);
+				book.setIsbn(isbn);
+				book.setTitle(title);
+				book.setAuthor(author);
+				book.setPublisher(publisher);
+				book.setPrice(price);
+				booksList.add(book);
 			}
 		}
-		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
-			log.log(Level.SEVERE, "", e);
+		catch (ClassNotFoundException | IOException | NamingException e) {
+			throw new SQLException(e);
 		}
 		finally {
 			DB.close(BookDAOImpl.class.getName(), rs, pst, con);

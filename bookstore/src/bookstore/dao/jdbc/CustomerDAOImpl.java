@@ -17,7 +17,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 	private static final Logger log = Logger.getLogger(CustomerDAOImpl.class.getName());
 
-	public int getCustomerNumberByUid(final String inUid) {
+	public int getCustomerNumberByUid(final String inUid) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement pst = null;
@@ -31,8 +31,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 				return rs.getInt(1);
 			}
 		}
-		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
-			log.log(Level.SEVERE, "", e);
+		catch (ClassNotFoundException | IOException | NamingException e) {
+			throw new SQLException(e);
 		}
 		finally {
 			DB.close(OrderDAOImpl.class.getName(), rs, pst, con);
@@ -40,7 +40,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		return 0;
 	}
 
-	public TCustomer findCustomerByUid(final String inUid) {
+	public TCustomer findCustomerByUid(final String inUid) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement pst = null;
@@ -56,11 +56,18 @@ public class CustomerDAOImpl implements CustomerDAO {
 				String passwordmd5 = rs.getString(3);
 				String name = rs.getString(4);
 				String email = rs.getString(5);
-				return new TCustomer(id, username, passwordmd5, name, email);
+				//return new TCustomer(id, username, passwordmd5, name, email);
+				TCustomer c = new TCustomer();
+				c.setId(id);
+				c.setUsername(username);
+				c.setPasswordmd5(passwordmd5);
+				c.setName(name);
+				c.setEmail(email);
+				return c;
 			}
 		}
-		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
-			log.log(Level.SEVERE, "", e);
+		catch (ClassNotFoundException | IOException | NamingException e) {
+			throw new SQLException(e);
 		}
 		finally {
 			DB.close(OrderDAOImpl.class.getName(), rs, pst, con);
@@ -71,7 +78,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 	public void saveCustomer(String inUid,
 			String inPasswordMD5,
 			String inName,
-			String inEmail) {
+			String inEmail) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement pst = null;
@@ -82,12 +89,12 @@ public class CustomerDAOImpl implements CustomerDAO {
 			pst.setString(2, inPasswordMD5);
 			pst.setString(3, inName);
 			pst.setString(4, inEmail);
-			if (!pst.execute()) {
+			if (pst.executeUpdate() <= 0) {
 				log.log(Level.SEVERE, "failed sql: {0}", pst);
 			}
 		}
-		catch (ClassNotFoundException | IOException | SQLException | NamingException e) {
-			log.log(Level.SEVERE, "", e);
+		catch (ClassNotFoundException | IOException | NamingException e) {
+			throw new SQLException(e);
 		}
 		finally {
 			DB.close(OrderDAOImpl.class.getName(), null, pst, con);

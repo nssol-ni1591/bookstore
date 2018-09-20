@@ -1,5 +1,6 @@
 package bookstore.action;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public class CheckoutAction extends Action {
 	public ActionForward execute(ActionMapping mapping
 			, ActionForm form
 			, HttpServletRequest req
-			, HttpServletResponse res) {
+			, HttpServletResponse res) throws SQLException {
 
 		HttpSession httpSession = req.getSession(false);
 		if (httpSession == null) {

@@ -1,5 +1,6 @@
 package bookstore.action;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +28,7 @@ public class LoginAction extends Action {
 	public ActionForward execute(ActionMapping mapping,
 			ActionForm form,
 			HttpServletRequest req,
-			HttpServletResponse res) {
+			HttpServletResponse res) throws SQLException {
 
 		LoginActionFormBean lafb = (LoginActionFormBean) form;
 

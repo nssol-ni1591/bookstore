@@ -10,7 +10,15 @@
 	<h2>購入商品</h2>
 	</center>
 
-	<br><br>
+	<br>
+	#if( $messages.exist() )
+		<br>
+		<font color="red">
+			$messages.get( "orderalert" )
+		</font>
+		<br>
+	#end
+	<br>
 	
 	以下が購入する商品と合計です。
 	<br>

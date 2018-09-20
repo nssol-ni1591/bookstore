@@ -1,4 +1,5 @@
-connect 'jdbc:derby:c:/opt/java-bin/db-derby-10.13.1.1-bin/db/bookstore;user=bookstore;password=bookstore';
+--connect 'jdbc:derby:c:/opt/java-bin/db-derby-10.13.1.1-bin/db/bookstore;user=bookstore;password=bookstore';
+connect 'jdbc:derby://localhost:1527/bookstore;user=bookstore;password=bookstore';
 
 set schema bookstore;
 
@@ -63,3 +64,6 @@ insert into t_book ( isbn, title, author, publisher, price ) values(
 
 insert into t_book ( isbn, title, author, publisher, price ) values(
 	'4-6543-2367-1', '今UNIXにゆきます', '鈴木三郎','Z出版社', 3800 );
+
+insert into t_book ( isbn, title, author, publisher, price ) values(
+	'0-0000-0000-0', 'SQLExceptionを発行', '異常系試験','試験官', 500 );

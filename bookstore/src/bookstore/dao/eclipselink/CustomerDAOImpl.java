@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import bookstore.annotation.UsedEclipselink;
@@ -17,9 +18,9 @@ import bookstore.pbean.TCustomer;
 public class CustomerDAOImpl implements CustomerDAO {
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
-	//@PersistenceContext(unitName = "BookStore") private EntityManager em
+	@PersistenceContext(unitName = "BookStore") private EntityManager em;
 	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager()
-	@Inject private EntityManager em;
+	//@Inject private EntityManager em;
 	@Inject private Logger log;
 
 	@Override
@@ -41,14 +42,17 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 
 	@Override
-	public void saveCustomer(String inUid, String inPasswordMD5, String inName,
-			String inEmail) {
+	public void saveCustomer(String inUsername, String inPasswordMD5, String inName, String inEmail) {
+		em.getTransaction().begin();
+
 		TCustomer customer = new TCustomer();
-		customer.setUsername(inUid);
+		customer.setUsername(inUsername);
 		customer.setPasswordmd5(inPasswordMD5);
 		customer.setName(inName);
 		customer.setEmail(inEmail);
 		em.persist(customer);
+
+		em.getTransaction().commit();
 	}
 
 }

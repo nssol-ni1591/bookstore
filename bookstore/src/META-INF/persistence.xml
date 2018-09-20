@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" 
-	version="1.0">
- -->
-
 <persistence version="2.1"
 	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -14,7 +8,9 @@
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
 		<jta-data-source>jdbc/bookstoreDS</jta-data-source>
+		<!-- 
 		<non-jta-data-source>jdbc/bookstoreDSnonJTA</non-jta-data-source>
+		 -->
 
 		<class>bookstore.pbean.TBook</class>
 		<class>bookstore.pbean.TCustomer</class>
@@ -31,14 +27,19 @@
 				<property name="javax.persistence.jdbc.password" value="bookstore" />
 				<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 			 -->
+			<property name="eclipselink.logging.parameters" value="true"/>
+			<property name="eclipselink.logging.level.sql" value="FINE"/>
 		</properties>
 	</persistence-unit>
 
 	<persistence-unit name="BookStore2" transaction-type="JTA">
+
 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
 
 		<jta-data-source>jdbc/bookstoreDS</jta-data-source>
+		<!-- 
 		<non-jta-data-source>jdbc/bookstoreDSnonJTA</non-jta-data-source>
+		 -->
 
 		<class>bookstore.pbean.TBook</class>
 		<class>bookstore.pbean.TCustomer</class>
@@ -55,6 +56,7 @@
 				<property name="openjpa.ConnectionPassword" value="bookstore"/>
 				<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 			 -->
+			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 		</properties>
 	</persistence-unit>
 

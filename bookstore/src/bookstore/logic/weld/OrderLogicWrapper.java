@@ -1,14 +1,15 @@
 package bookstore.logic.weld;
 
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.PostConstruct;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 
 import bookstore.annotation.UsedWeld;
 import bookstore.annotation.UsedEclipselink;
@@ -16,34 +17,47 @@ import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
 import bookstore.dao.OrderDAO;
 import bookstore.dao.OrderDetailDAO;
-import bookstore.logic.impl.OrderLogicImpl;
+import bookstore.logic.AbstractOrderLogic;
 import bookstore.pbean.TBook;
 import bookstore.pbean.TCustomer;
 import bookstore.pbean.TOrder;
 
 @UsedWeld
 @Dependent
-public class OrderLogicWrapper extends OrderLogicImpl {
+public class OrderLogicWrapper extends AbstractOrderLogic {
 
 	@Inject @UsedEclipselink private BookDAO bookdao;
 	@Inject @UsedEclipselink private CustomerDAO customerdao;
 	@Inject @UsedEclipselink private OrderDAO orderdao;
 	@Inject @UsedEclipselink private OrderDetailDAO orderdetaildao;
-
-	//@Inject private EntityManager em;
 	@Inject private Logger log;
 
-	@PostConstruct
-	public void init() {
-		super.setBookdao(bookdao);
-		super.setCustomerdao(customerdao);
-		super.setOrderdao(orderdao);
-		super.setOrderdetaildao(orderdetaildao);
+	@Override
+	protected BookDAO getBookDAO() {
+		return bookdao;
+	}
+	@Override
+	protected CustomerDAO getCustomerDAO() {
+		return customerdao;
+	}
+	@Override
+	protected OrderDAO getOrderDAO() {
+		return orderdao;
+	}
+	@Override
+	protected OrderDetailDAO getOrderDetailDAO() {
+		return orderdetaildao;
+	}
+	@Override
+	protected Logger getLogger() {
+		return log;
 	}
 
 	@Override
-	public void orderBooks(String inUid, List<String> inISBNs) {
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public void orderBooks(String inUid, List<String> inISBNs) throws SQLException {
 		log.log(Level.INFO, "uid={0}, isbn={1}", new Object[] { inUid, inISBNs });
+
 		// Exception Description: Cannot use an EntityTransaction while using JTA
 		//em.getTransaction().begin();
 
