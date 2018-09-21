@@ -23,7 +23,7 @@ public class OrderAction extends Action {
 
 	private OrderLogic orderLogic;
 	private CustomerLogic customerLogic;
-	@Log Logger log;
+	@Log private static Logger log;
 
 	@Override
 	public ActionForward execute(ActionMapping mapping

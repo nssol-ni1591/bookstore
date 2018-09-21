@@ -6,6 +6,9 @@ import java.util.logging.Logger;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 
 import bookstore.annotation.UsedWeld;
 import bookstore.annotation.UsedEclipselink;
@@ -14,23 +17,31 @@ import bookstore.logic.AbstractBookLogic;
 
 @UsedWeld
 @Dependent
-public class BookLogicWrapper extends AbstractBookLogic implements Serializable {
+public class BookLogicWrapper extends AbstractBookLogic<EntityManager> implements Serializable {
 
 	/*
 	 * bookstore.jsf.bean.BookStoreBeanのスコープが@SessionScopeのためSerializedが必要
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Inject @UsedEclipselink private BookDAO bookdao;
+	@Inject @UsedEclipselink private BookDAO<EntityManager> bookdao;
 	@Inject private Logger log;
 
+	//@PersistenceContext(unitName = "BookStore") private EntityManager em;
+	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
+
 	@Override
-	protected BookDAO getBookDAO() {
+	protected BookDAO<EntityManager> getBookDAO() {
 		return bookdao;
 	}
 	@Override
 	protected Logger getLogger() {
 		return log;
+	}
+	@Override
+	protected EntityManager getManager() {
+		EntityManager em = emf.createEntityManager();
+		return em;
 	}
 
 	/*

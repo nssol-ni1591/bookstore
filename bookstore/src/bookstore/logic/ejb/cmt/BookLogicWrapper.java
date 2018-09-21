@@ -1,4 +1,4 @@
-package bookstore.logic.ejb;
+package bookstore.logic.ejb.cmt;
 
 import bookstore.annotation.UsedOpenJpa;
 import bookstore.dao.BookDAO;
@@ -11,23 +11,32 @@ import java.util.logging.Logger;
 import javax.ejb.Local;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
-@Stateless
+@Stateless(name="BookLogicCmtWrapper")
 @LocalBean
 @Local(BookLogic.class)
-public class BookLogicWrapper extends AbstractBookLogic {
+@TransactionManagement(TransactionManagementType.CONTAINER)
+public class BookLogicWrapper extends AbstractBookLogic<EntityManager> {
 
-	@Inject @UsedOpenJpa private BookDAO bookdao;
+	@Inject @UsedOpenJpa private BookDAO<EntityManager> bookdao;
 	@Inject private Logger log;
 
 	@Override
-	protected BookDAO getBookDAO() {
+	protected BookDAO<EntityManager> getBookDAO() {
 		return bookdao;
 	}
 	@Override
 	protected Logger getLogger() {
 		return log;
+	}
+	@Override
+	protected EntityManager getManager() {
+		return null;
+		// BMTÇ≈ÇÕUserTransactionÇ≈ä«óùÇ≥ÇÍÇÈÇΩÇﬂÅAemÇà¯Ç´åpÇÆïKóvÇÕÇ»Çµ
 	}
 
 	/*

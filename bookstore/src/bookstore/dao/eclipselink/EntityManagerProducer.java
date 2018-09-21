@@ -7,6 +7,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+/*
+ * EntityManagerのDIに、@Injectではなく、
+ * @PersistentUnitまたは@PersistentContextを使用しているので、
+ * このクラスは使用していない
+ */
 @Dependent
 public class EntityManagerProducer {
 

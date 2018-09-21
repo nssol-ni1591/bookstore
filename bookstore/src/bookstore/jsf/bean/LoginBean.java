@@ -7,7 +7,7 @@ import javax.inject.Named;
 import bookstore.annotation.UsedWeld;
 import bookstore.logic.CustomerLogic;
 
-@Named(value="loginBean")
+@Named
 @RequestScoped
 public class LoginBean extends AbstractLoginBean {
 

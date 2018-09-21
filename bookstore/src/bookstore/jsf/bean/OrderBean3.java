@@ -12,9 +12,9 @@ import bookstore.logic.OrderLogic;
 @RequestScoped
 public class OrderBean3 extends AbstractOrderBean {
 
-	@EJB private BookLogic bookLogic;
-	@EJB private CustomerLogic customerLogic;
-	@EJB private OrderLogic orderLogic;
+	@EJB(mappedName="BookLogicCmtWrapper") private BookLogic bookLogic;
+	@EJB(mappedName="CustomerLogicCmtWrapper") private CustomerLogic customerLogic;
+	@EJB(mappedName="OrderLogicCmtWrapper") private OrderLogic orderLogic;
 
 	protected BookLogic getBookLogic() {
 		return bookLogic;

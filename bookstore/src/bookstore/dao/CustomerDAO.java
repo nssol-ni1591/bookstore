@@ -4,13 +4,14 @@ import java.sql.SQLException;
 
 import bookstore.pbean.TCustomer;
 
-public interface CustomerDAO {
+public interface CustomerDAO<T> {
 
-	public int getCustomerNumberByUid(String inUid) throws SQLException;
+	public int getCustomerNumberByUid(final T em, String inUid) throws SQLException;
 
-	public TCustomer findCustomerByUid(String inUid) throws SQLException;
+	public TCustomer findCustomerByUid(final T em, String inUid) throws SQLException;
 
-	public void saveCustomer(String inUid,
+	public void saveCustomer(final T em, 
+			String inUid,
 			String inPasswordMD5,
 			String inName,
 			String inEmail) throws SQLException;

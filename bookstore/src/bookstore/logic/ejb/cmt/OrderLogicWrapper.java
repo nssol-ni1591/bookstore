@@ -1,4 +1,4 @@
-package bookstore.logic.ejb;
+package bookstore.logic.ejb.cmt;
 
 import bookstore.annotation.UsedOpenJpa;
 import bookstore.dao.BookDAO;
@@ -12,24 +12,26 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.Resource;
+import javax.ejb.EJBException;
 import javax.ejb.Local;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.UserTransaction;
 
-@Stateless
+@Stateless(name="OrderLogicCmtWrapper")
 @LocalBean
 @Local(OrderLogic.class)
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 
-	@Inject @UsedOpenJpa private BookDAO bookdao;
-	@Inject @UsedOpenJpa private CustomerDAO customerdao;
+	@Inject @UsedOpenJpa private BookDAO<EntityManager> bookdao;
+	@Inject @UsedOpenJpa private CustomerDAO<EntityManager> customerdao;
 	@Inject @UsedOpenJpa private OrderDAO<EntityManager> orderdao;
 	@Inject @UsedOpenJpa private OrderDetailDAO<EntityManager> orderdetaildao;
 	@Inject private Logger log;
@@ -39,11 +41,11 @@ public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 	//@Resource private UserTransaction tx;
 
 	@Override
-	protected BookDAO getBookDAO() {
+	protected BookDAO<EntityManager> getBookDAO() {
 		return bookdao;
 	}
 	@Override
-	protected CustomerDAO getCustomerDAO() {
+	protected CustomerDAO<EntityManager> getCustomerDAO() {
 		return customerdao;
 	}
 	@Override
@@ -63,19 +65,23 @@ public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 		return em;
 	}
 
+	/*
+	 * Container-Managed Transactionsがロールバックするのは2つの場合がある
+	 * (1)システム例外が投げられた場合、コンテナは自動的にトランザクションをロールバックします
+	 * (2)EJBContextインターフェイスのsetRollbackOnlyメソッドが呼び出された場合
+	 * ※システム例外：java.lang.RuntimeExceptionまたはjava.rmi.RemoteException を拡張する例外
+	 */
 	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
-		/*
 		try {
-			tx.begin();
+			log.log(Level.INFO, "this={0}", this);
 			super.orderBooks(inUid, inISBNs);
-			tx.commit();
 		}
 		catch (Exception e) {
-			tx.rollback();
+			// EJBExceptionはシステム例外
+			throw new EJBException(e);
 		}
-		*/
-		super.orderBooks(inUid, inISBNs);
 	}
 
 }

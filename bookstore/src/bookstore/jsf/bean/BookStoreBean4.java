@@ -7,22 +7,21 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
 import bookstore.logic.BookLogic;
-import bookstore.logic.ejb.cmt.BookLogicWrapper;
 
 @Named
 @SessionScoped
-public class BookStoreBean2 extends AbstractBookStoreBean implements Serializable {
+public class BookStoreBean4 extends AbstractBookStoreBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@EJB private BookLogicWrapper bookLogic;
+	@EJB(mappedName="BookLogicBmtWrapper") private BookLogic bookLogic;
 
-	public BookStoreBean2() {
+	public BookStoreBean4() {
 		super();
 	}
 
 	protected String getBookStorePage() {
-		return "BookStore2";
+		return "BookStore4";
 	}
 	protected BookLogic getBookLogic() {
 		return bookLogic;

@@ -7,22 +7,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.naming.NamingException;
-
 import bookstore.dao.BookDAO;
 import bookstore.pbean.TBook;
 
-public class BookDAOImpl implements BookDAO {
-
-	//private static final Logger log = Logger.getLogger(BookDAOImpl.class.getName());
+public class BookDAOImpl<T extends Connection> implements BookDAO<T> {
 
 	@Override
-	public int getPriceByISBNs(final List<String> inISBNList) throws SQLException {
-		Connection con = null;
+	public int getPriceByISBNs(final T con2, final List<String> inISBNList) throws SQLException {
+		Connection con = con2 != null ? con2 : DB.createConnection ();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
-			con = DB.createConnection ();
+			con = con2 != null ? con2 : DB.createConnection ();
 			pst = con.prepareStatement("select sum(price) from T_Book where isbn in ('" 
 					+ String.join("','", inISBNList.toArray(new String[0]))
 					+ "')");
@@ -31,25 +27,22 @@ public class BookDAOImpl implements BookDAO {
 				return rs.getInt(1);
 			}
 		}
-		catch (NamingException e) {
-			throw new SQLException(e);
-		}
 		finally {
-			DB.close(BookDAOImpl.class.getName(), rs, pst, con);
+			DB.close(BookDAOImpl.class.getName(), rs, pst, con2 != null ? null : con);
 		}
 		return 0;
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByKeyword(String inKeyword) throws SQLException {
-		String keyword = "%" + inKeyword + "%";
-		Connection con = null;
+	public List<TBook> retrieveBooksByKeyword(final T con2, String inKeyword) throws SQLException {
+		Connection con = con2 != null ? con2 : DB.createConnection ();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		List<TBook> booksList = new ArrayList<>();
 		try {
-			con = DB.createConnection ();
+			con = con2 != null ? con2 : DB.createConnection ();
 			pst = con.prepareStatement("select id, isbn, title, author, publisher, price from T_Book where author like ? or title like ? or publisher like ?");
+			String keyword = "%" + inKeyword + "%";
 			pst.setString(1, keyword);
 			pst.setString(2, keyword);
 			pst.setString(3, keyword);
@@ -72,23 +65,19 @@ public class BookDAOImpl implements BookDAO {
 				booksList.add(book);
 			}
 		}
-		catch (NamingException e) {
-			throw new SQLException(e);
-		}
 		finally {
-			DB.close(BookDAOImpl.class.getName(), rs, pst, con);
+			DB.close(BookDAOImpl.class.getName(), rs, pst, con2 != null ? null : con);
 		}
 		return booksList;
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByISBNs(final List<String> inISBNList) throws SQLException {
-		Connection con = null;
+	public List<TBook> retrieveBooksByISBNs(final T con2, final List<String> inISBNList) throws SQLException {
+		Connection con = con2 != null ? con2 : DB.createConnection ();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		List<TBook> booksList = new ArrayList<>();
 		try {
-			con = DB.createConnection ();
 			if (inISBNList == null || inISBNList.isEmpty()) {
 				pst = con.prepareStatement("select id, isbn, title, author, publisher, price from T_Book");
 			}
@@ -116,11 +105,8 @@ public class BookDAOImpl implements BookDAO {
 				booksList.add(book);
 			}
 		}
-		catch (NamingException e) {
-			throw new SQLException(e);
-		}
 		finally {
-			DB.close(BookDAOImpl.class.getName(), rs, pst, con);
+			DB.close(BookDAOImpl.class.getName(), rs, pst, con2 != null ? null : con);
 		}
 		return booksList;
 	}

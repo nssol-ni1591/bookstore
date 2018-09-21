@@ -23,7 +23,7 @@ import bookstore.pbean.TOrder;
 public class OrderDAOImpl<T> extends HibernateDaoSupport implements OrderDAO<T> {
 
 	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
-	@Log Logger log;
+	@Log private static Logger log;
 
 	public TOrder createOrder(final T o, TCustomer inCustomer) {
 		TOrder saveOrder = new TOrder();

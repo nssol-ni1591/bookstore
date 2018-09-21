@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="windows-31j" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="resources/templates/template4.xhtml">
+	<ui:define name="title">
+	ログイン
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form>
+			<h:panelGrid border="1" columns="2">
+				<h:outputText value="ユーザ名"></h:outputText>
+				<h:inputText value="#{loginBean4.uid}"></h:inputText>
+				<h:outputText value="パスワード"></h:outputText>
+				<h:inputSecret value="#{loginBean4.passwd}"></h:inputSecret>
+			</h:panelGrid>
+			<hr />
+			<h:messages style="color:red;font-weight=bold;"></h:messages>
+			<h:commandButton value="ログイン" action="#{loginBean4.login}" type="submit"></h:commandButton>
+			<h:commandButton value="リセット" type="reset"></h:commandButton>
+		</h:form>
+		<hr />
+		<div>アカウントを作成していない人は<a href="CreateAccount.xhtml">こちら</a></div>
+	</ui:define>
+</ui:composition>
+
+</html>

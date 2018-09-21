@@ -20,9 +20,9 @@ import bookstore.pbean.TOrderDetail;
 public class OrderDetailDAOImpl<T> extends HibernateDaoSupport implements OrderDetailDAO<T> {
 
 	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
-	@Log Logger log;
+	@Log private static Logger log;
 
-	public TOrderDetail createOrderDetail(final T em, TOrder inOrder, TBook inBook) throws SQLException {
+	public void createOrderDetail(final T em, TOrder inOrder, TBook inBook) throws SQLException {
 		log.log(Level.INFO, "order_id={0}, book_id={1}"
 				, new Object[] {
 						 inOrder == null ? "null" : inOrder.getId()
@@ -37,6 +37,5 @@ public class OrderDetailDAOImpl<T> extends HibernateDaoSupport implements OrderD
 		saveOrderDetail.setTOrder(inOrder);
 		saveOrderDetail.setTBook(inBook);
 		getHibernateTemplate().save(saveOrderDetail);
-		return saveOrderDetail;
 	}
 }

@@ -79,6 +79,7 @@ public class LoginServlet extends HttpServlet {
 		}
 		}
 		catch (SQLException e) {
+			log.log(Level.SEVERE, "", e);
 			errors.add("illegallogin", "error.system.exception");
 			dispatcher = req.getRequestDispatcher("Login.jsp");
 		}

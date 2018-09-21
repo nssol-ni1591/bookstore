@@ -34,7 +34,6 @@ public class CheckoutServlet extends HttpServlet {
 
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse res) {
-
 		HttpSession httpSession = req.getSession(false);
 
 		Messages errors = new Messages(req);
@@ -57,6 +56,7 @@ public class CheckoutServlet extends HttpServlet {
 					dispatcher = req.getRequestDispatcher("Check.jsp");
 				}
 				catch (SQLException e) {
+					log.log(Level.SEVERE, "", e);
 					errors.add("productalart", "error.system.exception");
 					dispatcher = req.getRequestDispatcher("BookStore.jsp");
 				}

@@ -82,6 +82,7 @@ public class AddToCartServlet extends HttpServlet {
 					httpSession.setAttribute("ProductListView", vProductList);
 				}
 				catch (SQLException e) {
+					log.log(Level.SEVERE, "", e);
 					Messages errors = new Messages(req);
 					errors.add("productalart", "error.system.exception");
 				}

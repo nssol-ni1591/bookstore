@@ -7,17 +7,14 @@ import javax.inject.Named;
 import bookstore.logic.BookLogic;
 import bookstore.logic.CustomerLogic;
 import bookstore.logic.OrderLogic;
-import bookstore.logic.ejb.cmt.BookLogicWrapper;
-import bookstore.logic.ejb.cmt.CustomerLogicWrapper;
-import bookstore.logic.ejb.cmt.OrderLogicWrapper;
 
 @Named
 @RequestScoped
-public class OrderBean2 extends AbstractOrderBean {
+public class OrderBean4 extends AbstractOrderBean {
 
-	@EJB private BookLogicWrapper bookLogic;
-	@EJB private CustomerLogicWrapper customerLogic;
-	@EJB private OrderLogicWrapper orderLogic;
+	@EJB(mappedName="BookLogicBmtWrapper") private BookLogic bookLogic;
+	@EJB(mappedName="CustomerLogicBmtWrapper") private CustomerLogic customerLogic;
+	@EJB(mappedName="OrderLogicBmtWrapper") private OrderLogic orderLogic;
 
 	protected BookLogic getBookLogic() {
 		return bookLogic;
@@ -30,13 +27,13 @@ public class OrderBean2 extends AbstractOrderBean {
 	}
 
 	protected String getBookStorePage() {
-		return "BookStore2";
+		return "BookStore4";
 	}
 	protected String getCheckPage() {
-		return "Check2";
+		return "Check4";
 	}
 	protected String getOrderPage() {
-		return "Order2";
+		return "Order4";
 	}
 	protected String getOrderListPage() {
 		return "OrderList";

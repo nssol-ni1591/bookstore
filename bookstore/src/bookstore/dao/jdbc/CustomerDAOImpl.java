@@ -7,22 +7,18 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.naming.NamingException;
-
 import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;
 
-public class CustomerDAOImpl implements CustomerDAO {
+public class CustomerDAOImpl<T extends Connection> implements CustomerDAO<T> {
 
 	private static final Logger log = Logger.getLogger(CustomerDAOImpl.class.getName());
 
-	public int getCustomerNumberByUid(final String inUid) throws SQLException {
-
-		Connection con = null;
+	public int getCustomerNumberByUid(final T con2, final String inUid) throws SQLException {
+		Connection con = con2 != null ? con2 : DB.createConnection ();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
-			con = DB.createConnection ();
 			pst = con.prepareStatement("select count(*) from T_Customer where username = ?");
 			pst.setString(1, inUid);
 			rs = pst.executeQuery();
@@ -30,21 +26,17 @@ public class CustomerDAOImpl implements CustomerDAO {
 				return rs.getInt(1);
 			}
 		}
-		catch (NamingException e) {
-			throw new SQLException(e);
-		}
 		finally {
-			DB.close(OrderDAOImpl.class.getName(), rs, pst, con);
+			DB.close(OrderDAOImpl.class.getName(), rs, pst, con2 != null ? null : con);
 		}
 		return 0;
 	}
 
-	public TCustomer findCustomerByUid(final String inUid) throws SQLException {
-		Connection con = null;
+	public TCustomer findCustomerByUid(final T con2, final String inUid) throws SQLException {
+		Connection con = con2 != null ? con2 : DB.createConnection ();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
-			con = DB.createConnection ();
 			pst = con.prepareStatement("select id, username, passwordmd5, name, email from T_Customer where username = ?");
 			pst.setString(1, inUid);
 			rs = pst.executeQuery();
@@ -64,24 +56,20 @@ public class CustomerDAOImpl implements CustomerDAO {
 				return c;
 			}
 		}
-		catch (NamingException e) {
-			throw new SQLException(e);
-		}
 		finally {
-			DB.close(OrderDAOImpl.class.getName(), rs, pst, con);
+			DB.close(OrderDAOImpl.class.getName(), rs, pst, con2 != null ? null : con);
 		}
 		return null;
 	}
 
-	public void saveCustomer(String inUid,
+	public void saveCustomer(final T con2, 
+			String inUid,
 			String inPasswordMD5,
 			String inName,
 			String inEmail) throws SQLException {
-
-		Connection con = null;
+		Connection con = con2 != null ? con2 : DB.createConnection ();
 		PreparedStatement pst = null;
 		try {
-			con = DB.createConnection ();
 			pst = con.prepareStatement("insert into T_Customer (username, passwordmd5, name, email) values (?,?,?,?)");
 			pst.setString(1, inUid);
 			pst.setString(2, inPasswordMD5);
@@ -91,11 +79,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 				log.log(Level.SEVERE, "failed sql: {0}", pst);
 			}
 		}
-		catch (NamingException e) {
-			throw new SQLException(e);
-		}
 		finally {
-			DB.close(OrderDAOImpl.class.getName(), null, pst, con);
+			DB.close(OrderDAOImpl.class.getName(), null, pst, con2 != null ? null : con);
 		}
 	}
 }

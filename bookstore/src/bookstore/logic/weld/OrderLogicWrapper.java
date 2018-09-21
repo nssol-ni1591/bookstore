@@ -1,8 +1,6 @@
 package bookstore.logic.weld;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.enterprise.context.Dependent;
@@ -19,29 +17,25 @@ import bookstore.dao.CustomerDAO;
 import bookstore.dao.OrderDAO;
 import bookstore.dao.OrderDetailDAO;
 import bookstore.logic.AbstractOrderLogic;
-import bookstore.pbean.TBook;
-import bookstore.pbean.TCustomer;
-import bookstore.pbean.TOrder;
 
 @UsedWeld
 @Dependent
 public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 
-	@Inject @UsedEclipselink private BookDAO bookdao;
-	@Inject @UsedEclipselink private CustomerDAO customerdao;
+	@Inject @UsedEclipselink private BookDAO<EntityManager> bookdao;
+	@Inject @UsedEclipselink private CustomerDAO<EntityManager> customerdao;
 	@Inject @UsedEclipselink private OrderDAO<EntityManager> orderdao;
 	@Inject @UsedEclipselink private OrderDetailDAO<EntityManager> orderdetaildao;
 	@Inject private Logger log;
 
-	//@PersistenceContext(unitName = "BookStore") private EntityManager em;
 	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
 
 	@Override
-	protected BookDAO getBookDAO() {
+	protected BookDAO<EntityManager> getBookDAO() {
 		return bookdao;
 	}
 	@Override
-	protected CustomerDAO getCustomerDAO() {
+	protected CustomerDAO<EntityManager> getCustomerDAO() {
 		return customerdao;
 	}
 	@Override

@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.naming.NamingException;
-
 import bookstore.annotation.UsedPojo;
 import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
@@ -23,19 +21,18 @@ import bookstore.logic.AbstractOrderLogic;
 @UsedPojo
 public class OrderLogicWrapper extends AbstractOrderLogic<Connection> {
 
-	private final BookDAO bookdao = new BookDAOImpl();
-	private final CustomerDAO customerdao = new CustomerDAOImpl();
+	private final BookDAO<Connection> bookdao = new BookDAOImpl<>();
+	private final CustomerDAO<Connection> customerdao = new CustomerDAOImpl<>();
 	private final OrderDAO<Connection> orderdao = new OrderDAOImpl<>();
 	private final OrderDetailDAO<Connection> odetaildao = new OrderDetailDAOImpl<>();
 	private static final Logger log = Logger.getLogger(OrderLogicWrapper.class.getName());
-	private Connection con = null;
 
 	@Override
-	protected BookDAO getBookDAO() {
+	protected BookDAO<Connection> getBookDAO() {
 		return bookdao;
 	}
 	@Override
-	protected CustomerDAO getCustomerDAO() {
+	protected CustomerDAO<Connection> getCustomerDAO() {
 		return customerdao;
 	}
 	@Override
@@ -52,21 +49,19 @@ public class OrderLogicWrapper extends AbstractOrderLogic<Connection> {
 	}
 	@Override
 	protected Connection getManager() {
-		if (con == null) {
-			try {
-				con = DB.createConnection();
-			}
-			catch (NamingException | SQLException e) {
-				log.log(Level.SEVERE, "", e);
-			}
+		try {
+			return DB.createConnection();
 		}
-		return con;
+		catch (SQLException e) {
+			log.log(Level.SEVERE, "In createConnection", e);
+		}
+		return null;
 	}
 
 	@Override
 	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
+		Connection con = getManager();
 		try {
-			con = DB.createConnection();
 			super.orderBooks(inUid, inISBNs);
 			con.commit();
 		}
@@ -80,7 +75,6 @@ public class OrderLogicWrapper extends AbstractOrderLogic<Connection> {
 			if (con != null) {
 				con.close();
 			}
-			con = null;
 		}
 	}
 }

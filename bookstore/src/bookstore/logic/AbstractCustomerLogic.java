@@ -10,26 +10,29 @@ import java.util.logging.Logger;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-public abstract class AbstractCustomerLogic implements CustomerLogic {
+public abstract class AbstractCustomerLogic<T> implements CustomerLogic {
 
-	protected abstract CustomerDAO getCustomerDAO();
+	protected abstract CustomerDAO<T> getCustomerDAO();
 	protected abstract Logger getLogger();
+	protected abstract T getManager();
 
 	public boolean isAlreadyExsited(String inUid) throws SQLException {
-		CustomerDAO customerdao = getCustomerDAO();
-		int count = customerdao.getCustomerNumberByUid(inUid);
+		T em = getManager();
+		CustomerDAO<T> customerdao = getCustomerDAO();
+		int count = customerdao.getCustomerNumberByUid(em, inUid);
 		getLogger().log(Level.INFO, "count={0}", count);
 		return count != 0;
 	}
 
-	public boolean createCustomer(String inUid, String inPassword, String inName, String inEmail) throws SQLException {
+	public boolean createCustomer(String inUid, String inPassword, String inName, String inEmail) throws Exception {
 		if (isAlreadyExsited(inUid)) {
 			return false;
 		}
 
+		T em = getManager();
 		String passwordMD5 = getStringDigest(inPassword);
-		CustomerDAO customerdao = getCustomerDAO();
-		customerdao.saveCustomer(inUid, passwordMD5, inName, inEmail);
+		CustomerDAO<T> customerdao = getCustomerDAO();
+		customerdao.saveCustomer(em, inUid, passwordMD5, inName, inEmail);
 		return true;
 	}
 
@@ -38,15 +41,17 @@ public abstract class AbstractCustomerLogic implements CustomerLogic {
 			return false;
 		}
 
-		CustomerDAO customerdao = getCustomerDAO();
-		TCustomer customer = customerdao.findCustomerByUid(inUid);
+		T em = getManager();
+		CustomerDAO<T> customerdao = getCustomerDAO();
+		TCustomer customer = customerdao.findCustomerByUid(em, inUid);
 		getLogger().log(Level.INFO, "customer={0}", customer);
 		return customer.getPasswordmd5().equals(getStringDigest(inPassword));
 	}
 
 	public VCustomer createVCustomer(String inUid) throws SQLException {
-		CustomerDAO customerdao = getCustomerDAO();
-		return new VCustomer(customerdao.findCustomerByUid(inUid));
+		T em = getManager();
+		CustomerDAO<T> customerdao = getCustomerDAO();
+		return new VCustomer(customerdao.findCustomerByUid(em, inUid));
 	}
 
 	private static String getStringDigest(String inString) {

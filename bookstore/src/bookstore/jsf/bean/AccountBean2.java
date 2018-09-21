@@ -1,14 +1,12 @@
 package bookstore.jsf.bean;
 
-import java.sql.SQLException;
-
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
-import bookstore.logic.ejb.CustomerLogicWrapper;
+import bookstore.logic.ejb.cmt.CustomerLogicWrapper;
 import bookstore.util.Messages;
 
 @Named(value="accountBean2")
@@ -60,7 +58,7 @@ public class AccountBean2 {
 		this.passwd2 = passwd2;
 	}
 
-	public String create() throws SQLException {
+	public String create() throws Exception {
 		if (account == null || account.isEmpty()
 				|| passwd == null || passwd.isEmpty()
 				|| passwd2 == null || passwd2.isEmpty()

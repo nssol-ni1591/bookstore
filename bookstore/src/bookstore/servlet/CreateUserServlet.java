@@ -1,7 +1,6 @@
 package bookstore.servlet;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -77,7 +76,8 @@ public class CreateUserServlet extends HttpServlet {
 				dispatcher = req.getRequestDispatcher("Login.jsp");
 			}
 		}
-		catch (SQLException e) {
+		catch (Exception e) {
+			log.log(Level.SEVERE, "", e);
 			errors.add(ILLEGAL_CREATE_USER, "error.system.exception");
 			dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
 		}

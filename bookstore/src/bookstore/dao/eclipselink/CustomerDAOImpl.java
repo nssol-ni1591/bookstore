@@ -16,7 +16,7 @@ import bookstore.pbean.TCustomer;
 
 @UsedEclipselink
 @Dependent
-public class CustomerDAOImpl implements CustomerDAO {
+public class CustomerDAOImpl<T extends EntityManager> implements CustomerDAO<T> {
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
 	//@PersistenceContext(unitName = "BookStore") private EntityManager em;
@@ -26,8 +26,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 	@Inject private Logger log;
 
 	@Override
-	public int getCustomerNumberByUid(String inUid) {
-		EntityManager em = emf.createEntityManager();
+	public int getCustomerNumberByUid(final T em2, String inUid) {
+		EntityManager em = em2 != null ? em2 : emf.createEntityManager();
 		log.log(Level.INFO, "inUid={0}, em={1}"
 				, new Object[] { inUid, em == null ? "null" : em.getClass().getName() });
 		Query q = em
@@ -37,8 +37,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 
 	@Override
-	public TCustomer findCustomerByUid(String inUid) {
-		EntityManager em = emf.createEntityManager();
+	public TCustomer findCustomerByUid(final T em2, String inUid) {
+		EntityManager em = em2 != null ? em2 : emf.createEntityManager();
 		log.log(Level.FINE, "inUid={0}", inUid);
 		Query q = em
 				.createQuery("select c from TCustomer c where c.username=:username");
@@ -47,8 +47,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 
 	@Override
-	public void saveCustomer(String inUsername, String inPasswordMD5, String inName, String inEmail) {
-		EntityManager em = emf.createEntityManager();
+	public void saveCustomer(final T em2, String inUsername, String inPasswordMD5, String inName, String inEmail) {
+		EntityManager em = em2 != null ? em2 : emf.createEntityManager();
 		em.getTransaction().begin();
 
 		TCustomer customer = new TCustomer();

@@ -129,7 +129,6 @@ public abstract class AbstractOrderBean {
 
 		BookLogic bookLogic = getBookLogic();
 		itemsToBuy = bookLogic.createVCheckout(cart);
-		log.log(Level.INFO, "checkPage={0}", getCheckPage());
 		return getCheckPage();
 	}
 

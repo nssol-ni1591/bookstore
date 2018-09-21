@@ -18,14 +18,14 @@ import bookstore.dao.BookDAO;
 import bookstore.pbean.TBook;
 
 @Repository("BookDAOImplBId")
-public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
+public class BookDAOImpl<T> extends HibernateDaoSupport implements BookDAO<T> {
 
 	@Log private static Logger log;
 
 	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
 
 	@Override
-	public int getPriceByISBNs(final List<String> inISBNList) {
+	public int getPriceByISBNs(final T em2, final List<String> inISBNList) {
 		HibernateTemplate ht = getHibernateTemplate();
 		return ht.execute(session -> {
 			Query priceQuery = 
@@ -36,7 +36,7 @@ public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByKeyword(String inKeyword) {
+	public List<TBook> retrieveBooksByKeyword(final T em2, String inKeyword) {
 		String escapedKeyword = Pattern.compile("([%_])").matcher(inKeyword).replaceAll("\\\\$1");
 		Object[] keywords = { "%" + escapedKeyword + "%", "%" + escapedKeyword + "%", "%" + escapedKeyword + "%" };
 
@@ -49,7 +49,7 @@ public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<TBook> retrieveBooksByISBNs(final List<String> inISBNList) {
+	public List<TBook> retrieveBooksByISBNs(final T em2, final List<String> inISBNList) {
 
 		HibernateTemplate ht = getHibernateTemplate();
 

@@ -9,6 +9,8 @@ import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 
 import bookstore.annotation.UsedEclipselink;
@@ -22,13 +24,15 @@ public class OrderDAOImpl<T extends EntityManager> implements OrderDAO<T> {
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
 	//@PersistenceContext(unitName = "BookStore") private EntityManager em;
+	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
 	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager()
 	//@Inject private EntityManager em;
 	//private T em;
 	@Inject private Logger log;
 
 	@Override
-	public List<TOrder> retrieveOrders(T em, List<String> orderIdList) {
+	public List<TOrder> retrieveOrders(T em2, List<String> orderIdList) {
+		EntityManager em = em2 != null ? em2 : emf.createEntityManager();
 		Query q;
 		if (orderIdList == null) {
 			q = em.createQuery("select o from TOrder o");
@@ -45,7 +49,8 @@ public class OrderDAOImpl<T extends EntityManager> implements OrderDAO<T> {
 	}
 
 	@Override
-	public TOrder createOrder(T em, TCustomer inCustomer) {
+	public TOrder createOrder(T em2, TCustomer inCustomer) {
+		EntityManager em = em2 != null ? em2 : emf.createEntityManager();
 		TOrder order = new TOrder();
 		order.setOrderday(Timestamp.valueOf(LocalDateTime.now()));
 		order.setTCustomer(inCustomer);

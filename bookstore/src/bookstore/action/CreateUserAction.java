@@ -1,7 +1,5 @@
 package bookstore.action;
 
-import java.sql.SQLException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,7 +24,7 @@ public class CreateUserAction extends Action {
 			, ActionForm form
 			, HttpServletRequest req
 			, HttpServletResponse res
-			) throws SQLException {
+			) throws Exception {
 
 		CreateUserActionFormBean cuafb = (CreateUserActionFormBean) form;
 

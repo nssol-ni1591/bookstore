@@ -13,21 +13,25 @@ import org.springframework.stereotype.Component;
 
 @UsedSpring
 @Component("LogicCustomerImplBId")
-public class CustomerLogicWrapper extends AbstractCustomerLogic {
+public class CustomerLogicWrapper extends AbstractCustomerLogic<Object> {
 
-	@Autowired @Qualifier("CustomerDAOBId") CustomerDAO customerdao;
+	@Autowired @Qualifier("CustomerDAOBId") CustomerDAO<Object> customerdao;
 	@Log private static Logger log;
 
 	@Override
-	protected CustomerDAO getCustomerDAO() {
+	protected CustomerDAO<Object> getCustomerDAO() {
 		return customerdao;
 	}
 	@Override
 	protected Logger getLogger() {
 		return log;
 	}
+	@Override
+	protected Object getManager() {
+		return null;
+	}
 
-	public void setCustomerdao(CustomerDAO customerdao) {
+	public void setCustomerdao(CustomerDAO<Object> customerdao) {
 		this.customerdao = customerdao;
 	}
 

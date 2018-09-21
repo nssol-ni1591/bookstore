@@ -55,12 +55,18 @@ public class DB {
 	/*
 	 * コネクションプール
 	 */
-	public static Connection createConnection() throws SQLException, NamingException {
-		Context context = new InitialContext();
-		DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/bookstoreDS");
-		Connection con = ds.getConnection();
-		con.setAutoCommit(false);
-		return con;
+	public static Connection createConnection() throws SQLException {
+		try {
+			Context context = new InitialContext();
+			DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/bookstoreDS");
+			Connection con = ds.getConnection();
+			//con.setAutoCommit(false);
+			//log.log(Level.INFO, "autocommit={0}", con.getAutoCommit());
+			return con;
+		}
+		catch (NamingException e) {
+			throw new SQLException(e);
+		}
 	}
 	public static Connection createConnection3() {
 		try {

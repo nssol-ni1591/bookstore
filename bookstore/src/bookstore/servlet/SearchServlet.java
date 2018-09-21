@@ -62,6 +62,7 @@ public class SearchServlet extends HttpServlet {
 				httpSession.setAttribute("ProductListView", vProductList);
 			}
 			catch (SQLException e) {
+				log.log(Level.SEVERE, "", e);
 				errors.add("productalart", "error.system,exception");
 			}
 			dispatcher = req.getRequestDispatcher("BookStore.jsp");

@@ -8,6 +8,8 @@ import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 
 import bookstore.annotation.UsedEclipselink;
@@ -22,12 +24,14 @@ public class OrderDetailDAOImpl<T extends EntityManager> implements OrderDetailD
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
 	//@PersistenceContext(unitName = "BookStore") private EntityManager em;
+	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
 	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager()
 	//@Inject private EntityManager em;
 	@Inject private Logger log;
 
 	@Override
-	public TOrderDetail createOrderDetail(final T em, TOrder inOrder, TBook inBook) throws SQLException {
+	public void createOrderDetail(final T em2, TOrder inOrder, TBook inBook) throws SQLException {
+		EntityManager em = em2 != null ? em2 : emf.createEntityManager();
 		log.log(Level.INFO, "order_id={0}, book_id={1}"
 				, new Object[] { inOrder.getId(), inBook.getId() });
 
@@ -39,11 +43,12 @@ public class OrderDetailDAOImpl<T extends EntityManager> implements OrderDetailD
 		orderDetail.setTOrder(inOrder);
 		orderDetail.setTBook(inBook);
 		em.persist(orderDetail);
-		return orderDetail;
+		//return orderDetail;
 	}
 
 	@Override
-	public List<TOrderDetail> listOrderDetails(final T em, List<String> orders) {
+	public List<TOrderDetail> listOrderDetails(final T em2, List<String> orders) {
+		EntityManager em = em2 != null ? em2 : emf.createEntityManager();
 		Query query = em.createQuery("select d from TOrderDetail d");
 		@SuppressWarnings("unchecked")
 		List<TOrderDetail> details = query.getResultList();

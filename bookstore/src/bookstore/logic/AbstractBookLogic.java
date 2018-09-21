@@ -11,14 +11,16 @@ import bookstore.pbean.TBook;
 import bookstore.vbean.VBook;
 import bookstore.vbean.VCheckout;
 
-public abstract class AbstractBookLogic implements BookLogic {
+public abstract class AbstractBookLogic<T> implements BookLogic {
 
-	protected abstract BookDAO getBookDAO();
+	protected abstract BookDAO<T> getBookDAO();
 	protected abstract Logger getLogger();
+	protected abstract T getManager();
 
 	public List<String> getAllBookISBNs() throws SQLException {
-		BookDAO bookdao = getBookDAO();
-		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(null).iterator();
+		T em = getManager();
+		BookDAO<T> bookdao = getBookDAO();
+		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(em, null).iterator();
 		List<String> isbns = new ArrayList<>();
 
 		while (iter.hasNext()) {
@@ -30,8 +32,9 @@ public abstract class AbstractBookLogic implements BookLogic {
 	}
 
 	public List<String> retrieveBookISBNsByKeyword(String inKeyword) throws SQLException {
-		BookDAO bookdao = getBookDAO();
-		Iterator<TBook> iter = bookdao.retrieveBooksByKeyword(inKeyword).iterator();
+		T em = getManager();
+		BookDAO<T> bookdao = getBookDAO();
+		Iterator<TBook> iter = bookdao.retrieveBooksByKeyword(em, inKeyword).iterator();
 		List<String> isbns = new ArrayList<>();
 
 		while (iter.hasNext()) {
@@ -42,9 +45,10 @@ public abstract class AbstractBookLogic implements BookLogic {
 	}
 
 	public List<VBook> createVBookList(List<String> inProductList, List<String> inSelectedList) throws SQLException {
-		BookDAO bookdao = getBookDAO();
+		T em = getManager();
+		BookDAO<T> bookdao = getBookDAO();
 		List<VBook> vArrayList = new ArrayList<>();
-		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(inProductList).iterator();
+		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(em, inProductList).iterator();
 
 		while (iter.hasNext()) {
 			TBook currentBook = iter.next();
@@ -62,13 +66,14 @@ public abstract class AbstractBookLogic implements BookLogic {
 	}
 
 	public VCheckout createVCheckout(List<String> inSelectedList) throws SQLException {
-		BookDAO bookdao = getBookDAO();
+		T em = getManager();
+		BookDAO<T> bookdao = getBookDAO();
 		VCheckout vc = new VCheckout();
-		vc.setTotal(bookdao.getPriceByISBNs(inSelectedList));
+		vc.setTotal(bookdao.getPriceByISBNs(em, inSelectedList));
 
 		List<VBook> viewList = new ArrayList<>();
 
-		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(inSelectedList).iterator();
+		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(em, inSelectedList).iterator();
 
 		while (iter.hasNext()) {
 			TBook currentBook = iter.next();

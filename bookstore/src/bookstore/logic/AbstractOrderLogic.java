@@ -20,8 +20,8 @@ import bookstore.vbean.VOrderDetail;
 
 public abstract class AbstractOrderLogic<T> implements OrderLogic {
 
-	protected abstract BookDAO getBookDAO();
-	protected abstract CustomerDAO getCustomerDAO();
+	protected abstract BookDAO<T> getBookDAO();
+	protected abstract CustomerDAO<T> getCustomerDAO();
 	protected abstract OrderDAO<T> getOrderDAO();
 	protected abstract OrderDetailDAO<T> getOrderDetailDAO();
 	protected abstract Logger getLogger();
@@ -30,21 +30,26 @@ public abstract class AbstractOrderLogic<T> implements OrderLogic {
 	@Override
 	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
 		Logger log = getLogger();
-
 		T em = getManager();
-		BookDAO bookdao = getBookDAO();
-		CustomerDAO customerdao = getCustomerDAO();
+		BookDAO<T> bookdao = getBookDAO();
+		CustomerDAO<T> customerdao = getCustomerDAO();
 		OrderDAO<T> orderdao = getOrderDAO();
 		OrderDetailDAO<T> odetaildao = getOrderDetailDAO();
 
-		TCustomer customer = customerdao.findCustomerByUid(inUid);
+		TCustomer customer = customerdao.findCustomerByUid(em, inUid);
 		TOrder order = orderdao.createOrder(em, customer);
 		log.log(Level.INFO, "uid={0}, customer_id={1}, order_id={2}"
 				, new Object[] { inUid, customer.getId(), order.getId() });
 
-		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(inISBNs).iterator();
+		//Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(inISBNs).iterator();
+		Iterator<String> iter = inISBNs.iterator();
 		while (iter.hasNext()) {
-			TBook book = iter.next();
+			//TBook book = iter.next();
+			String isbn = iter.next();
+			List<String> isbns = new ArrayList<>();
+			isbns.add(isbn);
+			List<TBook> books = bookdao.retrieveBooksByISBNs(em, isbns);
+			TBook book = books.get(0);
 			odetaildao.createOrderDetail(em, order, book);
 		}
 	}

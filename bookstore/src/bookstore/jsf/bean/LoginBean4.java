@@ -8,11 +8,11 @@ import bookstore.logic.CustomerLogic;
 
 @Named
 @RequestScoped
-public class LoginBean3 extends AbstractLoginBean {
+public class LoginBean4 extends AbstractLoginBean {
 
 	@EJB(mappedName="CustomerLogicBmtWrapper") private CustomerLogic customerLogic;
 
-	public LoginBean3() {
+	public LoginBean4() {
 		super();
 	}
 
@@ -22,10 +22,10 @@ public class LoginBean3 extends AbstractLoginBean {
 	}
 
 	protected String getLoginPage() {
-		return "Login3";
+		return "Login4";
 	}
 	protected String getBookStorePage() {
-		return "BookStore3";
+		return "BookStore4";
 	}
 
 }

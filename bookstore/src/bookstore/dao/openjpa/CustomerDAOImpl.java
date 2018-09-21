@@ -15,18 +15,18 @@ import bookstore.pbean.TCustomer;
 
 @UsedOpenJpa
 @Dependent
-public class CustomerDAOImpl implements CustomerDAO {
+public class CustomerDAOImpl<T extends EntityManager> implements CustomerDAO<T> {
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
-	@PersistenceContext(unitName = "BookStore2") private EntityManager em;
+	@PersistenceContext(unitName = "BookStore2") private EntityManager em3;
 	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager()
 	//@Inject private EntityManager em
 	@Inject private Logger log;
 
 	@Override
-	public int getCustomerNumberByUid(String inUid) {
+	public int getCustomerNumberByUid(final T em2, String inUid) {
+		EntityManager em = em2 != null ? em2 : em3;
 		log.log(Level.INFO, "inUid={0}, em={1}", new Object[] { inUid, em.getClass().getName() });
-
 		Query q = em
 				.createQuery("select c from TCustomer c where c.username=:username");
 		q.setParameter("username", inUid);
@@ -34,8 +34,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 
 	@Override
-	public TCustomer findCustomerByUid(String inUid) {
+	public TCustomer findCustomerByUid(final T em2, String inUid) {
 		log.log(Level.FINE, "inUid={0}", inUid);
+		EntityManager em = em2 != null ? em2 : em3;
 		Query q = em
 				.createQuery("select c from TCustomer c where c.username=:username");
 		q.setParameter("username", inUid);
@@ -43,8 +44,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 
 	@Override
-	public void saveCustomer(String inUid, String inPasswordMD5, String inName,
+	public void saveCustomer(final T em2, String inUid, String inPasswordMD5, String inName,
 			String inEmail) {
+		EntityManager em = em2 != null ? em2 : em3;
 		TCustomer customer = new TCustomer();
 		customer.setUsername(inUid);
 		customer.setPasswordmd5(inPasswordMD5);

@@ -16,13 +16,13 @@ import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;
 
 @Repository("CustomerDAOImplBId")
-public class CustomerDAOImpl extends HibernateDaoSupport implements CustomerDAO {
+public class CustomerDAOImpl<T> extends HibernateDaoSupport implements CustomerDAO<T> {
 
 	@Log private static Logger log;
 
 	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
 
-	public int getCustomerNumberByUid(final String inUid) {
+	public int getCustomerNumberByUid(final T em2, final String inUid) {
 		log.log(Level.INFO, "inUid={0}, sessionFactory={1}", new Object[] { inUid, sessionFactory.getClass().getName() });
 
 		HibernateTemplate ht = getHibernateTemplate();
@@ -34,7 +34,7 @@ public class CustomerDAOImpl extends HibernateDaoSupport implements CustomerDAO 
 		}).intValue();
 	}
 
-	public TCustomer findCustomerByUid(final String inUid) {
+	public TCustomer findCustomerByUid(final T em2, final String inUid) {
 		HibernateTemplate ht = getHibernateTemplate();
 		return ht.execute(session -> {
 			Query priceQuery = session
@@ -44,7 +44,7 @@ public class CustomerDAOImpl extends HibernateDaoSupport implements CustomerDAO 
 		});
 	}
 
-	public void saveCustomer(String inUid, String inPasswordMD5, String inName, String inEmail) {
+	public void saveCustomer(final T em2, String inUid, String inPasswordMD5, String inName, String inEmail) {
 		TCustomer saveCustomer = new TCustomer();
 
 		saveCustomer.setUsername(inUid);

@@ -16,14 +16,15 @@ import bookstore.pbean.TBook;
 
 @UsedOpenJpa
 @Dependent
-public class BookDAOImpl implements BookDAO {
+public class BookDAOImpl<T extends EntityManager> implements BookDAO<T> {
 
-	@PersistenceContext(unitName = "BookStore2") private EntityManager em;
+	@PersistenceContext(unitName = "BookStore2") private EntityManager em3;
 	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager()
 	@Inject private Logger log;
 
 	@Override
-	public int getPriceByISBNs(List<String> inISBNList) {
+	public int getPriceByISBNs(final T em2, List<String> inISBNList) {
+		EntityManager em = em2 != null ? em2 : em3;
 		Query q = em
 				.createQuery("select sum( book.price ) from TBook book where book.isbn in :SELECTED_ITEMS");
 		q.setParameter("SELECTED_ITEMS", inISBNList);
@@ -33,7 +34,8 @@ public class BookDAOImpl implements BookDAO {
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByKeyword(String inKeyword) {
+	public List<TBook> retrieveBooksByKeyword(final T em2, String inKeyword) {
+		EntityManager em = em2 != null ? em2 : em3;
 		Query q = em
 				.createQuery("select b from TBook b where "
 						+ "b.author like :keyword or b.title like :keyword or b.publisher like :keyword");
@@ -47,9 +49,10 @@ public class BookDAOImpl implements BookDAO {
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByISBNs(List<String> inISBNList) {
+	public List<TBook> retrieveBooksByISBNs(final T em2, List<String> inISBNList) {
 		log.log(Level.FINE, "inISBNList={0}", inISBNList);
 
+		EntityManager em = em2 != null ? em2 : em3;
 		Query q;
 		if (inISBNList == null) {
 			q = em.createQuery("select b from TBook b");

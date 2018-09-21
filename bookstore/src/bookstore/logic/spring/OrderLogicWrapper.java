@@ -18,18 +18,18 @@ import bookstore.logic.AbstractOrderLogic;
 @Component("LogicOrderImplBId")
 public class OrderLogicWrapper extends AbstractOrderLogic<Object> {
 
-	@Autowired @Qualifier("BookDAOBId") BookDAO bookdao;
-	@Autowired @Qualifier("CustomerDAOBId") CustomerDAO customerdao;
+	@Autowired @Qualifier("BookDAOBId") BookDAO<Object> bookdao;
+	@Autowired @Qualifier("CustomerDAOBId") CustomerDAO<Object> customerdao;
 	@Autowired @Qualifier("OrderDAOBId")OrderDAO<Object> orderdao;
 	@Autowired @Qualifier("OrderDetailDAOBId")OrderDetailDAO<Object> odetaildao;
 	@Log private static Logger log;
 
 	@Override
-	protected BookDAO getBookDAO() {
+	protected BookDAO<Object> getBookDAO() {
 		return bookdao;
 	}
 	@Override
-	protected CustomerDAO getCustomerDAO() {
+	protected CustomerDAO<Object> getCustomerDAO() {
 		return customerdao;
 	}
 	@Override
@@ -50,10 +50,10 @@ public class OrderLogicWrapper extends AbstractOrderLogic<Object> {
 	}
 
 
-	public void setBookdao(BookDAO bookdao) {
+	public void setBookdao(BookDAO<Object> bookdao) {
 		this.bookdao = bookdao;
 	}
-	public void setCustomerdao(CustomerDAO customerdao) {
+	public void setCustomerdao(CustomerDAO<Object> customerdao) {
 		this.customerdao = customerdao;
 	}
 	public void setOrderdao(OrderDAO<Object> orderdao) {

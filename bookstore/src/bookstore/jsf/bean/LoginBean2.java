@@ -5,9 +5,9 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 import bookstore.logic.CustomerLogic;
-import bookstore.logic.ejb.CustomerLogicWrapper;
+import bookstore.logic.ejb.cmt.CustomerLogicWrapper;
 
-@Named(value="loginBean2")
+@Named
 @RequestScoped
 public class LoginBean2 extends AbstractLoginBean {
 
