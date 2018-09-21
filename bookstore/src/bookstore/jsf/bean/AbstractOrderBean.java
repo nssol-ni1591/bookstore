@@ -85,7 +85,7 @@ public abstract class AbstractOrderBean {
 	
 			session.setAttribute("Cart", null);
 		}
-		catch (SQLException e) {
+		catch (Exception e) {
 			log.log(Level.SEVERE, "", e);
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR
 					, Messages.getMessage("error.system.exception")

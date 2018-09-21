@@ -7,7 +7,8 @@ import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 
 import bookstore.annotation.UsedEclipselink;
@@ -19,13 +20,15 @@ import bookstore.pbean.TBook;
 public class BookDAOImpl implements BookDAO {
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
-	@PersistenceContext(unitName = "BookStore") private EntityManager em;
+	//@PersistenceContext(unitName = "BookStore") private EntityManager em;
+	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
 	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager()
 	//@Inject private EntityManager em;
 	@Inject private Logger log;
 
 	@Override
 	public int getPriceByISBNs(List<String> inISBNList) {
+		EntityManager em = emf.createEntityManager();
 		Query q = em
 				.createQuery("select sum( book.price ) from TBook book where book.isbn in :SELECTED_ITEMS");
 		q.setParameter("SELECTED_ITEMS", inISBNList);
@@ -36,6 +39,7 @@ public class BookDAOImpl implements BookDAO {
 
 	@Override
 	public List<TBook> retrieveBooksByKeyword(String inKeyword) {
+		EntityManager em = emf.createEntityManager();
 		Query q = em
 				.createQuery("select b from TBook b where "
 						+ "b.author like :keyword or b.title like :keyword or b.publisher like :keyword");
@@ -52,6 +56,7 @@ public class BookDAOImpl implements BookDAO {
 	public List<TBook> retrieveBooksByISBNs(List<String> inISBNList) {
 		log.log(Level.FINE, "inISBNList={0}", inISBNList);
 
+		EntityManager em = emf.createEntityManager();
 		Query q;
 		if (inISBNList == null) {
 			q = em.createQuery("select b from TBook b");

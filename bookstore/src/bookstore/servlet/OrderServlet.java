@@ -1,7 +1,6 @@
 package bookstore.servlet;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,7 +56,7 @@ public class OrderServlet extends HttpServlet {
 				req.setAttribute("Customer", customerLogic.createVCustomer(uid));
 				dispatcher = req.getRequestDispatcher("Order.jsp");
 			}
-			catch (SQLException e) {
+			catch (Exception e) {
 				log.log(Level.SEVERE, "", e);
 				Messages errors = new Messages(req);
 				errors.add("orderalert", "error.system.exception");

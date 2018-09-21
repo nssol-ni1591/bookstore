@@ -6,11 +6,11 @@ import bookstore.pbean.TOrder;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface OrderDAO {
+public interface OrderDAO<T> {
 
-	public TOrder createOrder(TCustomer inCustomer) throws SQLException;
+	public TOrder createOrder(final T em, final TCustomer inCustomer) throws SQLException;
 
 	// add by gohdo
-	public List<TOrder> retrieveOrders(List<String> orderIdList) throws SQLException;
+	public List<TOrder> retrieveOrders(final T em, final List<String> orderIdList) throws SQLException;
 
 }

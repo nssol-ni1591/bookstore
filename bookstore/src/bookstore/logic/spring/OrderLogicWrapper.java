@@ -16,12 +16,12 @@ import bookstore.logic.AbstractOrderLogic;
 
 @UsedSpring
 @Component("LogicOrderImplBId")
-public class OrderLogicWrapper extends AbstractOrderLogic {
+public class OrderLogicWrapper extends AbstractOrderLogic<Object> {
 
 	@Autowired @Qualifier("BookDAOBId") BookDAO bookdao;
 	@Autowired @Qualifier("CustomerDAOBId") CustomerDAO customerdao;
-	@Autowired @Qualifier("OrderDAOBId")OrderDAO orderdao;
-	@Autowired @Qualifier("OrderDetailDAOBId")OrderDetailDAO odetaildao;
+	@Autowired @Qualifier("OrderDAOBId")OrderDAO<Object> orderdao;
+	@Autowired @Qualifier("OrderDetailDAOBId")OrderDetailDAO<Object> odetaildao;
 	@Log private static Logger log;
 
 	@Override
@@ -33,16 +33,20 @@ public class OrderLogicWrapper extends AbstractOrderLogic {
 		return customerdao;
 	}
 	@Override
-	protected OrderDAO getOrderDAO() {
+	protected OrderDAO<Object> getOrderDAO() {
 		return orderdao;
 	}
 	@Override
-	protected OrderDetailDAO getOrderDetailDAO() {
+	protected OrderDetailDAO<Object> getOrderDetailDAO() {
 		return odetaildao;
 	}
 	@Override
 	protected Logger getLogger() {
 		return log;
+	}
+	@Override
+	protected Object getManager() {
+		return null;
 	}
 
 
@@ -52,10 +56,10 @@ public class OrderLogicWrapper extends AbstractOrderLogic {
 	public void setCustomerdao(CustomerDAO customerdao) {
 		this.customerdao = customerdao;
 	}
-	public void setOrderdao(OrderDAO orderdao) {
+	public void setOrderdao(OrderDAO<Object> orderdao) {
 		this.orderdao = orderdao;
 	}
-	public void setOrderdetaildao(OrderDetailDAO odetaildao) {
+	public void setOrderdetaildao(OrderDetailDAO<Object> odetaildao) {
 		this.odetaildao = odetaildao;
 	}
 

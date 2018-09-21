@@ -17,12 +17,12 @@ import bookstore.pbean.TOrder;
 import bookstore.pbean.TOrderDetail;
 
 @Repository("OrderDetailDAOImplBId")
-public class OrderDetailDAOImpl extends HibernateDaoSupport implements OrderDetailDAO {
+public class OrderDetailDAOImpl<T> extends HibernateDaoSupport implements OrderDetailDAO<T> {
 
 	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
 	@Log Logger log;
 
-	public TOrderDetail createOrderDetail(TOrder inOrder, TBook inBook) throws SQLException {
+	public TOrderDetail createOrderDetail(final T em, TOrder inOrder, TBook inBook) throws SQLException {
 		log.log(Level.INFO, "order_id={0}, book_id={1}"
 				, new Object[] {
 						 inOrder == null ? "null" : inOrder.getId()

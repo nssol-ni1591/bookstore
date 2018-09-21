@@ -20,13 +20,12 @@ import bookstore.pbean.TCustomer;
 import bookstore.pbean.TOrder;
 
 @Repository("OrderDAOImplBId")
-public class OrderDAOImpl extends HibernateDaoSupport implements OrderDAO {
+public class OrderDAOImpl<T> extends HibernateDaoSupport implements OrderDAO<T> {
 
 	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
 	@Log Logger log;
 
-	public TOrder createOrder(TCustomer inCustomer) {
-
+	public TOrder createOrder(final T o, TCustomer inCustomer) {
 		TOrder saveOrder = new TOrder();
 		saveOrder.setTCustomer(inCustomer);
 		saveOrder.setOrderday(Timestamp.valueOf(LocalDateTime.now()));
@@ -38,19 +37,20 @@ public class OrderDAOImpl extends HibernateDaoSupport implements OrderDAO {
 		return (saveOrder);
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<TOrder> retrieveOrders(final List<String> orderIdList) {
-
+	public List<TOrder> retrieveOrders(final T o, final List<String> orderIdList) {
 		HibernateTemplate ht = getHibernateTemplate();
-
 		if (orderIdList == null) {
-			return ht.find("from TOrder order");
+			@SuppressWarnings("unchecked")
+			List<TOrder> list = ht.find("from TOrder order");
+			return list;
 		}
 		else {
 			return ht.execute(session -> {
 				Query retrieveQuery = session.createQuery("from TOrder order where order.id in ( :ID )");
 				retrieveQuery.setParameterList("ID", orderIdList);
-				return retrieveQuery.list();
+				@SuppressWarnings("unchecked")
+				List<TOrder> list = retrieveQuery.list();
+				return list;
 			});
 		}
 	}

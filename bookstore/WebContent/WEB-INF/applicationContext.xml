@@ -79,6 +79,7 @@
 		<property name="transactionAttributes">
 			<props>
 				<prop key="create*">PROPAGATION_REQUIRED</prop>
+				<prop key="retrieve*">PROPAGATION_REQUIRED,readOnly</prop>
 			</props>
 		</property>
 	</bean>
@@ -172,6 +173,7 @@
 		<property name="transactionAttributes">
 			<props>
 				<prop key="orderBooks">PROPAGATION_REQUIRED</prop>
+				<prop key="list*">PROPAGATION_REQUIRED,readOnly</prop>
 			</props>
 		</property>
 	</bean>
@@ -179,7 +181,9 @@
 
 	<!-- Logic Layer Implement -->
 	<!-- autowired設定によりコメントアウト化ができた部分 -->
-	<!-- Weldと共有化させる場合、Springが制御をとってしまうのでcomponent-scanを無効化した影響で定義を有効化する -->
+	<!-- しかし、CDIと混在させる場合、@NameではSpringが優先されるのでCDIに制御が渡らない
+		よって、CDIと混在させるためcomponent-scanを無効にする
+		これにより以下の定義を有効化する必要が生じた -->
 	<bean id="LogicCustomerImplBId" class="bookstore.logic.spring.CustomerLogicWrapper">
 		<property name="customerdao">
 			<ref local="CustomerDAOBId" />
@@ -255,7 +259,8 @@
 	</bean>
 
 	<!-- Servlet Layer Implement -->
-	<!-- ServletはSpringで生成されたインスタンスとは別のインスタンスが使用されるので無理
+	<!-- ServletはSpringで生成されないため、Servletにautowiredを使用するのは無理 -->
+	<!-- 
 	<bean name="/bookstore/LoginServlet" class="bookstore.servlet.LoginServlet">
 		<property name="customerLogic">
 			<ref local="LogicCustomerImplBId" />

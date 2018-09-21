@@ -8,7 +8,7 @@
 		jdbcUrl jdbc:derby://localhost:1527/bookstore
 		userName bookstore
 		password bookstore
-		jtaManaged = true
+		jtaManaged true
 	</Resource>
 
 	<Resource id="jdbc/bookstoreDSnonJTA" type="javax.sql.DataSource">
@@ -16,7 +16,7 @@
 		jdbcUrl jdbc:derby://localhost:1527/bookstore
 		userName bookstore
 		password bookstore
-		jtaManaged = false
+		jtaManaged false
 	</Resource>
 
 </Resources>

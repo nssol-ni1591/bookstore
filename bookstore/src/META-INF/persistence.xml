@@ -4,13 +4,20 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 
-	<persistence-unit name="BookStore" transaction-type="JTA">
+	<!-- use bookstore.dao.eclipselink -->
+	<persistence-unit name="BookStore" transaction-type="RESOURCE_LOCAL">
+		<!-- 
+		eclipselinkでの実装はEntityManagerのTransaction機能を使用しているため、
+		transaction-typeには"RESOURCE_LOCAL"を指定する
+		 -->
+		<!-- 
+		ただし、RESOURCE_LOCALを使用すると@@PersistenceContextによるDIができない？
+		=>@PersistenceUnitを使用する
+		  -->
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
 		<jta-data-source>jdbc/bookstoreDS</jta-data-source>
-		<!-- 
 		<non-jta-data-source>jdbc/bookstoreDSnonJTA</non-jta-data-source>
-		 -->
 
 		<class>bookstore.pbean.TBook</class>
 		<class>bookstore.pbean.TCustomer</class>
@@ -32,14 +39,13 @@
 		</properties>
 	</persistence-unit>
 
+	<!-- use bookstore.dao.openjpa -->
 	<persistence-unit name="BookStore2" transaction-type="JTA">
 
 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
 
 		<jta-data-source>jdbc/bookstoreDS</jta-data-source>
-		<!-- 
 		<non-jta-data-source>jdbc/bookstoreDSnonJTA</non-jta-data-source>
-		 -->
 
 		<class>bookstore.pbean.TBook</class>
 		<class>bookstore.pbean.TCustomer</class>
@@ -56,7 +62,7 @@
 				<property name="openjpa.ConnectionPassword" value="bookstore"/>
 				<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 			 -->
-			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
+			<property name="openjpa.Log" value="DefaultLevel=INFO, Tool=INFO" />
 		</properties>
 	</persistence-unit>
 

@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import bookstore.annotation.UsedEclipselink;
@@ -19,16 +18,16 @@ import bookstore.pbean.TOrderDetail;
 
 @UsedEclipselink
 @Dependent
-public class OrderDetailDAOImpl implements OrderDetailDAO {
+public class OrderDetailDAOImpl<T extends EntityManager> implements OrderDetailDAO<T> {
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
-	@PersistenceContext(unitName = "BookStore") private EntityManager em;
+	//@PersistenceContext(unitName = "BookStore") private EntityManager em;
 	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager()
 	//@Inject private EntityManager em;
 	@Inject private Logger log;
 
 	@Override
-	public TOrderDetail createOrderDetail(TOrder inOrder, TBook inBook) throws SQLException {
+	public TOrderDetail createOrderDetail(final T em, TOrder inOrder, TBook inBook) throws SQLException {
 		log.log(Level.INFO, "order_id={0}, book_id={1}"
 				, new Object[] { inOrder.getId(), inBook.getId() });
 
@@ -44,7 +43,7 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 	}
 
 	@Override
-	public List<TOrderDetail> listOrderDetails(List<String> orders) {
+	public List<TOrderDetail> listOrderDetails(final T em, List<String> orders) {
 		Query query = em.createQuery("select d from TOrderDetail d");
 		@SuppressWarnings("unchecked")
 		List<TOrderDetail> details = query.getResultList();

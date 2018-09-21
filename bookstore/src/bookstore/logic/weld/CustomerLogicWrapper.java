@@ -4,8 +4,6 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
@@ -31,7 +29,7 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic {
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	//@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public boolean createCustomer(String inUid, String inPassword, String inName, String inEmail) throws SQLException {
 		boolean rc = super.createCustomer(inUid, inPassword, inName, inEmail);
 		log.log(Level.INFO, "rc={0}", rc);

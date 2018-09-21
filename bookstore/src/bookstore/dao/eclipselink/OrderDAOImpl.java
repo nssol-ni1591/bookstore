@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import bookstore.annotation.UsedEclipselink;
@@ -19,16 +18,17 @@ import bookstore.pbean.TOrder;
 
 @UsedEclipselink
 @Dependent
-public class OrderDAOImpl implements OrderDAO {
+public class OrderDAOImpl<T extends EntityManager> implements OrderDAO<T> {
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
-	@PersistenceContext(unitName = "BookStore") private EntityManager em;
+	//@PersistenceContext(unitName = "BookStore") private EntityManager em;
 	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager()
 	//@Inject private EntityManager em;
+	//private T em;
 	@Inject private Logger log;
 
 	@Override
-	public List<TOrder> retrieveOrders(List<String> orderIdList) {
+	public List<TOrder> retrieveOrders(T em, List<String> orderIdList) {
 		Query q;
 		if (orderIdList == null) {
 			q = em.createQuery("select o from TOrder o");
@@ -45,11 +45,15 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
-	public TOrder createOrder(TCustomer inCustomer) {
+	public TOrder createOrder(T em, TCustomer inCustomer) {
 		TOrder order = new TOrder();
 		order.setOrderday(Timestamp.valueOf(LocalDateTime.now()));
 		order.setTCustomer(inCustomer);
 		em.persist(order);
+
+		Query q = em.createQuery("select o from TOrder o where o.id = (select max(o2.id) from TOrder o2 where o2.TCustomer = :CUSTID)");
+		q.setParameter("CUSTID", inCustomer);
+		order = (TOrder) q.getSingleResult();
 
 		log.log(Level.INFO, "customer_id={0}, order_id={1}"
 				, new Object[] { inCustomer.getId(), order.getId() });

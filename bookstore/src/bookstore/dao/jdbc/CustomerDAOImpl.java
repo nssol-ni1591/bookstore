@@ -1,6 +1,5 @@
 package bookstore.dao.jdbc;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,7 +30,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 				return rs.getInt(1);
 			}
 		}
-		catch (ClassNotFoundException | IOException | NamingException e) {
+		catch (NamingException e) {
 			throw new SQLException(e);
 		}
 		finally {
@@ -41,7 +40,6 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 
 	public TCustomer findCustomerByUid(final String inUid) throws SQLException {
-
 		Connection con = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -56,7 +54,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 				String passwordmd5 = rs.getString(3);
 				String name = rs.getString(4);
 				String email = rs.getString(5);
-				//return new TCustomer(id, username, passwordmd5, name, email);
+
 				TCustomer c = new TCustomer();
 				c.setId(id);
 				c.setUsername(username);
@@ -66,7 +64,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 				return c;
 			}
 		}
-		catch (ClassNotFoundException | IOException | NamingException e) {
+		catch (NamingException e) {
 			throw new SQLException(e);
 		}
 		finally {
@@ -93,7 +91,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 				log.log(Level.SEVERE, "failed sql: {0}", pst);
 			}
 		}
-		catch (ClassNotFoundException | IOException | NamingException e) {
+		catch (NamingException e) {
 			throw new SQLException(e);
 		}
 		finally {

@@ -55,12 +55,26 @@ public class DB {
 	/*
 	 * コネクションプール
 	 */
-	public static Connection createConnection() throws ClassNotFoundException, SQLException, IOException, NamingException {
+	public static Connection createConnection() throws SQLException, NamingException {
 		Context context = new InitialContext();
 		DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/bookstoreDS");
 		Connection con = ds.getConnection();
 		con.setAutoCommit(false);
 		return con;
+	}
+	public static Connection createConnection3() {
+		try {
+			Context context = new InitialContext();
+			DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/bookstoreDS");
+			Connection con = ds.getConnection();
+			con.setAutoCommit(false);
+			return con;
+		}
+		//catch (ClassNotFoundException | SQLException | IOException | NamingException  e) {
+		catch (SQLException | NamingException  e) {
+			log.log(Level.SEVERE, "", e);
+		}
+		return null;
 	}
 
 	public static void close(String className, ResultSet rs, PreparedStatement pst, Connection con) {
@@ -88,7 +102,6 @@ public class DB {
 				log.log(Level.SEVERE, e.getMessage());
 			}
 		}
-
 	}
 
 }

@@ -1,6 +1,5 @@
 package bookstore.action;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,7 +45,7 @@ public class OrderAction extends Action {
 			req.setAttribute("Customer", customerLogic.createVCustomer(uid));
 			return (mapping.findForward("OrderSuccess"));
 		}
-		catch (SQLException e) {
+		catch (Exception e) {
 			log.log(Level.SEVERE, "", e);
 
 			ActionMessages errors = new ActionMessages();

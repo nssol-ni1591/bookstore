@@ -1,12 +1,5 @@
 package bookstore.dao.jdbc;
 
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.naming.NamingException;
-
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,19 +7,23 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import bookstore.dao.CustomerDAO;
 import bookstore.dao.OrderDAO;
 import bookstore.pbean.TCustomer;
 import bookstore.pbean.TOrder;
 
-public class OrderDAOImpl implements OrderDAO {
+public class OrderDAOImpl<T extends Connection> implements OrderDAO<T> {
 
 	private static final Logger log = Logger.getLogger(OrderDAOImpl.class.getName());
+	//private T con;
 
-	public TOrder createOrder(TCustomer inCustomer) throws SQLException {
-		try {
-			Connection con = DB.createConnection();
+	public TOrder createOrder(final T con, TCustomer inCustomer) throws SQLException {
+//		try {
+			//Connection con = DB.createConnection();
 
 			PreparedStatement pst = null;
 			PreparedStatement pst2 = null;
@@ -41,7 +38,7 @@ public class OrderDAOImpl implements OrderDAO {
 				log.log(Level.INFO, "execute sql: {0}, customer_id={1}", new Object[] { pst, inCustomer.getId() });
 				if (pst.executeUpdate() <= 0) {
 					log.log(Level.SEVERE, "failed sql: {0}", pst.toString());
-					con.rollback();
+					//con.rollback();
 					return null;
 				}
 
@@ -62,7 +59,7 @@ public class OrderDAOImpl implements OrderDAO {
 				pst2.setInt(1, inCustomer.getId());
 				rs2 = pst2.executeQuery();
 				if (rs2.next()) {
-					con.commit();
+					//con.commit();
 
 					TOrder saveOrder = new TOrder();
 					saveOrder.setTCustomer(inCustomer);
@@ -77,30 +74,30 @@ public class OrderDAOImpl implements OrderDAO {
 				else {
 					log.log(Level.SEVERE, "failed get id: {0}", pst2);
 				}
-				con.rollback();
+				//con.rollback();
 			}
 			catch (SQLException e) {
 				log.log(Level.SEVERE, "", e);
 			}
 			finally {
-				DB.close(OrderDAOImpl.class.getName(), rs, pst, con);
+				DB.close(OrderDAOImpl.class.getName(), rs, pst, null);
 				DB.close(OrderDAOImpl.class.getName(), rs2, pst2, null);
 			}
 
-		}
-		catch (ClassNotFoundException | IOException | NamingException e) {
-			throw new SQLException(e);
-		}
+//		}
+//		catch (ClassNotFoundException | IOException | NamingException e) {
+//			throw new SQLException(e);
+//		}
 		return null;
 	}
 
-	public List<TOrder> retrieveOrders(final List<String> orderIdList) throws SQLException {
-		Connection con = null;
+	public List<TOrder> retrieveOrders(final T con, final List<String> orderIdList) throws SQLException {
+		//Connection con = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		List<TOrder> orderList = new ArrayList<>();
 		try {
-			con = DB.createConnection();
+			//con = DB.createConnection();
 			if (orderIdList == null || orderIdList.isEmpty()) {
 				pst = con.prepareStatement("select id, custormerId, orderDay from T_Order");
 			}
@@ -126,11 +123,12 @@ public class OrderDAOImpl implements OrderDAO {
 				orderList.add(o);
 			}
 		}
-		catch (ClassNotFoundException | IOException | NamingException e) {
-			throw new SQLException(e);
-		}
+//		catch (ClassNotFoundException | IOException | NamingException e) {
+//		catch (ClassNotFoundException | IOException | NamingException e) {
+//			throw new SQLException(e);
+//		}
 		finally {
-			DB.close(OrderDAOImpl.class.getName(), rs, pst, con);
+			DB.close(OrderDAOImpl.class.getName(), rs, pst, null);
 		}
 		return orderList;
 	}

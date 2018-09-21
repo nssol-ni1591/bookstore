@@ -1,24 +1,21 @@
 package bookstore.dao.jdbc;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.naming.NamingException;
-
 import bookstore.dao.OrderDetailDAO;
 import bookstore.pbean.TBook;
 import bookstore.pbean.TOrder;
 import bookstore.pbean.TOrderDetail;
 
-public class OrderDetailDAOImpl implements OrderDetailDAO {
+public class OrderDetailDAOImpl<T extends Connection> implements OrderDetailDAO<T> {
 
 	private static final Logger log = Logger.getLogger(OrderDetailDAOImpl.class.getName());
 
-	public TOrderDetail createOrderDetail(TOrder inOrder, TBook inBook) throws SQLException {
+	public TOrderDetail createOrderDetail(final T con, TOrder inOrder, TBook inBook) throws SQLException {
 		log.log(Level.INFO, "order_id={0}, book_id={1}"
 				, new Object[] { inOrder.getId(), inBook.getId() });
 
@@ -26,9 +23,9 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 			throw new SQLException("isdn: 0-0000-0000-0");
 		}
 
-		try {
-			Connection con = null;
-			con = DB.createConnection();
+		//try {
+			//Connection con = null;
+			//con = DB.createConnection();
 
 			PreparedStatement pst = null;
 			TOrderDetail orderDetail = null;
@@ -42,24 +39,24 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 					log.log(Level.SEVERE, "failed sql: {0}", pst);
 				}
 				else {
-					con.commit();
+					//con.commit();
 					orderDetail = new TOrderDetail();
 					orderDetail.setTOrder(inOrder);
 					orderDetail.setTBook(inBook);
 					return orderDetail;
 				}
-				con.rollback();
+				//con.rollback();
 			}
-			catch (SQLException e) {
-				log.log(Level.SEVERE, "", e);
-			}
+//			catch (SQLException e) {
+//				log.log(Level.SEVERE, "", e);
+//			}
 			finally {
-				DB.close(OrderDetailDAOImpl.class.getName(), null, pst, con);
+				DB.close(OrderDetailDAOImpl.class.getName(), null, pst, null);
 			}
-		}
-		catch (ClassNotFoundException | IOException | NamingException e) {
-			throw new SQLException(e);
-		}
+//		}
+//		catch (ClassNotFoundException | IOException | NamingException e) {
+//			throw new SQLException(e);
+//		}
 		return null;
 	}
 

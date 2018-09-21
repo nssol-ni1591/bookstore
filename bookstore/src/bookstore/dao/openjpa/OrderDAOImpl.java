@@ -19,16 +19,17 @@ import bookstore.pbean.TOrder;
 
 @UsedOpenJpa
 @Dependent
-public class OrderDAOImpl implements OrderDAO {
+public class OrderDAOImpl<T extends EntityManager> implements OrderDAO<T> {
 
 	//Tomcat‚Å‚Í@PersistenceContext‚ÍŽg‚¦‚È‚¢
-	@PersistenceContext(unitName = "BookStore2") private EntityManager em;
+	@PersistenceContext(unitName = "BookStore2") private EntityManager em3;
 	//private EntityManager em = Persistence.createEntityManagerFactory("BookStore").createEntityManager()
 	//@Inject private EntityManager em
 	@Inject private Logger log;
 
 	@Override
-	public List<TOrder> retrieveOrders(List<String> orderIdList) {
+	public List<TOrder> retrieveOrders(final T em2, List<String> orderIdList) {
+		EntityManager em = em2 != null ? em2 : em3;
 		Query q;
 		if (orderIdList == null) {
 			q = em.createQuery("select o from TOrder o");
@@ -45,7 +46,10 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
-	public TOrder createOrder(TCustomer inCustomer) {
+	public TOrder createOrder(final T em2, TCustomer inCustomer) {
+		EntityManager em = em2 != null ? em2 : em3;
+		log.log(Level.INFO, "em={0}", em);
+
 		TOrder order = new TOrder();
 		order.setOrderday(Timestamp.valueOf(LocalDateTime.now()));
 		order.setTCustomer(inCustomer);

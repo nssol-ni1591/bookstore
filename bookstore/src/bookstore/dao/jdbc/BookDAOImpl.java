@@ -1,6 +1,5 @@
 package bookstore.dao.jdbc;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,7 +31,7 @@ public class BookDAOImpl implements BookDAO {
 				return rs.getInt(1);
 			}
 		}
-		catch (ClassNotFoundException | IOException | NamingException e) {
+		catch (NamingException e) {
 			throw new SQLException(e);
 		}
 		finally {
@@ -62,7 +61,7 @@ public class BookDAOImpl implements BookDAO {
 				String author = rs.getString(4);
 				String publisher = rs.getString(5);
 				int price = rs.getInt(6);
-				//booksList.add(new TBook(id, isbn, title, author, publisher, price));
+
 				TBook book = new TBook();
 				book.setId(id);
 				book.setIsbn(isbn);
@@ -73,7 +72,7 @@ public class BookDAOImpl implements BookDAO {
 				booksList.add(book);
 			}
 		}
-		catch (ClassNotFoundException | IOException | NamingException e) {
+		catch (NamingException e) {
 			throw new SQLException(e);
 		}
 		finally {
@@ -106,7 +105,7 @@ public class BookDAOImpl implements BookDAO {
 				String author = rs.getString(4);
 				String publisher = rs.getString(5);
 				int price = rs.getInt(6);
-				//booksList.add(new TBook(id, isbn, title, author, publisher, price));
+
 				TBook book = new TBook();
 				book.setId(id);
 				book.setIsbn(isbn);
@@ -117,7 +116,7 @@ public class BookDAOImpl implements BookDAO {
 				booksList.add(book);
 			}
 		}
-		catch (ClassNotFoundException | IOException | NamingException e) {
+		catch (NamingException e) {
 			throw new SQLException(e);
 		}
 		finally {

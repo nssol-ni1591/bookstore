@@ -1,15 +1,16 @@
 package bookstore.logic.weld;
 
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceUnit;
 
 import bookstore.annotation.UsedWeld;
 import bookstore.annotation.UsedEclipselink;
@@ -24,13 +25,16 @@ import bookstore.pbean.TOrder;
 
 @UsedWeld
 @Dependent
-public class OrderLogicWrapper extends AbstractOrderLogic {
+public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 
 	@Inject @UsedEclipselink private BookDAO bookdao;
 	@Inject @UsedEclipselink private CustomerDAO customerdao;
-	@Inject @UsedEclipselink private OrderDAO orderdao;
-	@Inject @UsedEclipselink private OrderDetailDAO orderdetaildao;
+	@Inject @UsedEclipselink private OrderDAO<EntityManager> orderdao;
+	@Inject @UsedEclipselink private OrderDetailDAO<EntityManager> orderdetaildao;
 	@Inject private Logger log;
+
+	//@PersistenceContext(unitName = "BookStore") private EntityManager em;
+	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
 
 	@Override
 	protected BookDAO getBookDAO() {
@@ -41,41 +45,41 @@ public class OrderLogicWrapper extends AbstractOrderLogic {
 		return customerdao;
 	}
 	@Override
-	protected OrderDAO getOrderDAO() {
+	protected OrderDAO<EntityManager> getOrderDAO() {
 		return orderdao;
 	}
 	@Override
-	protected OrderDetailDAO getOrderDetailDAO() {
+	protected OrderDetailDAO<EntityManager> getOrderDetailDAO() {
 		return orderdetaildao;
 	}
 	@Override
 	protected Logger getLogger() {
 		return log;
 	}
+	@Override
+	protected EntityManager getManager() {
+		EntityManager em = emf.createEntityManager();
+		return em;
+	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void orderBooks(String inUid, List<String> inISBNs) throws SQLException {
-		log.log(Level.INFO, "uid={0}, isbn={1}", new Object[] { inUid, inISBNs });
+	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
+		EntityManager em = getManager();
+		EntityTransaction tx = null;
+		try {
+			tx = em.getTransaction();
+			tx.begin();
+	
+			super.orderBooks(inUid, inISBNs);
 
-		// Exception Description: Cannot use an EntityTransaction while using JTA
-		//em.getTransaction().begin();
-
-		// WHY?:
-		// Caused by: java.lang.Error: Unresolved compilation problem: 
-		// The field OrderLogicImpl.odetaildao is not visible
-		//super.orderBooks(inUid, inISBNs);
-		
-		TCustomer customer = customerdao.findCustomerByUid(inUid);
-		TOrder order = orderdao.createOrder(customer);
-
-		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(inISBNs).iterator();
-		while (iter.hasNext()) {
-			TBook book = iter.next();
-			orderdetaildao.createOrderDetail(order, book);
+			tx.commit();
 		}
-		// Exception Description: Cannot use an EntityTransaction while using JTA
-		//em.getTransaction().commit();
+		catch (Exception e) {
+			if (tx != null) {
+				tx.rollback();
+			}
+			throw e;
+		}
 	}
 
 }

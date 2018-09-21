@@ -8,7 +8,7 @@ import bookstore.vbean.VOrderDetail;
 
 public interface OrderLogic {
 
-	public void orderBooks(String inUid, List<String> inISBNs) throws SQLException;
+	public void orderBooks(String inUid, List<String> inISBNs) throws Exception;
 
 	// add by gohdo.
 	public List<VOrder> listOrders(List<String> orderIdList) throws SQLException;
