@@ -79,6 +79,7 @@
 		<property name="transactionAttributes">
 			<props>
 				<prop key="create*">PROPAGATION_REQUIRED</prop>
+				<prop key="retrieve*">PROPAGATION_REQUIRED,readOnly</prop>
 			</props>
 		</property>
 	</bean>
@@ -172,6 +173,7 @@
 		<property name="transactionAttributes">
 			<props>
 				<prop key="orderBooks">PROPAGATION_REQUIRED</prop>
+				<prop key="list*">PROPAGATION_REQUIRED,readOnly</prop>
 			</props>
 		</property>
 	</bean>

@@ -9,13 +9,21 @@
     <!-- 
         <property name="hibernate.cglib.use_reflection_optimizer">true</property>
      -->
+    <!-- trace
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.format_sql">true</property>
+		<property name="hibernate.use_sql_comments">true</property>
+     -->
+
 <!-- 2018/08/27 -->
 		<property name="hibernate.connection.driver_class">org.apache.derby.jdbc.ClientDriver</property>
 		<property name="hibernate.connection.url">jdbc:derby://localhost:1527/bookstore</property>
 		<property name="hibernate.connection.username">bookstore</property>
 		<property name="hibernate.connection.password">bookstore</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
-<!-- 2010/02/23 delete
+
+
+<!-- 2010/02/23 Oracle database setting
 		<property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
 		<property name="hibernate.connection.password">bookstore</property>
 		<property name="hibernate.connection.url">jdbc:oracle:thin:@192.168.75.125:1521:ORCL</property>
@@ -31,18 +39,18 @@
 -->
 <!-- 2010/02/23 add -->
 <!--
-	<property name="hibernate.jndi.url">t3://vm141.vm.net:7101</property>
-	<property name="hibernate.jndi.class">weblogic.jndi.WLInitialContextFactory</property>
+		<property name="hibernate.jndi.url">t3://vm141.vm.net:7101</property>
+		<property name="hibernate.jndi.class">weblogic.jndi.WLInitialContextFactory</property>
 -->
-<!-- Tomcat JNDI
-<Resource name="jdbc/derby" auth="Container" type="javax.sql.DataSource"
-maxActive="10" maxIdle="2" maxWait="10000"
-username="user" password="password"
-driverClassName="org.apache.derby.jdbc.ClientDriver"
-url="jdbc:derby://localhost:1527/\derbydata\testdb"
-/>
+<!-- 参考：Tomcat JNDI
+		<Resource name="jdbc/derby" auth="Container" type="javax.sql.DataSource"
+			maxActive="10" maxIdle="2" maxWait="10000"
+			username="user" password="password"
+			driverClassName="org.apache.derby.jdbc.ClientDriver"
+			url="jdbc:derby://localhost:1527/\derbydata\testdb"
+		/>
  -->
-<!-- use by connection_pool
+<!-- for WebLogic and Oracle
 	<property name="hibernate.connection.datasource">vm125-orcl-bookstore</property>
 	<property name="hibernate.transaction.manager_lookup_class">org.hibernate.transaction.WeblogicTransactionManagerLookup</property>
 	<property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>

@@ -6,9 +6,6 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -21,8 +18,6 @@ import bookstore.pbean.TBook;
 public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 
 	@Log private static Logger log;
-
-	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
 
 	@Override
 	public int getPriceByISBNs(final List<String> inISBNList) {

@@ -4,9 +4,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -20,10 +17,8 @@ public class CustomerDAOImpl extends HibernateDaoSupport implements CustomerDAO 
 
 	@Log private static Logger log;
 
-	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
-
 	public int getCustomerNumberByUid(final String inUid) {
-		log.log(Level.INFO, "inUid={0}, sessionFactory={1}", new Object[] { inUid, sessionFactory.getClass().getName() });
+		log.log(Level.INFO, "inUid={0}, sessionFactory={1}", new Object[] { inUid, getSessionFactory() });
 
 		HibernateTemplate ht = getHibernateTemplate();
 		return ht.execute(session -> {

@@ -1,5 +1,7 @@
 package bookstore.logic.spring;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -47,5 +49,10 @@ public class OrderLogicWrapper extends OrderLogicImpl {
 		this.odetaildao = odetaildao;
 		super.setOrderdetaildao(odetaildao);
 	}
+
+//	@Override
+//	public void orderBooks(String inUid, List<String> inISBNs) {
+//		super.orderBooks(inUid, inISBNs);
+//	}
 
 }

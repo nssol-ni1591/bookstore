@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core">
+
+	<ui:composition template="resources/templates/template.xhtml">
+		<ui:define name="title">
+			注文一覧
+		</ui:define>
+
+		<ui:define name="content">
+			<h:dataTable id="table" border="1" value="#{orderBean.orders}" var="order">
+				<h:column id="column2">
+					<f:facet name="header">
+						<h:outputText value="id"></h:outputText>
+					</f:facet>
+					<h:outputText id="id" value="#{order.id}"></h:outputText>
+				</h:column>
+				<h:column id="column3">
+					<f:facet name="header">
+						<h:outputText value="customer"></h:outputText>
+					</f:facet>
+					<h:outputText id="customer" value="#{order.VCustomer.name}"></h:outputText>
+				</h:column>
+				<h:column id="column4">
+					<f:facet name="header">
+						<h:outputText value="orderday"></h:outputText>
+					</f:facet>
+					<h:outputText id="orderday" value="#{order.orderday}"></h:outputText>
+				</h:column>
+				<h:column id="column5">
+					<f:facet name="header">
+						<h:outputText value="details"></h:outputText>
+					</f:facet>
+					<h:outputText id="details" value="#{order.VOrderDetails}"></h:outputText>
+				</h:column>
+			</h:dataTable>
+
+			<br />
+
+			<h:form>
+				<h:commandButton value="商品一覧へ戻る" action="BookStore.xhtml"></h:commandButton>
+			</h:form>
+
+		</ui:define>
+
+	</ui:composition>
+</html>
