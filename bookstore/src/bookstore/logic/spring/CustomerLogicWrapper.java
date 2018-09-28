@@ -1,25 +1,33 @@
 package bookstore.logic.spring;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import bookstore.annotation.Log;
 import bookstore.annotation.UsedSpring;
 import bookstore.dao.CustomerDAO;
 import bookstore.logic.AbstractCustomerLogic;
 
-import java.util.logging.Logger;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
 @UsedSpring
 @Component("LogicCustomerImplBId")
-public class CustomerLogicWrapper extends AbstractCustomerLogic<Object> {
+public class CustomerLogicWrapper extends AbstractCustomerLogic<SessionFactory> {
 
-	@Autowired @Qualifier("CustomerDAOBId") CustomerDAO<Object> customerdao;
 	@Log private static Logger log;
 
+	@Autowired @Qualifier("CustomerDAOBId") CustomerDAO<SessionFactory> customerdao;
+	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
+
 	@Override
-	protected CustomerDAO<Object> getCustomerDAO() {
+	protected CustomerDAO<SessionFactory> getCustomerDAO() {
 		return customerdao;
 	}
 	@Override
@@ -27,12 +35,38 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic<Object> {
 		return log;
 	}
 	@Override
-	protected Object getManager() {
-		return null;
+	protected SessionFactory getManager() {
+		return sessionFactory;
 	}
-
-	public void setCustomerdao(CustomerDAO<Object> customerdao) {
+/*
+	public void setCustomerdao(CustomerDAO<SessionFactory> customerdao) {
 		this.customerdao = customerdao;
+	}
+*/
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED)	//-> applicationContext.xmlÇ…ìØìôÇÃíËã`Ç†ÇËÅH
+	public boolean createCustomer(String inUid
+			, String inPassword
+			, String inName
+			, String inEmail) throws Exception {
+		// Non-managed environment idiom
+		log.log(Level.INFO, "sessionFactory={0}", sessionFactory);
+
+		Session sess = sessionFactory.openSession();
+		Transaction tx = sess.getTransaction();
+		try {
+			tx.begin();;
+			boolean rc = super.createCustomer(inUid, inPassword, inName, inEmail);
+			tx.commit();
+			return rc;
+		}
+		catch (Exception e) {
+			tx.rollback();
+			throw e;
+		}
+		finally {
+			sess.close();
+		}
 	}
 
 }

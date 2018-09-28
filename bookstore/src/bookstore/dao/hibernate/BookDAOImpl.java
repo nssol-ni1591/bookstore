@@ -7,10 +7,7 @@ import java.util.regex.Pattern;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.orm.hibernate3.HibernateTemplate;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import bookstore.annotation.Log;
@@ -18,15 +15,14 @@ import bookstore.dao.BookDAO;
 import bookstore.pbean.TBook;
 
 @Repository("BookDAOImplBId")
-public class BookDAOImpl<T> extends HibernateDaoSupport implements BookDAO<T> {
+public class BookDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport*/ implements BookDAO<T> {
 
 	@Log private static Logger log;
 
-	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
-
 	@Override
-	public int getPriceByISBNs(final T em2, final List<String> inISBNList) {
-		HibernateTemplate ht = getHibernateTemplate();
+	public int getPriceByISBNs(final T sessionFactory, final List<String> inISBNList) {
+		//HibernateTemplate ht = getHibernateTemplate()
+		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		return ht.execute(session -> {
 			Query priceQuery = 
 					session.createQuery("select sum( book.price ) from TBook book where book.isbn in ( :SELECTED_ITEMS )");
@@ -36,36 +32,45 @@ public class BookDAOImpl<T> extends HibernateDaoSupport implements BookDAO<T> {
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByKeyword(final T em2, String inKeyword) {
+	public List<TBook> retrieveBooksByKeyword(final T sessionFactory, String inKeyword) {
 		String escapedKeyword = Pattern.compile("([%_])").matcher(inKeyword).replaceAll("\\\\$1");
 		Object[] keywords = { "%" + escapedKeyword + "%", "%" + escapedKeyword + "%", "%" + escapedKeyword + "%" };
 
+		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		@SuppressWarnings("unchecked")
-		List<TBook> booksList = (List<TBook>)getHibernateTemplate()
+		//List<TBook> booksList = (List<TBook>)getHibernateTemplate()
+		List<TBook> booksList = ht
 				.find("from TBook book where book.author like ?" + "or book.title like ? or book.publisher like ?",
 						keywords);
 		return booksList;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<TBook> retrieveBooksByISBNs(final T em2, final List<String> inISBNList) {
+	public List<TBook> retrieveBooksByISBNs(final T sessionFactory, final List<String> inISBNList) {
+		//HibernateTemplate ht = getHibernateTemplate()
+		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 
-		HibernateTemplate ht = getHibernateTemplate();
-
+		List<TBook> list = null;
 		if (inISBNList == null) {
-			return ht.find("from TBook book");
+			//return (List<TBook>)ht.find("from TBook book")
+			@SuppressWarnings("unchecked")
+			List<TBook> list2 = (List<TBook>) ht.find("from TBook book");
+			list = list2;	// list2‚Ì‰E•Ó‚ð’¼Úlist‚É‘ã“ü‚·‚é‚ÆƒGƒ‰[‚È‚é WHY?
 		}
 		else {
-			return ht.execute(session -> {
+			//return ht.execute(session -> {-
+			list = ht.execute(session -> {
 				Query retrieveQuery = session.createQuery("from TBook book where book.isbn in ( :ISBNS )");
 				retrieveQuery.setParameterList("ISBNS", inISBNList);
 
 				log.log(Level.INFO, "inISBNList={0}", retrieveQuery);
 				log.log(Level.INFO, "retrieveQuery={0}", retrieveQuery);
-				return retrieveQuery.list();
-				
+
+				@SuppressWarnings("unchecked")
+				List<TBook> list2 = (List<TBook>)retrieveQuery.list();
+				return list2;
 			});
 		}
+		return list;
 	}
 }

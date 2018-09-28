@@ -5,14 +5,22 @@
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:c="http://www.springframework.org/schema/c"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<context:annotation-config />
-	<!-- 
-	<context:component-scan base-package="bookstore" />
+	<!-- TXモードにannotationを使用していない
+		このファイルのLogic層のbean定義に記載している
+	<tx:annotation-driven />
 	 -->
+	<tx:annotation-driven proxy-target-class="true" />
+	<context:component-scan base-package="bookstore.dao.hibernate.*" />
+	<context:component-scan base-package="bookstore.logic.spring.*" />
+
+	<bean id="logger" class="bookstore.util.LogInjection" />
 
 	<!-- SessionFactory -->
 	<bean id="sessionFactory"
@@ -24,24 +32,83 @@
 
 
 	<!-- TransactionManager -->
-	<bean id="transactionManager"
+<!-- 
+Springのトランザクション管理は大きく分けて以下の2つの管理方法が存在する。
+
+1.プログラミングによるトランザクション管理
+以下のようなイメージでトランザクション制御コードをソースコード内に記述する。
+
+transactionManager.begin();
+transactionManager.commit();
+transactionManager.rollback();
+
+2.宣言的トランザクション管理
+「あるメソッドを呼び出したときにトランザクションをかける」と宣言する方法。
+メソッドやクラスに@Transactionalアノテーションを付与することで管理され、
+トランザクションの開始、コミット、ロールバックは自動で行われる。
+ただし、ロールバックの注意点として、
+非検査例外(RuntimeException及びそのサブクラス)が発生した場合はロールバックされるが、
+検査例外(Exception及びそのサブクラスでRuntimeExceptionのサブクラスじゃないもの)が
+発生した場合はロールバックされずコミットされる。
+ -->
+	<!-- Transaction Manager -->
+ 	<bean id="transactionManager"
 			class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory">
 			<ref local="sessionFactory" />
 		</property>
 	</bean>
+ <!-- 
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
+		<property name="url" value="jdbc:derby://localhost:1527/bookstore"></property>
+		<property name="username" value="bookstore"></property>
+		<property name="password" value="bookstore"></property>
+	</bean>
 
-	<bean id="logger" class="bookstore.util.LogInjection" />
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource"><ref local="dataSource"/></property>
+	</bean>
+  -->
 
 
 	<!-- DAO -->
-	<bean id="BookDAOBId"
-			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager">
-			<ref local="transactionManager" />
-		</property>
+	<!-- Logic層でトランザクションを開始しているのでDAOにトランザクション定義が必要か？ -->
+	<bean id="BookDAOBId" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
 			<ref local="BookDAOImplBId" />
+		</property>
+	</bean>
+
+	<bean id="CustomerDAOBId" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<ref local="CustomerDAOImplBId" />
+		</property>
+	</bean>
+
+	<bean id="OrderDAOBId" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<ref local="OrderDAOImplBId" />
+		</property>
+	</bean>
+
+	<bean id="OrderDetailDAOBId" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<ref local="OrderDetailDAOImplBId" />
+		</property>
+	</bean>
+
+	
+	<!-- 
+	<bean id="BookDAOBId"
+			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="target">
+			<ref local="BookDAOImplBId" />
+		</property>
+
+		<property name="transactionManager">
+			<ref local="transactionManager" />
 		</property>
 		<property name="transactionAttributes">
 			<props>
@@ -49,15 +116,17 @@
 				<prop key="retrieve*">PROPAGATION_REQUIRED,readOnly</prop>
 			</props>
 		</property>
+
 	</bean>
 
 	<bean id="CustomerDAOBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager">
-			<ref local="transactionManager" />
-		</property>
 		<property name="target">
 			<ref local="CustomerDAOImplBId" />
+		</property>
+
+		<property name="transactionManager">
+			<ref local="transactionManager" />
 		</property>
 		<property name="transactionAttributes">
 			<props>
@@ -66,15 +135,17 @@
 				<prop key="save*">PROPAGATION_REQUIRED</prop>
 			</props>
 		</property>
+
 	</bean>
 
 	<bean id="OrderDAOBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager">
-			<ref local="transactionManager" />
-		</property>
 		<property name="target">
 			<ref local="OrderDAOImplBId" />
+		</property>
+
+		<property name="transactionManager">
+			<ref local="transactionManager" />
 		</property>
 		<property name="transactionAttributes">
 			<props>
@@ -82,69 +153,65 @@
 				<prop key="retrieve*">PROPAGATION_REQUIRED,readOnly</prop>
 			</props>
 		</property>
+
 	</bean>
 
 	<bean id="OrderDetailDAOBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager">
-			<ref local="transactionManager" />
-		</property>
 		<property name="target">
 			<ref local="OrderDetailDAOImplBId" />
+		</property>
+
+		<property name="transactionManager">
+			<ref local="transactionManager" />
 		</property>
 		<property name="transactionAttributes">
 			<props>
 				<prop key="create*">PROPAGATION_REQUIRED</prop>
 			</props>
 		</property>
-	</bean>
 
+	</bean>
+	 -->
 
 	<!-- DAOImpl -->
-	<!-- sessionFactoryをautowiredできなかった -->
+	<!-- この定義を省略するとsessionFactoryをautowiredできなかった -->
+	<!-- sessionFactoryはsuperクラスのHibernateDaoSupportがHibernateTemplateを生成するために必要
+		このため、sessionFactoryをautowiredする必要はなかった -->
 	<bean id="BookDAOImplBId" class="bookstore.dao.hibernate.BookDAOImpl">
+		<!-- 
 		<property name="sessionFactory">
 			<ref local="sessionFactory" />
 		</property>
+		 -->
 	</bean>
 	
 	<bean id="CustomerDAOImplBId" class="bookstore.dao.hibernate.CustomerDAOImpl">
+		<!-- 
 		<property name="sessionFactory">
 			<ref local="sessionFactory" />
 		</property>
+		 -->
 	</bean>
 	
 	<bean id="OrderDAOImplBId" class="bookstore.dao.hibernate.OrderDAOImpl">
+		<!-- 
 		<property name="sessionFactory">
 			<ref local="sessionFactory" />
 		</property>
+		 -->
 	</bean>
 	
 	<bean id="OrderDetailDAOImplBId" class="bookstore.dao.hibernate.OrderDetailDAOImpl">
+		<!-- 
 		<property name="sessionFactory">
 			<ref local="sessionFactory" />
 		</property>
+		 -->
 	</bean>
 
 
 	<!-- Logic Layer -->
-	<bean id="LogicCustomerBId"
-			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager">
-			<ref local="transactionManager" />
-		</property>
-		<property name="target">
-			<ref local="LogicCustomerImplBId" />
-		</property>
-		<property name="transactionAttributes">
-			<props>
-				<prop key="is*">PROPAGATION_REQUIRED,readOnly</prop>
-				<prop key="createCustomer">PROPAGATION_REQUIRED</prop>
-				<prop key="createVCustomer">PROPAGATION_REQUIRED,readOnly</prop>
-			</props>
-		</property>
-	</bean>
-
 	<bean id="LogicBookBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
@@ -162,7 +229,24 @@
 		</property>
 	</bean>
 
-	<bean id="LogicOrderBId"
+	<bean id="LogicCustomerBId"
+			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref local="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="LogicCustomerImplBId" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="is*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="createCustomer">PROPAGATION_REQUIRED</prop>
+				<prop key="createVCustomer">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+<!-- 
+ 	<bean id="LogicOrderBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
 			<ref local="transactionManager" />
@@ -177,26 +261,38 @@
 			</props>
 		</property>
 	</bean>
-	
+ -->
 
+	<bean id="LogicOrderBId" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<ref local="LogicOrderImplBId" />
+		</property>
+	</bean>
+
+ 
 	<!-- Logic Layer Implement -->
-	<!-- autowired設定によりコメントアウト化ができた部分 -->
-	<!-- しかし、CDIと混在させる場合、@NameではSpringが優先されるのでCDIに制御が渡らない
-		よって、CDIと混在させるためcomponent-scanを無効にする
-		これにより以下の定義を有効化する必要が生じた -->
+	<!-- autowired設定によりコメントアウト化ができる部分 -->
+	<!-- しかし、CDIと混在させる場合、@NameはSpringが優先されためCDIで処理されない
+		このため、CDIと混在させるためにはspringによるAnnotation（<component-scan ...>）を無効にする 
+		よって、以下のbean定義を有効化する必要が生じる -->
 	<bean id="LogicCustomerImplBId" class="bookstore.logic.spring.CustomerLogicWrapper">
+	<!-- クラスに@Autowiredが指定されているのでapplicationContext.xmlでの指定は不要
 		<property name="customerdao">
 			<ref local="CustomerDAOBId" />
 		</property>
+	 -->
 	</bean>
 
 	<bean id="LogicBookImplBId" class="bookstore.logic.spring.BookLogicWrapper">
+	<!-- クラスに@Autowiredが指定されているのでapplicationContext.xmlでの指定は不要
 		<property name="bookdao">
 			<ref local="BookDAOBId" />
 		</property>
+	 -->
 	</bean>
 
 	<bean id="LogicOrderImplBId" class="bookstore.logic.spring.OrderLogicWrapper">
+	<!-- クラスに@Autowiredが指定されているのでapplicationContext.xmlでの指定は不要
 		<property name="bookdao">
 			<ref local="BookDAOBId" />
 		</property>
@@ -209,10 +305,12 @@
 		<property name="orderdetaildao">
 			<ref local="OrderDetailDAOBId" />
 		</property>
+	 -->
 	</bean>
 
 
-	<!-- Struts Action -->
+	<!-- Struts Action Layer -->
+	<!-- この層ではDIをxmlファイルの定義で行う -->
 	<bean name="/CreateUser" class="bookstore.action.CreateUserAction">
 		<property name="customerLogic">
 			<ref local="LogicCustomerImplBId" />

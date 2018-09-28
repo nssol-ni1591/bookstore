@@ -23,7 +23,7 @@ public class OrderDetailDAOImpl<T extends Connection> implements OrderDetailDAO<
 			throw new SQLException("isdn: 0-0000-0000-0");
 		}
 
-		Connection con = con2 != null ? con2 : DB.createConnection ();
+		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
 		TOrderDetail orderDetail = null;
 		try {

@@ -21,7 +21,7 @@ public class OrderDAOImpl<T extends Connection> implements OrderDAO<T> {
 	private static final Logger log = Logger.getLogger(OrderDAOImpl.class.getName());
 
 	public TOrder createOrder(final T con2, TCustomer inCustomer) throws SQLException {
-		Connection con = con2 != null ? con2 : DB.createConnection ();
+		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
 		PreparedStatement pst2 = null;
 		ResultSet rs = null;
@@ -79,7 +79,7 @@ public class OrderDAOImpl<T extends Connection> implements OrderDAO<T> {
 	}
 
 	public List<TOrder> retrieveOrders(final T con2, final List<String> orderIdList) throws SQLException {
-		Connection con = con2 != null ? con2 : DB.createConnection ();
+		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		List<TOrder> orderList = new ArrayList<>();

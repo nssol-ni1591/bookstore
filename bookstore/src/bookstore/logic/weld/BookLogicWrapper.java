@@ -27,8 +27,9 @@ public class BookLogicWrapper extends AbstractBookLogic<EntityManager> implement
 	@Inject @UsedEclipselink private BookDAO<EntityManager> bookdao;
 	@Inject private Logger log;
 
-	//@PersistenceContext(unitName = "BookStore") private EntityManager em;
 	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
+
+	private transient EntityManager em = null;
 
 	@Override
 	protected BookDAO<EntityManager> getBookDAO() {
@@ -40,7 +41,6 @@ public class BookLogicWrapper extends AbstractBookLogic<EntityManager> implement
 	}
 	@Override
 	protected EntityManager getManager() {
-		EntityManager em = emf.createEntityManager();
 		return em;
 	}
 

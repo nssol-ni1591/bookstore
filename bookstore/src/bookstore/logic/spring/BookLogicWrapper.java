@@ -2,6 +2,7 @@ package bookstore.logic.spring;
 
 import java.util.logging.Logger;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -13,13 +14,15 @@ import bookstore.logic.AbstractBookLogic;
 
 @UsedSpring
 @Component("LogicBookImplBId")
-public class BookLogicWrapper extends AbstractBookLogic<Object> {
+public class BookLogicWrapper extends AbstractBookLogic<SessionFactory> {
 
-	@Autowired @Qualifier("BookDAOBId") BookDAO<Object> bookdao;
 	@Log private static Logger log;
 
+	@Autowired @Qualifier("BookDAOBId") BookDAO<SessionFactory> bookdao;
+	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
+
 	@Override
-	protected BookDAO<Object> getBookDAO() {
+	protected BookDAO<SessionFactory> getBookDAO() {
 		return bookdao;
 	}
 	@Override
@@ -27,12 +30,12 @@ public class BookLogicWrapper extends AbstractBookLogic<Object> {
 		return log;
 	}
 	@Override
-	protected Object getManager() {
-		return null;
+	protected SessionFactory getManager() {
+		return sessionFactory;
 	}
-
-	public void setBookdao(BookDAO<Object> bookdao) {
+/*
+	public void setBookdao(BookDAO<SessionFactory> bookdao) {
 		this.bookdao = bookdao;
 	}
-
+*/
 }

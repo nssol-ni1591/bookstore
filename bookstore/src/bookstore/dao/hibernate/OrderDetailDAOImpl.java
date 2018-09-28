@@ -5,9 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
 import bookstore.annotation.Log;
@@ -17,12 +15,12 @@ import bookstore.pbean.TOrder;
 import bookstore.pbean.TOrderDetail;
 
 @Repository("OrderDetailDAOImplBId")
-public class OrderDetailDAOImpl<T> extends HibernateDaoSupport implements OrderDetailDAO<T> {
+public class OrderDetailDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport*/ implements OrderDetailDAO<T> {
 
-	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
 	@Log private static Logger log;
 
-	public void createOrderDetail(final T em, TOrder inOrder, TBook inBook) throws SQLException {
+	public void createOrderDetail(final T sessionFactory, TOrder inOrder, TBook inBook) throws SQLException {
+		log.log(Level.INFO, "sessionFactory={0}", sessionFactory);
 		log.log(Level.INFO, "order_id={0}, book_id={1}"
 				, new Object[] {
 						 inOrder == null ? "null" : inOrder.getId()
@@ -36,6 +34,6 @@ public class OrderDetailDAOImpl<T> extends HibernateDaoSupport implements OrderD
 		TOrderDetail saveOrderDetail = new TOrderDetail();
 		saveOrderDetail.setTOrder(inOrder);
 		saveOrderDetail.setTBook(inBook);
-		getHibernateTemplate().save(saveOrderDetail);
+		new HibernateTemplate(sessionFactory).save(saveOrderDetail);
 	}
 }

@@ -4,6 +4,34 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 
+<!-- 
+<persistence-unit transaction-type = "RESOURCE_LOCAL">を使用すると、
+EntityManager（PersistenceContext / Cache）の作成と追跡が行われます。
+
+・EntityManagerFactoryを使用してEntityManagerを取得する必要があります
+・生成されるEntityManagerインスタンスは 、PersistenceContext / Cacheです
+・@PersistenceUnit注釈だけでEntityManagerFactoryを挿入できます（@PersistenceContextではありません）
+・@PersistenceContextを使用してRESOURCE_LOCALタイプのユニットを参照することはできません
+・EntityMangerへのすべての呼び出しの前後でEntityTransaction APIを使用して開始/コミットする必要があります
+・entityManagerFactory.createEntityManager（）を2回呼び出すと、 
+　2つの別々のEntityManagerインスタンスが生成され、そのために2つの別々のPersistenceContext / Cacheが生成されます
+・EntityManagerの複数のインスタンスを使用することをお勧めします
+　（最初のインスタンスを破棄しない限り、2つ目のインスタンスを作成しないでください） 
+
+<persistence-unit transaction-type = "JTA">を使用すると、 
+CONTAINERはEntityManager（PersistenceContext / Cache）を作成および追跡します。
+
+・EntityManagerFactoryを使用してEntityManagerを取得することはできません
+・コンテナによって提供されるEntityManagerのみを取得できます
+・EntityManagerは@PersistenceContextアノテーションのみで挿入できます（@PersistenceUnitではなく）
+・@PersistenceUnitを使用して、JTAタイプのユニットを参照することはできません
+・コンテナによって与えられるEntityManagerは、JTAトランザクションに関連するPersistenceContext / Cacheへの参照です
+・JTAトランザクションが進行中でない場合 、PersistenceContext / Cacheが存在しないためEntityManager は使用できません
+・同じトランザクション内の同じユニットへのEntityManager参照を持つすべてのユーザは、
+　自動的に同じPersistenceContext / Cacheへの参照を持ちます
+・PersistenceContext / Cacheがフラッシュされ、JTA コミット時にクリアされる
+ -->
+
 	<!-- use bookstore.dao.eclipselink -->
 	<persistence-unit name="BookStore" transaction-type="RESOURCE_LOCAL">
 		<!-- 
@@ -13,7 +41,7 @@
 		<!-- 
 		ただし、RESOURCE_LOCALを使用すると@@PersistenceContextによるDIができない？
 		=>@PersistenceUnitを使用する
-		  -->
+		 -->
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
 		<jta-data-source>jdbc/bookstoreDS</jta-data-source>

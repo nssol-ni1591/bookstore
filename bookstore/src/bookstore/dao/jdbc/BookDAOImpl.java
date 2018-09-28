@@ -14,11 +14,11 @@ public class BookDAOImpl<T extends Connection> implements BookDAO<T> {
 
 	@Override
 	public int getPriceByISBNs(final T con2, final List<String> inISBNList) throws SQLException {
-		Connection con = con2 != null ? con2 : DB.createConnection ();
+		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
-			con = con2 != null ? con2 : DB.createConnection ();
+			con = con2 != null ? con2 : DB.createConnection();
 			pst = con.prepareStatement("select sum(price) from T_Book where isbn in ('" 
 					+ String.join("','", inISBNList.toArray(new String[0]))
 					+ "')");
@@ -35,12 +35,12 @@ public class BookDAOImpl<T extends Connection> implements BookDAO<T> {
 
 	@Override
 	public List<TBook> retrieveBooksByKeyword(final T con2, String inKeyword) throws SQLException {
-		Connection con = con2 != null ? con2 : DB.createConnection ();
+		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		List<TBook> booksList = new ArrayList<>();
 		try {
-			con = con2 != null ? con2 : DB.createConnection ();
+			con = con2 != null ? con2 : DB.createConnection();
 			pst = con.prepareStatement("select id, isbn, title, author, publisher, price from T_Book where author like ? or title like ? or publisher like ?");
 			String keyword = "%" + inKeyword + "%";
 			pst.setString(1, keyword);
@@ -73,7 +73,7 @@ public class BookDAOImpl<T extends Connection> implements BookDAO<T> {
 
 	@Override
 	public List<TBook> retrieveBooksByISBNs(final T con2, final List<String> inISBNList) throws SQLException {
-		Connection con = con2 != null ? con2 : DB.createConnection ();
+		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		List<TBook> booksList = new ArrayList<>();

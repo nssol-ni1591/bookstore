@@ -30,6 +30,8 @@ public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 
 	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
 
+	private EntityManager em = null;
+
 	@Override
 	protected BookDAO<EntityManager> getBookDAO() {
 		return bookdao;
@@ -52,13 +54,12 @@ public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 	}
 	@Override
 	protected EntityManager getManager() {
-		EntityManager em = emf.createEntityManager();
 		return em;
 	}
 
 	@Override
 	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
-		EntityManager em = getManager();
+		em = emf.createEntityManager();
 		EntityTransaction tx = null;
 		try {
 			tx = em.getTransaction();
@@ -69,10 +70,14 @@ public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 			tx.commit();
 		}
 		catch (Exception e) {
-			if (tx != null) {
+			if (tx != null && tx.isActive()) {
 				tx.rollback();
 			}
 			throw e;
+		}
+		finally {
+			em.close();
+			em = null;
 		}
 	}
 

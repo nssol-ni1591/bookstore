@@ -7,6 +7,7 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceUnit;
 
 import bookstore.annotation.UsedWeld;
@@ -21,8 +22,9 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic<EntityManager> {
 	@Inject @UsedEclipselink private CustomerDAO<EntityManager> customerdao;
 	@Inject private Logger log;
 
-	//@PersistenceContext(unitName = "BookStore") private EntityManager em;
 	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
+
+	private EntityManager em = null;
 
 	@Override
 	protected CustomerDAO<EntityManager> getCustomerDAO() {
@@ -39,11 +41,29 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic<EntityManager> {
 	}
 
 	@Override
-	//@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public boolean createCustomer(String inUid, String inPassword, String inName, String inEmail) throws Exception {
-		boolean rc = super.createCustomer(inUid, inPassword, inName, inEmail);
-		log.log(Level.INFO, "rc={0}", rc);
-		return rc;
+		em = emf.createEntityManager();
+		EntityTransaction tx = null;
+		try {
+			tx = em.getTransaction();
+			tx.begin();
+	
+			boolean rc = super.createCustomer(inUid, inPassword, inName, inEmail);
+			log.log(Level.INFO, "rc={0}", rc);
+
+			tx.commit();
+			return rc;
+		}
+		catch (Exception e) {
+			if (tx != null && tx.isActive()) {
+				tx.rollback();
+			}
+			throw e;
+		}
+		finally {
+			em.close();
+			em = null;
+		}
 	}
 
 }

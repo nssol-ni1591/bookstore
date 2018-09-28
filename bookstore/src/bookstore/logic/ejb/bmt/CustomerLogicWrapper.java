@@ -49,7 +49,8 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic<EntityManager> {
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	//@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	// => The @TransactionAttribute annotation applies only to beans using Container-Managed Transactions.  
 	public boolean createCustomer(String inUid, String inPassword, String inName, String inEmail) throws Exception {
 		log.log(Level.INFO, "this={0}", this);
 		try {

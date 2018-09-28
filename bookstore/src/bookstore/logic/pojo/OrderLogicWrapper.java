@@ -1,9 +1,7 @@
 package bookstore.logic.pojo;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import bookstore.annotation.UsedPojo;
@@ -25,7 +23,10 @@ public class OrderLogicWrapper extends AbstractOrderLogic<Connection> {
 	private final CustomerDAO<Connection> customerdao = new CustomerDAOImpl<>();
 	private final OrderDAO<Connection> orderdao = new OrderDAOImpl<>();
 	private final OrderDetailDAO<Connection> odetaildao = new OrderDetailDAOImpl<>();
+
 	private static final Logger log = Logger.getLogger(OrderLogicWrapper.class.getName());
+
+	private Connection con = null;
 
 	@Override
 	protected BookDAO<Connection> getBookDAO() {
@@ -49,18 +50,12 @@ public class OrderLogicWrapper extends AbstractOrderLogic<Connection> {
 	}
 	@Override
 	protected Connection getManager() {
-		try {
-			return DB.createConnection();
-		}
-		catch (SQLException e) {
-			log.log(Level.SEVERE, "In createConnection", e);
-		}
-		return null;
+		return con;
 	}
 
 	@Override
 	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
-		Connection con = getManager();
+		con = DB.createConnection();
 		try {
 			super.orderBooks(inUid, inISBNs);
 			con.commit();
@@ -75,6 +70,7 @@ public class OrderLogicWrapper extends AbstractOrderLogic<Connection> {
 			if (con != null) {
 				con.close();
 			}
+			con = null;
 		}
 	}
 }

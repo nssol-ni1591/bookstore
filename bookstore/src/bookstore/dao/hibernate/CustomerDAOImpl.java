@@ -5,10 +5,7 @@ import java.util.logging.Logger;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.orm.hibernate3.HibernateTemplate;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import bookstore.annotation.Log;
@@ -16,16 +13,14 @@ import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;
 
 @Repository("CustomerDAOImplBId")
-public class CustomerDAOImpl<T> extends HibernateDaoSupport implements CustomerDAO<T> {
+public class CustomerDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport*/ implements CustomerDAO<T> {
 
 	@Log private static Logger log;
 
-	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
+	public int getCustomerNumberByUid(final T sessionFactory, final String inUid) {
+		log.log(Level.INFO, "inUid={0}", new Object[] { inUid });
 
-	public int getCustomerNumberByUid(final T em2, final String inUid) {
-		log.log(Level.INFO, "inUid={0}, sessionFactory={1}", new Object[] { inUid, sessionFactory.getClass().getName() });
-
-		HibernateTemplate ht = getHibernateTemplate();
+		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		return ht.execute(session -> {
 			Query numQuery = session
 					.createQuery("select count(*) from TCustomer customer where customer.username like :USERNAME");
@@ -34,8 +29,8 @@ public class CustomerDAOImpl<T> extends HibernateDaoSupport implements CustomerD
 		}).intValue();
 	}
 
-	public TCustomer findCustomerByUid(final T em2, final String inUid) {
-		HibernateTemplate ht = getHibernateTemplate();
+	public TCustomer findCustomerByUid(final T sessionFactory, final String inUid) {
+		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		return ht.execute(session -> {
 			Query priceQuery = session
 					.createQuery("from TCustomer customer where customer.username like :USERNAME");
@@ -44,7 +39,7 @@ public class CustomerDAOImpl<T> extends HibernateDaoSupport implements CustomerD
 		});
 	}
 
-	public void saveCustomer(final T em2, String inUid, String inPasswordMD5, String inName, String inEmail) {
+	public void saveCustomer(final T sessionFactory, String inUid, String inPasswordMD5, String inName, String inEmail) {
 		TCustomer saveCustomer = new TCustomer();
 
 		saveCustomer.setUsername(inUid);
@@ -52,6 +47,6 @@ public class CustomerDAOImpl<T> extends HibernateDaoSupport implements CustomerD
 		saveCustomer.setName(inName);
 		saveCustomer.setEmail(inEmail);
 
-		getHibernateTemplate().save(saveCustomer);
+		new HibernateTemplate(sessionFactory).save(saveCustomer);
 	}
 }

@@ -15,7 +15,7 @@ public class CustomerDAOImpl<T extends Connection> implements CustomerDAO<T> {
 	private static final Logger log = Logger.getLogger(CustomerDAOImpl.class.getName());
 
 	public int getCustomerNumberByUid(final T con2, final String inUid) throws SQLException {
-		Connection con = con2 != null ? con2 : DB.createConnection ();
+		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
@@ -33,7 +33,7 @@ public class CustomerDAOImpl<T extends Connection> implements CustomerDAO<T> {
 	}
 
 	public TCustomer findCustomerByUid(final T con2, final String inUid) throws SQLException {
-		Connection con = con2 != null ? con2 : DB.createConnection ();
+		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
@@ -67,7 +67,7 @@ public class CustomerDAOImpl<T extends Connection> implements CustomerDAO<T> {
 			String inPasswordMD5,
 			String inName,
 			String inEmail) throws SQLException {
-		Connection con = con2 != null ? con2 : DB.createConnection ();
+		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
 		try {
 			pst = con.prepareStatement("insert into T_Customer (username, passwordmd5, name, email) values (?,?,?,?)");

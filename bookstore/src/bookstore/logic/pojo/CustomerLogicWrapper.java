@@ -1,8 +1,6 @@
 package bookstore.logic.pojo;
 
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import bookstore.annotation.UsedPojo;
@@ -17,6 +15,8 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic<Connection> {
 	private final CustomerDAO<Connection> customerdao = new CustomerDAOImpl<>();
 	private static final Logger log = Logger.getLogger(CustomerLogicWrapper.class.getName());
 
+	private Connection con = null;
+
 	@Override
 	protected CustomerDAO<Connection> getCustomerDAO() {
 		return customerdao;
@@ -27,13 +27,33 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic<Connection> {
 	}
 	@Override
 	protected Connection getManager() {
+		return con;
+	}
+
+	@Override
+	public boolean createCustomer(String inUid
+			, String inPassword
+			, String inName
+			, String inEmail) throws Exception {
+		boolean rc = false;
+		con = DB.createConnection();
 		try {
-			return DB.createConnection();
+			rc = super.createCustomer(inUid, inPassword, inName, inEmail);
+			con.commit();
+			return rc;
 		}
-		catch (SQLException e) {
-			log.log(Level.SEVERE, "", e);
+		catch (Exception e) {
+			if (con != null) {
+				con.rollback();
+			}
+			throw e;
 		}
-		return null;
+		finally {
+			if (con != null) {
+				con.close();
+			}
+			con = null;
+		}
 	}
 
 }

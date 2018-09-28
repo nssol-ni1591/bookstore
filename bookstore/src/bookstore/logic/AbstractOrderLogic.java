@@ -41,10 +41,8 @@ public abstract class AbstractOrderLogic<T> implements OrderLogic {
 		log.log(Level.INFO, "uid={0}, customer_id={1}, order_id={2}"
 				, new Object[] { inUid, customer.getId(), order.getId() });
 
-		//Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(inISBNs).iterator();
 		Iterator<String> iter = inISBNs.iterator();
 		while (iter.hasNext()) {
-			//TBook book = iter.next();
 			String isbn = iter.next();
 			List<String> isbns = new ArrayList<>();
 			isbns.add(isbn);
