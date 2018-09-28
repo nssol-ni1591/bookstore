@@ -17,6 +17,8 @@
 	<tx:annotation-driven />
 	 -->
 	<tx:annotation-driven proxy-target-class="true" />
+
+	<!-- spring DI対象のパッケージのみを指定する -->
 	<context:component-scan base-package="bookstore.dao.hibernate.*" />
 	<context:component-scan base-package="bookstore.logic.spring.*" />
 
@@ -75,9 +77,13 @@ transactionManager.rollback();
 
 	<!-- DAO -->
 	<!-- Logic層でトランザクションを開始しているのでDAOにトランザクション定義が必要か？ -->
+	<!-- targetの参照先はbean定義ファイル内で完結してしないといけない。ようだ -->
 	<bean id="BookDAOBId" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
+		<!-- 
 			<ref local="BookDAOImplBId" />
+		 -->
+			<ref bean="BookDAOImplBId" />
 		</property>
 	</bean>
 
@@ -177,7 +183,11 @@ transactionManager.rollback();
 	<!-- DAOImpl -->
 	<!-- この定義を省略するとsessionFactoryをautowiredできなかった -->
 	<!-- sessionFactoryはsuperクラスのHibernateDaoSupportがHibernateTemplateを生成するために必要
-		このため、sessionFactoryをautowiredする必要はなかった -->
+		別にsuperクラスを使用しなくても、sessionFactoryがあればHibernateTemplateを生成できるので
+		HibernateDaoSupportの継承をやめて、PojoクラスでautowiredしたsessionFactoryから
+		HibernateDaoSupportを生成するようにする
+	 -->
+	<!-- これにより、以下のsessionFactoryのDI定義は必要なくなった -->
 	<bean id="BookDAOImplBId" class="bookstore.dao.hibernate.BookDAOImpl">
 		<!-- 
 		<property name="sessionFactory">
@@ -185,7 +195,6 @@ transactionManager.rollback();
 		</property>
 		 -->
 	</bean>
-	
 	<bean id="CustomerDAOImplBId" class="bookstore.dao.hibernate.CustomerDAOImpl">
 		<!-- 
 		<property name="sessionFactory">
@@ -193,7 +202,6 @@ transactionManager.rollback();
 		</property>
 		 -->
 	</bean>
-	
 	<bean id="OrderDAOImplBId" class="bookstore.dao.hibernate.OrderDAOImpl">
 		<!-- 
 		<property name="sessionFactory">
@@ -201,7 +209,6 @@ transactionManager.rollback();
 		</property>
 		 -->
 	</bean>
-	
 	<bean id="OrderDetailDAOImplBId" class="bookstore.dao.hibernate.OrderDetailDAOImpl">
 		<!-- 
 		<property name="sessionFactory">
@@ -209,7 +216,6 @@ transactionManager.rollback();
 		</property>
 		 -->
 	</bean>
-
 
 	<!-- Logic Layer -->
 	<bean id="LogicBookBId"
@@ -223,7 +229,7 @@ transactionManager.rollback();
 		<property name="transactionAttributes">
 			<props>
 				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
-				<prop key="create*">PROPAGATION_REQUIRED</prop>
+				<prop key="create*">PROPAGATION_REQUIRED,readOnly</prop>
 				<prop key="retrieve*">PROPAGATION_REQUIRED,readOnly</prop>
 			</props>
 		</property>
@@ -274,7 +280,8 @@ transactionManager.rollback();
 	<!-- autowired設定によりコメントアウト化ができる部分 -->
 	<!-- しかし、CDIと混在させる場合、@NameはSpringが優先されためCDIで処理されない
 		このため、CDIと混在させるためにはspringによるAnnotation（<component-scan ...>）を無効にする 
-		よって、以下のbean定義を有効化する必要が生じる -->
+		よって、以下のbean定義を有効化する必要が生じる
+	 -->
 	<bean id="LogicCustomerImplBId" class="bookstore.logic.spring.CustomerLogicWrapper">
 	<!-- クラスに@Autowiredが指定されているのでapplicationContext.xmlでの指定は不要
 		<property name="customerdao">

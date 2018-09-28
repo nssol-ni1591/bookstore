@@ -2,6 +2,7 @@ package bookstore.logic.spring;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.hibernate.SessionFactory;
@@ -74,7 +75,15 @@ public class OrderLogicWrapper extends AbstractOrderLogic<SessionFactory> {
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED)	//-> applicationContext.xmlÇ…ìØìôÇÃíËã`Ç†ÇËÅH
 	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
-		super.orderBooks(inUid, inISBNs);
+		//rollbackÇ∑ÇÈÇΩÇﬂÇÃó·äOÇÕRuntimeExceptionÇ≈Ç»Ç¢Ç∆Ç¢ÇØÇ»Ç¢
+		try {
+			super.orderBooks(inUid, inISBNs);
+		}
+		catch (Exception e) {
+			log.log(Level.SEVERE, "e={0}", new Object[] { e.getMessage() });
+			throw new SpringRuntimeException(e);
+		}
+
 		/*
 		// Non-managed environment idiom
 		log.log(Level.INFO, "sessionFactory={0}", sessionFactory);
