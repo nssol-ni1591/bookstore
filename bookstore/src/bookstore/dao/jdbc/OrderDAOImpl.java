@@ -94,15 +94,15 @@ public class OrderDAOImpl<T extends Connection> implements OrderDAO<T> {
 			rs = pst.executeQuery();
 			while (rs.next()) {
 				int id = rs.getInt(1);
-				String custormerId = rs.getString(2);
+				String customerId = rs.getString(2);
 				Timestamp orderDay = rs.getTimestamp(3);
 
 				CustomerDAO<Connection> customerDAO = new CustomerDAOImpl<>();
-				TCustomer custormer = customerDAO.findCustomerByUid(con, custormerId);
+				TCustomer customer = customerDAO.findCustomerByUid(con, customerId);
 
 				TOrder o = new TOrder();
 				o.setId(id);
-				o.setTCustomer(custormer);
+				o.setTCustomer(customer);
 				o.setOrderday(orderDay);
 				orderList.add(o);
 			}

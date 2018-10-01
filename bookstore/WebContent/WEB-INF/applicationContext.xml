@@ -12,13 +12,12 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<context:annotation-config />
-	<!-- TXモードにannotationを使用していない
-		このファイルのLogic層のbean定義に記載している
+	<!-- TXモードにannotationを使用する場合
 	<tx:annotation-driven />
 	 -->
 	<tx:annotation-driven proxy-target-class="true" />
 
-	<!-- spring DI対象のパッケージのみを指定する -->
+	<!-- spring DI対象のパッケージを指定する -->
 	<context:component-scan base-package="bookstore.dao.hibernate.*" />
 	<context:component-scan base-package="bookstore.logic.spring.*" />
 
@@ -34,33 +33,33 @@
 
 
 	<!-- TransactionManager -->
-<!-- 
-Springのトランザクション管理は大きく分けて以下の2つの管理方法が存在する。
+	<!-- 
+	Springのトランザクション管理は大きく分けて以下の2つの管理方法が存在する。
 
-1.プログラミングによるトランザクション管理
-以下のようなイメージでトランザクション制御コードをソースコード内に記述する。
+	1.プログラミングによるトランザクション管理
+	以下のようなイメージでトランザクション制御コードをソースコード内に記述する。
 
-transactionManager.begin();
-transactionManager.commit();
-transactionManager.rollback();
+	transactionManager.begin();
+	transactionManager.commit();
+	transactionManager.rollback();
 
-2.宣言的トランザクション管理
-「あるメソッドを呼び出したときにトランザクションをかける」と宣言する方法。
-メソッドやクラスに@Transactionalアノテーションを付与することで管理され、
-トランザクションの開始、コミット、ロールバックは自動で行われる。
-ただし、ロールバックの注意点として、
-非検査例外(RuntimeException及びそのサブクラス)が発生した場合はロールバックされるが、
-検査例外(Exception及びそのサブクラスでRuntimeExceptionのサブクラスじゃないもの)が
-発生した場合はロールバックされずコミットされる。
- -->
-	<!-- Transaction Manager -->
- 	<bean id="transactionManager"
-			class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+	2.宣言的トランザクション管理
+	「あるメソッドを呼び出したときにトランザクションをかける」と宣言する方法。
+	メソッドやクラスに@Transactionalアノテーションを付与することで管理され、
+	トランザクションの開始、コミット、ロールバックは自動で行われる。
+	ただし、ロールバックの注意点として、
+	非検査例外(RuntimeException及びそのサブクラス)が発生した場合はロールバックされるが、
+	検査例外(Exception及びそのサブクラスでRuntimeExceptionのサブクラスじゃないもの)が
+	発生した場合はロールバックされずコミットされる。
+	 -->
+	<!-- 2.を使用する場合
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory">
 			<ref local="sessionFactory" />
 		</property>
 	</bean>
- <!-- 
+	 -->
+
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
 		<property name="url" value="jdbc:derby://localhost:1527/bookstore"></property>
@@ -68,19 +67,19 @@ transactionManager.rollback();
 		<property name="password" value="bookstore"></property>
 	</bean>
 
+	<!-- DataSourceTransactionManager は単一のデータソースに対するトランザクションマネージャ -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource"><ref local="dataSource"/></property>
 	</bean>
-  -->
 
 
 	<!-- DAO -->
-	<!-- Logic層でトランザクションを開始しているのでDAOにトランザクション定義が必要か？ -->
+	<!-- Logic層でトランザクションを開始しているのでDAOにトランザクション定義が必要か？ ⇒必要ない -->
 	<!-- targetの参照先はbean定義ファイル内で完結してしないといけない。ようだ -->
 	<bean id="BookDAOBId" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
-		<!-- 
+		<!-- どうもlocalでもbeanでも違いはないようだ？
 			<ref local="BookDAOImplBId" />
 		 -->
 			<ref bean="BookDAOImplBId" />
@@ -106,7 +105,7 @@ transactionManager.rollback();
 	</bean>
 
 	
-	<!-- 
+	<!-- Logicでトランザクションを開始するので、DAOでのトランザクションは無効にする
 	<bean id="BookDAOBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="target">
@@ -182,12 +181,13 @@ transactionManager.rollback();
 
 	<!-- DAOImpl -->
 	<!-- この定義を省略するとsessionFactoryをautowiredできなかった -->
-	<!-- sessionFactoryはsuperクラスのHibernateDaoSupportがHibernateTemplateを生成するために必要
-		別にsuperクラスを使用しなくても、sessionFactoryがあればHibernateTemplateを生成できるので
-		HibernateDaoSupportの継承をやめて、PojoクラスでautowiredしたsessionFactoryから
-		HibernateDaoSupportを生成するようにする
+	<!-- HibernateDaoSupportがHibernateTemplateを生成するためにsessionFactoryはsuperクラスのDIが必要なだけ
+		ただ、HibernateDaoSupportクラスを使用しなくても、
+		HibernateTemplateをnewする際にsessionFactoryを引数にすればよいだけなので、
+		DAOImplクラスのHibernateDaoSupportのextendsをやめて、
+		DAOImplクラスでautowiredしたsessionFactoryからHibernateDaoSupportを生成するようにすることにした。
+		これにより、以下のsessionFactoryのDI定義は必要なくなった
 	 -->
-	<!-- これにより、以下のsessionFactoryのDI定義は必要なくなった -->
 	<bean id="BookDAOImplBId" class="bookstore.dao.hibernate.BookDAOImpl">
 		<!-- 
 		<property name="sessionFactory">
@@ -251,7 +251,9 @@ transactionManager.rollback();
 			</props>
 		</property>
 	</bean>
-<!-- 
+	<!-- LogicOrderImplBIdでは、@Transactionalを使うことにしてみた
+		classをTransactionProxyFactoryBeanからTransactionProxyFactoryBeanに変更する
+
  	<bean id="LogicOrderBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
@@ -267,39 +269,33 @@ transactionManager.rollback();
 			</props>
 		</property>
 	</bean>
- -->
-
+	 -->
 	<bean id="LogicOrderBId" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
 			<ref local="LogicOrderImplBId" />
 		</property>
 	</bean>
-
  
 	<!-- Logic Layer Implement -->
-	<!-- autowired設定によりコメントアウト化ができる部分 -->
-	<!-- しかし、CDIと混在させる場合、@NameはSpringが優先されためCDIで処理されない
-		このため、CDIと混在させるためにはspringによるAnnotation（<component-scan ...>）を無効にする 
-		よって、以下のbean定義を有効化する必要が生じる
-	 -->
+	<!-- autowired設定によりコメントアウト化ができる部分
+		クラスに@Autowiredが指定されているのでapplicationContext.xmlでの指定は不要
+	-->
 	<bean id="LogicCustomerImplBId" class="bookstore.logic.spring.CustomerLogicWrapper">
-	<!-- クラスに@Autowiredが指定されているのでapplicationContext.xmlでの指定は不要
+	<!-- 
 		<property name="customerdao">
 			<ref local="CustomerDAOBId" />
 		</property>
 	 -->
 	</bean>
-
 	<bean id="LogicBookImplBId" class="bookstore.logic.spring.BookLogicWrapper">
-	<!-- クラスに@Autowiredが指定されているのでapplicationContext.xmlでの指定は不要
+	<!-- 
 		<property name="bookdao">
 			<ref local="BookDAOBId" />
 		</property>
 	 -->
 	</bean>
-
 	<bean id="LogicOrderImplBId" class="bookstore.logic.spring.OrderLogicWrapper">
-	<!-- クラスに@Autowiredが指定されているのでapplicationContext.xmlでの指定は不要
+	<!-- 
 		<property name="bookdao">
 			<ref local="BookDAOBId" />
 		</property>

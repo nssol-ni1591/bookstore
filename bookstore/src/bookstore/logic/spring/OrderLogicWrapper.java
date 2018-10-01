@@ -29,8 +29,8 @@ public class OrderLogicWrapper extends AbstractOrderLogic<SessionFactory> {
 
 	@Autowired @Qualifier("BookDAOBId") BookDAO<SessionFactory> bookdao;
 	@Autowired @Qualifier("CustomerDAOBId") CustomerDAO<SessionFactory> customerdao;
-	@Autowired @Qualifier("OrderDAOBId")OrderDAO<SessionFactory> orderdao;
-	@Autowired @Qualifier("OrderDetailDAOBId")OrderDetailDAO<SessionFactory> odetaildao;
+	@Autowired @Qualifier("OrderDAOBId") OrderDAO<SessionFactory> orderdao;
+	@Autowired @Qualifier("OrderDetailDAOBId") OrderDetailDAO<SessionFactory> odetaildao;
 	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
 
 	@Override

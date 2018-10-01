@@ -7,14 +7,56 @@
 <hibernate-configuration>
 	<session-factory>
 
-		<!-- TomEE setting in JTA -->
-		<!-- 
+		<!-- APサーバのコネクションプールでも、hibernateのコネクションプールでも、どちらを使っても動作することを確認済み -->
+
+		<!-- use connection pool in TomEE -->
 		<property name="hibernate.transaction.manager_lookup_class">org.apache.openejb.hibernate.TransactionManagerLookup</property>
 		<property name="hibernate.connection.datasource">java:comp/env/jdbc/bookstoreDS</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
-		 -->
+
 		<!-- jdbc/bookstoreDSnonJTAでは起動時にDataSourceが見つからない旨の例外が発生する <> jdbc/bookstoreDSでは発生しない WHY?
 		<property name="hibernate.connection.datasource">java:comp/env/jdbc/bookstoreDSnonJTA</property>
+		 -->
+
+		<!-- use connection pool of managed hibernate -->
+		<!-- 2018/08/27 -->
+		<!-- 
+		<property name="hibernate.connection.driver_class">org.apache.derby.jdbc.ClientDriver</property>
+		<property name="hibernate.connection.url">jdbc:derby://localhost:1527/bookstore</property>
+		<property name="hibernate.connection.username">bookstore</property>
+		<property name="hibernate.connection.password">bookstore</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
+		 -->
+
+		<!-- 2010/02/23 Oracle database setting
+		<property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
+		<property name="hibernate.connection.password">bookstore</property>
+		<property name="hibernate.connection.url">jdbc:oracle:thin:@192.168.75.125:1521:ORCL</property>
+		<property name="hibernate.connection.username">bookstore</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+		-->
+
+		<!-- 2012/07/30 Apache Derby setting
+		<property name="hibernate.connection.driver_class">org.apache.derby.jdbc.ClientDriver</property>
+		<property name="hibernate.connection.url">jdbc:derby://localhost:1527/MyDB</property>
+		<property name="hibernate.connection.username">bookstore</property>
+		<property name="hibernate.connection.password">bookstore</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
+		-->
+
+		<!-- 参考:Tomcat JNDI
+		<Resource name="jdbc/derby" auth="Container" type="javax.sql.DataSource"
+			maxActive="10" maxIdle="2" maxWait="10000"
+			username="user" password="password"
+			driverClassName="org.apache.derby.jdbc.ClientDriver"
+			url="jdbc:derby://localhost:1527/\derbydata\testdb"
+		/>
+		 -->
+
+		<!-- for WebLogic and oracle
+		<property name="hibernate.connection.datasource">vm125-orcl-bookstore</property>
+		<property name="hibernate.transaction.manager_lookup_class">org.hibernate.transaction.WeblogicTransactionManagerLookup</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
 		 -->
 
 		<!-- trace
@@ -29,40 +71,6 @@
 		<property name="hibernate.transaction.auto_close_session">true</property>
 	     -->
 
-<!-- 2018/08/27 -->
-		<property name="hibernate.connection.driver_class">org.apache.derby.jdbc.ClientDriver</property>
-		<property name="hibernate.connection.url">jdbc:derby://localhost:1527/bookstore</property>
-		<property name="hibernate.connection.username">bookstore</property>
-		<property name="hibernate.connection.password">bookstore</property>
-		<property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
-
-<!-- 2010/02/23 Oracle database setting
-		<property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
-		<property name="hibernate.connection.password">bookstore</property>
-		<property name="hibernate.connection.url">jdbc:oracle:thin:@192.168.75.125:1521:ORCL</property>
-		<property name="hibernate.connection.username">bookstore</property>
-		<property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
--->
-<!-- 2012/07/30 Apache Derby setting
-		<property name="hibernate.connection.driver_class">org.apache.derby.jdbc.ClientDriver</property>
-		<property name="hibernate.connection.url">jdbc:derby://localhost:1527/MyDB</property>
-		<property name="hibernate.connection.username">bookstore</property>
-		<property name="hibernate.connection.password">bookstore</property>
-		<property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
--->
-<!-- 参考:Tomcat JNDI
-		<Resource name="jdbc/derby" auth="Container" type="javax.sql.DataSource"
-			maxActive="10" maxIdle="2" maxWait="10000"
-			username="user" password="password"
-			driverClassName="org.apache.derby.jdbc.ClientDriver"
-			url="jdbc:derby://localhost:1527/\derbydata\testdb"
-		/>
- -->
-<!-- for WebLogic and oracle
-		<property name="hibernate.connection.datasource">vm125-orcl-bookstore</property>
-		<property name="hibernate.transaction.manager_lookup_class">org.hibernate.transaction.WeblogicTransactionManagerLookup</property>
-		<property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
- -->
 		<!-- 2010/02/22 add ClassNotFoundException: org.hibernate.hql.ast.HqlToken -->
 		<property name="hibernate.query.factory_class">org.hibernate.hql.classic.ClassicQueryTranslatorFactory</property>
 
