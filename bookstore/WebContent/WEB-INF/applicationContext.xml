@@ -23,14 +23,6 @@
 
 	<bean id="logger" class="bookstore.util.LogInjection" />
 
-	<!-- SessionFactory -->
-	<bean id="sessionFactory"
-			class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
-		<property name="configLocation">
-			<value>/WEB-INF/hibernate.cfg.xml</value>
-		</property>
-	</bean>
-
 
 	<!-- TransactionManager -->
 	<!-- 
@@ -52,25 +44,48 @@
 	検査例外(Exception及びそのサブクラスでRuntimeExceptionのサブクラスじゃないもの)が
 	発生した場合はロールバックされずコミットされる。
 	 -->
-	<!-- 2.を使用する場合
+
+	<!-- HibernateTransactionManager：SessionFactoryを使用してTXを制御する -->
 	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory">
 			<ref local="sessionFactory" />
 		</property>
 	</bean>
-	 -->
+	<!-- SessionFactory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="configLocation">
+			<value>/WEB-INF/hibernate.cfg.xml</value>
+		</property>
+	</bean>
 
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<!-- DataSourceTransactionManager：JDBCのConnectionを利用してTX制御を行う
+		例えば、APサーバのDataSourceなど
+			org.apache.tomcat.jdbc.pool.DataSource
+			org.apache.commons.dbcp2.BasicDataSource
+		単一のデータソースに対するトランザクションマネージャで、グローバルTXはサポートしない
+		直接Connectionを使用するのではなく、JdbcTemplateを使用するのがおすすめ
+	 -->
+	<bean id="dataSource2" class="org.apache.tomcat.jdbc.pool.DataSource">
 		<property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
 		<property name="url" value="jdbc:derby://localhost:1527/bookstore"></property>
 		<property name="username" value="bookstore"></property>
 		<property name="password" value="bookstore"></property>
+		<property name="defaultAutoCommit" value="false"></property>
+	</bean>
+	<bean id="transactionManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource">
+			<ref local="dataSource2"/>
+		</property>
+	</bean>
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="dataSource2" />
 	</bean>
 
-	<!-- DataSourceTransactionManager は単一のデータソースに対するトランザクションマネージャ -->
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource"><ref local="dataSource"/></property>
+	<!-- JtaTransactionManager：JTAのUserTransactionを利用してTX制御を行う -->
+	<bean id="dataSource3" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName"><value>java:comp/env/jdbc/bookstoreDS</value></property>
+	</bean>
+	<bean id="transactionManager3" class="org.springframework.transaction.jta.JtaTransactionManager">
 	</bean>
 
 
@@ -101,6 +116,30 @@
 	<bean id="OrderDetailDAOBId" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
 			<ref local="OrderDetailDAOImplBId" />
+		</property>
+	</bean>
+
+	<bean id="BookDAOBId2" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<ref bean="BookDAOImplBId2" />
+		</property>
+	</bean>
+
+	<bean id="CustomerDAOBId2" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<ref local="CustomerDAOImplBId2" />
+		</property>
+	</bean>
+
+	<bean id="OrderDAOBId2" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<ref local="OrderDAOImplBId2" />
+		</property>
+	</bean>
+
+	<bean id="OrderDetailDAOBId2" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<ref local="OrderDetailDAOImplBId2" />
 		</property>
 	</bean>
 
@@ -195,6 +234,7 @@
 		</property>
 		 -->
 	</bean>
+
 	<bean id="CustomerDAOImplBId" class="bookstore.dao.hibernate.CustomerDAOImpl">
 		<!-- 
 		<property name="sessionFactory">
@@ -202,6 +242,7 @@
 		</property>
 		 -->
 	</bean>
+
 	<bean id="OrderDAOImplBId" class="bookstore.dao.hibernate.OrderDAOImpl">
 		<!-- 
 		<property name="sessionFactory">
@@ -209,12 +250,25 @@
 		</property>
 		 -->
 	</bean>
+
 	<bean id="OrderDetailDAOImplBId" class="bookstore.dao.hibernate.OrderDetailDAOImpl">
 		<!-- 
 		<property name="sessionFactory">
 			<ref local="sessionFactory" />
 		</property>
 		 -->
+	</bean>
+
+	<bean id="BookDAOImplBId2" class="bookstore.dao.jdbctemplate.BookDAOImpl">
+	</bean>
+
+	<bean id="CustomerDAOImplBId2" class="bookstore.dao.jdbctemplate.CustomerDAOImpl">
+	</bean>
+
+	<bean id="OrderDAOImplBId2" class="bookstore.dao.jdbctemplate.OrderDAOImpl">
+	</bean>
+
+	<bean id="OrderDetailDAOImplBId2" class="bookstore.dao.jdbctemplate.OrderDetailDAOImpl">
 	</bean>
 
 	<!-- Logic Layer -->
@@ -251,33 +305,35 @@
 			</props>
 		</property>
 	</bean>
-	<!-- LogicOrderImplBIdでは、@Transactionalを使うことにしてみた
-		classをTransactionProxyFactoryBeanからTransactionProxyFactoryBeanに変更する
 
- 	<bean id="LogicOrderBId"
-			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager">
-			<ref local="transactionManager" />
-		</property>
-		<property name="target">
-			<ref local="LogicOrderImplBId" />
-		</property>
-		<property name="transactionAttributes">
-			<props>
-				<prop key="orderBooks">PROPAGATION_REQUIRED</prop>
-				<prop key="list*">PROPAGATION_REQUIRED,readOnly</prop>
-			</props>
-		</property>
-	</bean>
-	 -->
+	<!-- LogicOrderImplBIdでは、@Transactionalを使うことにしてみた -->
 	<bean id="LogicOrderBId" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
 			<ref local="LogicOrderImplBId" />
 		</property>
 	</bean>
+
+ 	<bean id="LogicOrderBId2"
+			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref local="transactionManager2" />
+		</property>
+		<property name="target">
+			<ref local="LogicOrderImplBId2" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="orderBooks">PROPAGATION_REQUIRED</prop>
+				<!-- "*"のみが使える
+				<prop key="list*">PROPAGATION_REQUIRED,readOnly</prop>
+				 -->
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
  
 	<!-- Logic Layer Implement -->
-	<!-- autowired設定によりコメントアウト化ができる部分
+	<!-- autowired設定によりコメントアウト化ができる部分：
 		クラスに@Autowiredが指定されているのでapplicationContext.xmlでの指定は不要
 	-->
 	<bean id="LogicCustomerImplBId" class="bookstore.logic.spring.CustomerLogicWrapper">
@@ -287,6 +343,7 @@
 		</property>
 	 -->
 	</bean>
+
 	<bean id="LogicBookImplBId" class="bookstore.logic.spring.BookLogicWrapper">
 	<!-- 
 		<property name="bookdao">
@@ -294,6 +351,7 @@
 		</property>
 	 -->
 	</bean>
+
 	<bean id="LogicOrderImplBId" class="bookstore.logic.spring.OrderLogicWrapper">
 	<!-- 
 		<property name="bookdao">
@@ -309,6 +367,23 @@
 			<ref local="OrderDetailDAOBId" />
 		</property>
 	 -->
+	</bean>
+	<bean id="LogicOrderImplBId2" class="bookstore.logic.spring.legacy.OrderLogicWrapper">
+		<property name="bookdao">
+			<ref local="BookDAOBId2" />
+		</property>
+		<property name="customerdao">
+			<ref local="CustomerDAOBId2" />
+		</property>
+		<property name="orderdao">
+			<ref local="OrderDAOBId2" />
+		</property>
+		<property name="orderdetaildao">
+			<ref local="OrderDetailDAOBId2" />
+		</property>
+		<property name="jdbcTemplate">
+			<ref local="jdbcTemplate" />
+		</property>
 	</bean>
 
 
@@ -344,6 +419,14 @@
 	<bean name="/OrderAction" class="bookstore.action.OrderAction">
 		<property name="orderLogic">
 			<ref local="LogicOrderImplBId" />
+		</property>
+		<property name="customerLogic">
+			<ref local="LogicCustomerImplBId" />
+		</property>
+	</bean>
+	<bean name="/OrderAction2" class="bookstore.action.OrderAction">
+		<property name="orderLogic">
+			<ref local="LogicOrderImplBId2" />
 		</property>
 		<property name="customerLogic">
 			<ref local="LogicCustomerImplBId" />

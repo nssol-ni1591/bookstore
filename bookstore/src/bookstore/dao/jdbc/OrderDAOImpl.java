@@ -35,10 +35,13 @@ public class OrderDAOImpl<T extends Connection> implements OrderDAO<T> {
 			log.log(Level.INFO, "execute sql: {0}, customer_id={1}", new Object[] { pst, inCustomer.getId() });
 			if (pst.executeUpdate() <= 0) {
 				log.log(Level.SEVERE, "failed sql: {0}", pst.toString());
+				/*
 				if (con2 == null) {
 					con.rollback();
 				}
 				return null;
+				*/
+				throw new SQLException("failed insert");
 			}
 
 			/* Ž©“®Ì”Ô‚³‚ê‚½’l‚ðŽæ“¾‚·‚é */

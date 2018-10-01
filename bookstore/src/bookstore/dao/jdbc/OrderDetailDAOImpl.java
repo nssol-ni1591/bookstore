@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import bookstore.dao.OrderDetailDAO;
 import bookstore.pbean.TBook;
 import bookstore.pbean.TOrder;
-import bookstore.pbean.TOrderDetail;
 
 public class OrderDetailDAOImpl<T extends Connection> implements OrderDetailDAO<T> {
 
@@ -25,7 +24,7 @@ public class OrderDetailDAOImpl<T extends Connection> implements OrderDetailDAO<
 
 		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
-		TOrderDetail orderDetail = null;
+		//TOrderDetail orderDetail = null;
 		try {
 			pst = con.prepareStatement("insert into T_Order_Detail (order_id_fk, book_id_fk) values (?,?)");
 			pst.setInt(1, inOrder.getId());
@@ -39,9 +38,9 @@ public class OrderDetailDAOImpl<T extends Connection> implements OrderDetailDAO<
 				if (con2 == null) {
 					con.commit();
 				}
-				orderDetail = new TOrderDetail();
-				orderDetail.setTOrder(inOrder);
-				orderDetail.setTBook(inBook);
+				//orderDetail = new TOrderDetail();
+				//orderDetail.setTOrder(inOrder);
+				//orderDetail.setTBook(inBook);
 			}
 			if (con2 == null) {
 				con.commit();
