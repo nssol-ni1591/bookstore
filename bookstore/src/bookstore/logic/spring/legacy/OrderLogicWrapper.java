@@ -82,6 +82,9 @@ public class OrderLogicWrapper extends AbstractOrderLogic<JdbcTemplate> {
 		}
 		catch (Exception e) {
 			log.log(Level.SEVERE, "e={0}", new Object[] { e.getMessage() });
+			if (e instanceof RuntimeException) {
+				throw e;
+			}
 			throw new SpringRuntimeException(e);
 		}
 	}
