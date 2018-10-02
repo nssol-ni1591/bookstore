@@ -23,6 +23,7 @@ h2 {
 		<input type="submit" value="ŒŸõ" />
 	</form>
 	<% if (request.getAttribute("errors") != null) {
+		@SuppressWarnings("unchecked")
 		Map<String, String> errors = (Map<String, String>)request.getAttribute("errors"); %>
 		<br>
 		<font color="red">
@@ -35,7 +36,8 @@ h2 {
 	<form method="post" action="AddToCartServlet">
  	<table border="1">
 
-	<% List<VBook> list = (List<VBook>)session.getAttribute("ProductListView");
+	<% @SuppressWarnings("unchecked")
+	  List<VBook> list = (List<VBook>)session.getAttribute("ProductListView");
 	  if (list == null) {
 		// Do nothing		  
 	  }

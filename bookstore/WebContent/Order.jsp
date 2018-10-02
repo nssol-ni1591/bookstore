@@ -11,13 +11,13 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=Windows-31J">
 	<title>注文確定</title>
 </head>
-
+<style>
+h2 {
+  text-align: center;
+}
+</style>
 <body>
-
-	<center>
-		<h2>注文確認</h2>
-	</center>
-
+	<h2>注文確認</h2>
 	<br><br>
 	
 	以下のとおり、注文を受け付けました。

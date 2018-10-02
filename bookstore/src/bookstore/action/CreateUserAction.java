@@ -37,7 +37,7 @@ public class CreateUserAction extends Action {
 		if (!passwd.equals(passwd2)) {
 			// passwd and passwd2 not matched
 			errors = new ActionMessages();
-			errors.add("illegalcreateuser", new ActionMessage("error.createuser.pass2inmatch"));
+			errors.add(ILLEGAL_CREATE_USER, new ActionMessage("error.createuser.pass2inmatch"));
 			saveMessages(req, errors);
 			return (mapping.findForward(ILLEGAL_CREATE_USER));
 		}
@@ -45,7 +45,7 @@ public class CreateUserAction extends Action {
 		if (customerLogic.isAlreadyExsited(account)) {
 			// user has already exsited
 			errors = new ActionMessages();
-			errors.add("illegalcreateuser", new ActionMessage("error.createuser.useralreadyexist"));
+			errors.add(ILLEGAL_CREATE_USER, new ActionMessage("error.createuser.useralreadyexist"));
 			saveMessages(req, errors);
 			return (mapping.findForward(ILLEGAL_CREATE_USER));
 		}
@@ -53,7 +53,7 @@ public class CreateUserAction extends Action {
 		if (!customerLogic.createCustomer(account, passwd, cuafb.getName(), cuafb.getEmail())) {
 			// user was not created
 			errors = new ActionMessages();
-			errors.add("illegalcreateuser", new ActionMessage("error.createuser.cannotcreate"));
+			errors.add(ILLEGAL_CREATE_USER, new ActionMessage("error.createuser.cannotcreate"));
 			saveMessages(req, errors);
 			return (mapping.findForward(ILLEGAL_CREATE_USER));
 		}

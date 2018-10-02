@@ -10,15 +10,16 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=Windows-31J">
 	<title>購入商品</title>
 </head>
-
+<style>
+h2 {
+  text-align: center;
+}
+</style>
 <body>
-
-	<center>
 	<h2>購入商品</h2>
-	</center>
-
 	<br>
 	<% if (request.getAttribute("errors") != null) {
+		@SuppressWarnings("unchecked")
 		Map<String, String> errors = (Map<String, String>)request.getAttribute("errors"); %>
 		<br>
 		<font color="red">
