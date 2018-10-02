@@ -22,6 +22,7 @@ h2 {
 		<br>
 
 		<% if (request.getAttribute("errors") != null) {
+			@SuppressWarnings("unchecked")
 			Map<String, String> errors = (Map<String, String>)request.getAttribute("errors"); %>
 			<br>
 			<font color="red">

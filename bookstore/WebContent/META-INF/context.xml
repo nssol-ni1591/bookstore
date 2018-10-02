@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<!-- 以上、Eclipse のバグ対策：(存在しない build.xml のDTDが無いことを警告する問題の回避) -->
 
 <!-- Tomcat's Connection Pool Setting -->
 <Context>

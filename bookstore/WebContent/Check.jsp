@@ -10,13 +10,13 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=Windows-31J">
 	<title>購入商品</title>
 </head>
-
+<style>
+h2 {
+  text-align: center;
+}
+</style>
 <body>
-
-	<center>
 	<h2>購入商品</h2>
-	</center>
-
 	<br><br>
 	
 	以下が購入する商品と合計です。
