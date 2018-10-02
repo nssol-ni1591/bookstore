@@ -360,7 +360,9 @@
 	 -->
 	<!-- transactionManagerにデフォルト(id=transactionManager)以外を指定したい場合はどうすればいいの
 		これは、複数のtransactionManagerを使い分けたい場合などに応用できる
-		※実際にどのtxManagerが使用されているかを確認できていない
+		※実際にどのtxManagerが使用されているかはDataSourceの実装クラスで確認できると思う
+			JtaTransactionManager => org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource
+			DataSourceTransactionManager => transactionmanager2の実装クラス
 	 -->
 	<bean id="LogicOrderBId3" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">

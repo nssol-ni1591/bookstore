@@ -1,13 +1,6 @@
 package bookstore.logic.ejb.cmt;
 
-import bookstore.annotation.UsedOpenJpa;
-import bookstore.dao.BookDAO;
-import bookstore.dao.CustomerDAO;
-import bookstore.dao.OrderDAO;
-import bookstore.dao.OrderDetailDAO;
-import bookstore.logic.OrderLogic;
-import bookstore.logic.AbstractOrderLogic;
-
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,7 +15,14 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+
+import bookstore.annotation.UsedOpenJpa;
+import bookstore.dao.BookDAO;
+import bookstore.dao.CustomerDAO;
+import bookstore.dao.OrderDAO;
+import bookstore.dao.OrderDetailDAO;
+import bookstore.logic.OrderLogic;
+import bookstore.logic.AbstractOrderLogic;
 
 @Stateless(name="OrderLogicCmtWrapper")
 @LocalBean
@@ -35,10 +35,6 @@ public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 	@Inject @UsedOpenJpa private OrderDAO<EntityManager> orderdao;
 	@Inject @UsedOpenJpa private OrderDetailDAO<EntityManager> orderdetaildao;
 	@Inject private Logger log;
-
-	@PersistenceContext(unitName = "BookStore2") private EntityManager em;
-	// UserTransactionはBMTに対するものでCMTには利用できない
-	//@Resource private UserTransaction tx;
 
 	@Override
 	protected BookDAO<EntityManager> getBookDAO() {
@@ -62,7 +58,8 @@ public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 	}
 	@Override
 	protected EntityManager getManager() {
-		return em;
+		return null;
+		// @TransactionAttributeで管理されるため、emを引き継ぐ必要はなし
 	}
 
 	/*
@@ -77,6 +74,9 @@ public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 		try {
 			log.log(Level.INFO, "this={0}", this);
 			super.orderBooks(inUid, inISBNs);
+		}
+		catch (RuntimeException | RemoteException e) {
+			throw e;
 		}
 		catch (Exception e) {
 			// EJBExceptionはシステム例外

@@ -1,9 +1,4 @@
-package bookstore.logic.ejb.bmt;
-
-import bookstore.annotation.UsedOpenJpa;
-import bookstore.dao.BookDAO;
-import bookstore.logic.BookLogic;
-import bookstore.logic.AbstractBookLogic;
+package bookstore.logic.ejb.eclipselink;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -16,17 +11,19 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-@Stateless(name="BookLogicBmtWrapper")
+import bookstore.annotation.UsedEclipselink;
+import bookstore.dao.BookDAO;
+import bookstore.logic.BookLogic;
+import bookstore.logic.AbstractBookLogic;
+
+@Stateless(name="BookLogicEclipseLinkWrapper")
 @LocalBean
 @Local(BookLogic.class)
-@TransactionManagement(TransactionManagementType.BEAN)
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class BookLogicWrapper extends AbstractBookLogic<EntityManager> {
 
-	@Inject @UsedOpenJpa private BookDAO<EntityManager> bookdao;
+	@Inject @UsedEclipselink private BookDAO<EntityManager> bookdao;
 	@Inject private Logger log;
-
-	// UserTransaction‚ÍBMT‚É‘Î‚·‚é‚à‚Ì‚ÅCMT‚É‚Í—˜—p‚Å‚«‚È‚¢
-	//@Resource private UserTransaction tx
 
 	@Override
 	protected BookDAO<EntityManager> getBookDAO() {

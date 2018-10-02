@@ -1,6 +1,7 @@
-package bookstore.logic.ejb.cmt;
+package bookstore.logic.ejb.eclipselink;
 
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,23 +16,41 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import bookstore.annotation.UsedOpenJpa;
+import bookstore.annotation.UsedEclipselink;
+import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
-import bookstore.logic.CustomerLogic;
-import bookstore.logic.AbstractCustomerLogic;
+import bookstore.dao.OrderDAO;
+import bookstore.dao.OrderDetailDAO;
+import bookstore.logic.OrderLogic;
+import bookstore.logic.AbstractOrderLogic;
 
-@Stateless(name="CustomerLogicCmtWrapper")
+@Stateless(name="OrderLogicEclipseLinkWrapper")
 @LocalBean
-@Local(CustomerLogic.class)
+@Local(OrderLogic.class)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class CustomerLogicWrapper extends AbstractCustomerLogic<EntityManager> {
+public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 
-	@Inject @UsedOpenJpa CustomerDAO<EntityManager> customerdao;
+	@Inject @UsedEclipselink private BookDAO<EntityManager> bookdao;
+	@Inject @UsedEclipselink private CustomerDAO<EntityManager> customerdao;
+	@Inject @UsedEclipselink private OrderDAO<EntityManager> orderdao;
+	@Inject @UsedEclipselink private OrderDetailDAO<EntityManager> orderdetaildao;
 	@Inject private Logger log;
 
 	@Override
+	protected BookDAO<EntityManager> getBookDAO() {
+		return bookdao;
+	}
+	@Override
 	protected CustomerDAO<EntityManager> getCustomerDAO() {
 		return customerdao;
+	}
+	@Override
+	protected OrderDAO<EntityManager> getOrderDAO() {
+		return orderdao;
+	}
+	@Override
+	protected OrderDetailDAO<EntityManager> getOrderDetailDAO() {
+		return orderdetaildao;
 	}
 	@Override
 	protected Logger getLogger() {
@@ -40,7 +59,6 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic<EntityManager> {
 	@Override
 	protected EntityManager getManager() {
 		return null;
-		// @TransactionAttributeÇ≈ä«óùÇ≥ÇÍÇÈÇΩÇﬂÅAemÇà¯Ç´åpÇÆïKóvÇÕÇ»Çµ
 	}
 
 	/*
@@ -51,11 +69,10 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic<EntityManager> {
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public boolean createCustomer(String inUid, String inPassword, String inName, String inEmail) throws Exception {
+	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
 		try {
-			boolean rc = super.createCustomer(inUid, inPassword, inName, inEmail);
-			log.log(Level.INFO, "rc={0}", rc);
-			return rc;
+			log.log(Level.INFO, "this={0}", this);
+			super.orderBooks(inUid, inISBNs);
 		}
 		catch (RuntimeException | RemoteException e) {
 			throw e;

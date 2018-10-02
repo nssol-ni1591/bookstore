@@ -2,6 +2,7 @@ package bookstore.logic.spring.multi;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +62,10 @@ public class OrderLogicWrapper extends AbstractOrderLogic<JdbcTemplate> {
 
 	@Override
 	@Transactional(value="multi", propagation=Propagation.REQUIRED)
-	@Qualifier("multi")
 	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
+		log.log(Level.INFO, "datasource={0}"
+				, jdbcTemplate == null ? "null" : jdbcTemplate.getDataSource().getClass().getName());
+
 		//rollback‚·‚é‚½‚ß‚Ì—áŠO‚ÍRuntimeException‚Å‚È‚¢‚Æ‚¢‚¯‚È‚¢
 		try {
 			super.orderBooks(inUid, inISBNs);

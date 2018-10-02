@@ -1,6 +1,5 @@
-package bookstore.logic.ejb.cmt;
+package bookstore.logic.ejb.eclipselink;
 
-import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,18 +14,18 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import bookstore.annotation.UsedOpenJpa;
+import bookstore.annotation.UsedEclipselink;
 import bookstore.dao.CustomerDAO;
 import bookstore.logic.CustomerLogic;
 import bookstore.logic.AbstractCustomerLogic;
 
-@Stateless(name="CustomerLogicCmtWrapper")
+@Stateless(name="CustomerLogicEclipseLinkWrapper")
 @LocalBean
 @Local(CustomerLogic.class)
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class CustomerLogicWrapper extends AbstractCustomerLogic<EntityManager> {
 
-	@Inject @UsedOpenJpa CustomerDAO<EntityManager> customerdao;
+	@Inject @UsedEclipselink CustomerDAO<EntityManager> customerdao;
 	@Inject private Logger log;
 
 	@Override
@@ -40,7 +39,7 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic<EntityManager> {
 	@Override
 	protected EntityManager getManager() {
 		return null;
-		// @TransactionAttributeで管理されるため、emを引き継ぐ必要はなし
+		// BMTではUserTransactionで管理されるため、emを引き継ぐ必要はなし
 	}
 
 	/*
@@ -56,9 +55,6 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic<EntityManager> {
 			boolean rc = super.createCustomer(inUid, inPassword, inName, inEmail);
 			log.log(Level.INFO, "rc={0}", rc);
 			return rc;
-		}
-		catch (RuntimeException | RemoteException e) {
-			throw e;
 		}
 		catch (Exception e) {
 			// EJBExceptionはシステム例外

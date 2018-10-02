@@ -20,7 +20,6 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.UserTransaction;
 
 @Stateless(name="OrderLogicBmtWrapper")
@@ -35,7 +34,6 @@ public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 	@Inject @UsedOpenJpa private OrderDetailDAO<EntityManager> orderdetaildao;
 	@Inject private Logger log;
 
-	@PersistenceContext(unitName = "BookStore2") private EntityManager em;
 	// UserTransaction‚ÍBMT‚É‘Î‚·‚é‚à‚Ì‚ÅCMT‚É‚Í—˜—p‚Å‚«‚È‚¢
 	@Resource private UserTransaction tx;
 
