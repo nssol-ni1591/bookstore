@@ -57,7 +57,11 @@
 	</form>
 	<form method="post"
 		action="$link.setAction( "/OrderAction2" )">
-		<input type="submit" value="’•¶‚·‚é(2)" />
+		<input type="submit" value="’•¶‚·‚é(DataSourceTransactionManager)" />
+	</form>
+	<form method="post"
+		action="$link.setAction( "/OrderAction3" )">
+		<input type="submit" value="’•¶‚·‚é(JtaTransactionManager)" />
 	</form>
 
 	<form method="post" action="$link.setAction( "/SearchAction" )">

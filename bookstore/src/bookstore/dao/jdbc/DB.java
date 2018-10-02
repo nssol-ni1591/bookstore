@@ -62,6 +62,7 @@ public class DB {
 			Connection con = ds.getConnection();
 			//con.setAutoCommit(false);
 			//log.log(Level.INFO, "autocommit={0}", con.getAutoCommit());
+			log.log(Level.INFO, "ds={0}, con={1}", new Object[] { ds, con });
 			return con;
 		}
 		catch (NamingException e) {
@@ -74,6 +75,7 @@ public class DB {
 			DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/bookstoreDS");
 			Connection con = ds.getConnection();
 			con.setAutoCommit(false);
+			log.log(Level.INFO, "ds={0}, con={1}", new Object[] { ds, con });
 			return con;
 		}
 		//catch (ClassNotFoundException | SQLException | IOException | NamingException  e) {

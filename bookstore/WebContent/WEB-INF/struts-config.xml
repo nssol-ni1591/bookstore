@@ -71,6 +71,13 @@
 			<forward name="OrderSuccess" path="/Order.vm" />
 			<forward name="OrderFailed" path="/Check.vm" />
 		</action>
+		<action	path="/OrderAction3"
+				type="org.springframework.web.struts.DelegatingActionProxy"
+				name="OrderActionName"
+				scope="request" >
+			<forward name="OrderSuccess" path="/Order.vm" />
+			<forward name="OrderFailed" path="/Check.vm" />
+		</action>
 
 		<action	path="/SearchAction"
 				type="org.springframework.web.struts.DelegatingActionProxy"

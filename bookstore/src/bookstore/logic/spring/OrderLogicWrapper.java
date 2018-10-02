@@ -2,7 +2,6 @@ package bookstore.logic.spring;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.hibernate.SessionFactory;
@@ -73,17 +72,17 @@ public class OrderLogicWrapper extends AbstractOrderLogic<SessionFactory> {
 */
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED)	//-> applicationContext.xmlに同等の定義あり？
+	@Transactional(propagation=Propagation.REQUIRED)
+	// このクラスではコンテキストxmlにTransactionAttributesを定義していないので@Transactionalが必要
 	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
 		//rollbackするための例外はRuntimeExceptionでないといけない
 		try {
 			super.orderBooks(inUid, inISBNs);
 		}
+		catch (RuntimeException e) {
+			throw e;
+		}
 		catch (Exception e) {
-			log.log(Level.SEVERE, "e={0}", new Object[] { e.getMessage() });
-			if (e instanceof RuntimeException) {
-				throw e;
-			}
 			throw new SpringRuntimeException(e);
 		}
 

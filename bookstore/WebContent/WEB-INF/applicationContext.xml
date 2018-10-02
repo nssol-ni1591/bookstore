@@ -50,6 +50,7 @@
 		<property name="sessionFactory">
 			<ref local="sessionFactory" />
 		</property>
+		<qualifier value="default"/>
 	</bean>
 	<!-- SessionFactory -->
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
@@ -66,18 +67,23 @@
 		直接Connectionを使用するのではなく、JdbcTemplateを使用するのがおすすめ
 	 -->
 	<bean id="dataSource2" class="org.apache.tomcat.jdbc.pool.DataSource">
+	 <!-- 
+	<bean id="dataSource2" class="org.apache.commons.dbcp2.BasicDataSource">
+	  -->
 		<property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
 		<property name="url" value="jdbc:derby://localhost:1527/bookstore"></property>
 		<property name="username" value="bookstore"></property>
 		<property name="password" value="bookstore"></property>
+		<!-- defaultAutoCommitでConnection.autoCommitの値に反映されることを確認 -->
 		<property name="defaultAutoCommit" value="false"></property>
 	</bean>
 	<bean id="transactionManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource">
 			<ref local="dataSource2"/>
 		</property>
+		<qualifier value="legacy"/>
 	</bean>
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+	<bean id="jdbcTemplate2" class="org.springframework.jdbc.core.JdbcTemplate">
 		<constructor-arg ref="dataSource2" />
 	</bean>
 
@@ -85,7 +91,11 @@
 	<bean id="dataSource3" class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName"><value>java:comp/env/jdbc/bookstoreDS</value></property>
 	</bean>
+	<bean id="jdbcTemplate3" class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="dataSource3" />
+	</bean>
 	<bean id="transactionManager3" class="org.springframework.transaction.jta.JtaTransactionManager">
+		<qualifier value="multi"/>
 	</bean>
 
 
@@ -306,29 +316,55 @@
 		</property>
 	</bean>
 
-	<!-- LogicOrderImplBIdでは、@Transactionalを使うことにしてみた -->
+	<!-- LogicOrderImplBIdのみ、@Transactionalを使うことにしてみた -->
 	<bean id="LogicOrderBId" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
 			<ref local="LogicOrderImplBId" />
 		</property>
 	</bean>
-
- 	<bean id="LogicOrderBId2"
-			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+ 	<bean id="LogicOrderBId2" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+ 		<!-- id=transactionManager以外のtransactionManagerを使用したい場合は明示する -->
 		<property name="transactionManager">
 			<ref local="transactionManager2" />
 		</property>
 		<property name="target">
 			<ref local="LogicOrderImplBId2" />
 		</property>
+		<!-- TransactionProxyFactoryBeanを使用する場合は
+			transactionAttributesの定義が必須。これにより@Transactionalでの定義は無効
+		 -->
 		<property name="transactionAttributes">
 			<props>
 				<prop key="orderBooks">PROPAGATION_REQUIRED</prop>
-				<!-- "*"のみが使える
+				<!-- "*"のみも使える。ただ、setter/getterも対象になってしまうのでは?? -->
 				<prop key="list*">PROPAGATION_REQUIRED,readOnly</prop>
-				 -->
-				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
 			</props>
+		</property>
+	</bean>
+	<!-- JtaTransactionManagerに変更しただけ -->
+	<!-- 
+	<bean id="LogicOrderBId3" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref local="transactionManager3" />
+		</property>
+		<property name="target">
+			<ref local="LogicOrderImplBId3" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="orderBooks">PROPAGATION_REQUIRED</prop>
+				<prop key="list*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	 -->
+	<!-- transactionManagerにデフォルト(id=transactionManager)以外を指定したい場合はどうすればいいの
+		これは、複数のtransactionManagerを使い分けたい場合などに応用できる
+		※実際にどのtxManagerが使用されているかを確認できていない
+	 -->
+	<bean id="LogicOrderBId3" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<ref local="LogicOrderImplBId3" />
 		</property>
 	</bean>
  
@@ -382,60 +418,70 @@
 			<ref local="OrderDetailDAOBId2" />
 		</property>
 		<property name="jdbcTemplate">
-			<ref local="jdbcTemplate" />
+			<ref local="jdbcTemplate2" />
 		</property>
 	</bean>
-
+	<bean id="LogicOrderImplBId3" class="bookstore.logic.spring.multi.OrderLogicWrapper">
+	</bean>
 
 	<!-- Struts Action Layer -->
 	<!-- この層ではDIをxmlファイルの定義で行う -->
+	<!-- DI先は、当然Interfaceのはず -->
 	<bean name="/CreateUser" class="bookstore.action.CreateUserAction">
 		<property name="customerLogic">
-			<ref local="LogicCustomerImplBId" />
+			<ref local="LogicCustomerBId" />
 		</property>
 	</bean>
 
 	<bean name="/Login" class="bookstore.action.LoginAction">
 		<property name="customerLogic">
-			<ref local="LogicCustomerImplBId" />
+			<ref local="LogicCustomerBId" />
 		</property>
 		<property name="bookLogic">
-			<ref local="LogicBookImplBId" />
+			<ref local="LogicBookBId" />
 		</property>
 	</bean>
 
 	<bean name="/AddToCartAction" class="bookstore.action.AddToCartAction">
 		<property name="bookLogic">
-			<ref local="LogicBookImplBId" />
+			<ref local="LogicBookBId" />
 		</property>
 	</bean>
 
 	<bean name="/CheckoutAction" class="bookstore.action.CheckoutAction">
 		<property name="bookLogic">
-			<ref local="LogicBookImplBId" />
+			<ref local="LogicBookBId" />
 		</property>
 	</bean>
 
 	<bean name="/OrderAction" class="bookstore.action.OrderAction">
 		<property name="orderLogic">
-			<ref local="LogicOrderImplBId" />
+			<ref local="LogicOrderBId" />
 		</property>
 		<property name="customerLogic">
-			<ref local="LogicCustomerImplBId" />
+			<ref local="LogicCustomerBId" />
 		</property>
 	</bean>
 	<bean name="/OrderAction2" class="bookstore.action.OrderAction">
 		<property name="orderLogic">
-			<ref local="LogicOrderImplBId2" />
+			<ref local="LogicOrderBId2" />
 		</property>
 		<property name="customerLogic">
-			<ref local="LogicCustomerImplBId" />
+			<ref local="LogicCustomerBId" />
+		</property>
+	</bean>
+	<bean name="/OrderAction3" class="bookstore.action.OrderAction">
+		<property name="orderLogic">
+			<ref local="LogicOrderBId3" />
+		</property>
+		<property name="customerLogic">
+			<ref local="LogicCustomerBId" />
 		</property>
 	</bean>
 
 	<bean name="/SearchAction" class="bookstore.action.SearchAction">
 		<property name="bookLogic">
-			<ref local="LogicBookImplBId" />
+			<ref local="LogicBookBId" />
 		</property>
 	</bean>
 

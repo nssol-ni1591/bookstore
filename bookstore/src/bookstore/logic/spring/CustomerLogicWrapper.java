@@ -9,8 +9,6 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import bookstore.annotation.Log;
 import bookstore.annotation.UsedSpring;
@@ -44,7 +42,8 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic<SessionFactory> 
 	}
 */
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED)	//-> applicationContext.xml‚É“¯“™‚Ì’è‹`‚ ‚èH
+	//@Transactional(propagation=Propagation.REQUIRED)
+	//-> applicationContext.xml‚ÉtransactionAttributes‚ğ’è‹`‚µ‚Ä‚¢‚é‚Ì‚Å@Transactional‚ğÈ—ª‚·‚é
 	public boolean createCustomer(String inUid
 			, String inPassword
 			, String inName
