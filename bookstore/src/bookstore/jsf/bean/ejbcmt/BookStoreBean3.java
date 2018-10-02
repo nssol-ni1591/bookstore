@@ -1,4 +1,4 @@
-package bookstore.jsf.bean;
+package bookstore.jsf.bean.ejbcmt;
 
 import java.io.Serializable;
 
@@ -6,6 +6,7 @@ import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
+import bookstore.jsf.bean.AbstractBookStoreBean;
 import bookstore.logic.BookLogic;
 
 @Named

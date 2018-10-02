@@ -1,31 +1,32 @@
-package bookstore.jsf.bean;
+package bookstore.jsf.bean.eclipselink;
 
 import java.io.Serializable;
 
-import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
+import bookstore.annotation.UsedWeld;
+import bookstore.jsf.bean.AbstractBookStoreBean;
 import bookstore.logic.BookLogic;
-import bookstore.logic.ejb.cmt.BookLogicWrapper;
 
 @Named
 @SessionScoped
-public class BookStoreBean2 extends AbstractBookStoreBean implements Serializable {
+public class BookStoreBean extends AbstractBookStoreBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@EJB private BookLogicWrapper bookLogic;
+	@Inject @UsedWeld private BookLogic bookLogic;
 
-	public BookStoreBean2() {
+	public BookStoreBean() {
 		super();
 	}
 
 	protected String getBookStorePage() {
-		return "BookStore2";
+		return "BookStore";
 	}
 	protected BookLogic getBookLogic() {
 		return bookLogic;
 	}
-
+	
 }

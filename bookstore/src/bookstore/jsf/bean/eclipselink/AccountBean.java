@@ -1,21 +1,22 @@
-package bookstore.jsf.bean;
+package bookstore.jsf.bean.eclipselink;
 
-import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 
-import bookstore.logic.ejb.cmt.CustomerLogicWrapper;
+import bookstore.annotation.UsedWeld;
+import bookstore.logic.CustomerLogic;
 import bookstore.util.Messages;
 
-@Named(value="accountBean2")
+@Named
 @RequestScoped
-public class AccountBean2 {
+public class AccountBean {
 
-	private static final String CREATE_ACCOUNT = "CreateAccount2";
+	private static final String CREATE_ACCOUNT = "CreateAccount";
 
-	@EJB private CustomerLogicWrapper customerLogic;
+	@Inject @UsedWeld private CustomerLogic customerLogic;
 
 	private String account;
 	private String name;
@@ -105,7 +106,7 @@ public class AccountBean2 {
 				, "[info.createuser.success]Ç≈Ç∑ÅB");
 		FacesContext fc = FacesContext.getCurrentInstance();
 		fc.addMessage(null, fm);
-		return "BookStore2";
+		return "BookStore";
 	}
 
 }

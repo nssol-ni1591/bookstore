@@ -1,4 +1,4 @@
-package bookstore.jsf.bean;
+package bookstore.jsf.bean.eclipselink;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;

@@ -1,19 +1,19 @@
-package bookstore.jsf.bean;
+package bookstore.jsf.bean.ejbbmt;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
+import bookstore.jsf.bean.AbstractLoginBean;
 import bookstore.logic.CustomerLogic;
-import bookstore.logic.ejb.cmt.CustomerLogicWrapper;
 
 @Named
 @RequestScoped
-public class LoginBean2 extends AbstractLoginBean {
+public class LoginBean4 extends AbstractLoginBean {
 
-	@EJB private CustomerLogicWrapper customerLogic;
+	@EJB(mappedName="CustomerLogicBmtWrapper") private CustomerLogic customerLogic;
 
-	public LoginBean2() {
+	public LoginBean4() {
 		super();
 	}
 
@@ -23,10 +23,10 @@ public class LoginBean2 extends AbstractLoginBean {
 	}
 
 	protected String getLoginPage() {
-		return "Login2";
+		return "Login4";
 	}
 	protected String getBookStorePage() {
-		return "BookStore2";
+		return "BookStore4";
 	}
 
 }

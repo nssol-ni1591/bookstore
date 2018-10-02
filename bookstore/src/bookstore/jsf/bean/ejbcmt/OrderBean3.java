@@ -1,9 +1,10 @@
-package bookstore.jsf.bean;
+package bookstore.jsf.bean.ejbcmt;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
+import bookstore.jsf.bean.AbstractOrderBean;
 import bookstore.logic.BookLogic;
 import bookstore.logic.CustomerLogic;
 import bookstore.logic.OrderLogic;

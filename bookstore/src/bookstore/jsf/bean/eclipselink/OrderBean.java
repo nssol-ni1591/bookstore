@@ -1,20 +1,22 @@
-package bookstore.jsf.bean;
+package bookstore.jsf.bean.eclipselink;
 
-import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
+import bookstore.annotation.UsedWeld;
+import bookstore.jsf.bean.AbstractOrderBean;
 import bookstore.logic.BookLogic;
 import bookstore.logic.CustomerLogic;
 import bookstore.logic.OrderLogic;
 
 @Named
 @RequestScoped
-public class OrderBean4 extends AbstractOrderBean {
+public class OrderBean extends AbstractOrderBean {
 
-	@EJB(mappedName="BookLogicBmtWrapper") private BookLogic bookLogic;
-	@EJB(mappedName="CustomerLogicBmtWrapper") private CustomerLogic customerLogic;
-	@EJB(mappedName="OrderLogicBmtWrapper") private OrderLogic orderLogic;
+	@Inject @UsedWeld private BookLogic bookLogic;
+	@Inject @UsedWeld private CustomerLogic customerLogic;
+	@Inject @UsedWeld private OrderLogic orderLogic;
 
 	protected BookLogic getBookLogic() {
 		return bookLogic;
@@ -27,13 +29,13 @@ public class OrderBean4 extends AbstractOrderBean {
 	}
 
 	protected String getBookStorePage() {
-		return "BookStore4";
+		return "BookStore";
 	}
 	protected String getCheckPage() {
-		return "Check4";
+		return "Check";
 	}
 	protected String getOrderPage() {
-		return "Order4";
+		return "Order";
 	}
 	protected String getOrderListPage() {
 		return "OrderList";
