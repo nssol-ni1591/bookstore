@@ -1,4 +1,4 @@
-package bookstore.dao.openjpa;
+package bookstore.dao.jpa.jta;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,11 +9,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import bookstore.annotation.UsedOpenJpa;
+import bookstore.annotation.UsedJpaLocal;
 import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;
 
-@UsedOpenJpa
+@UsedJpaLocal
 @Dependent
 public class CustomerDAOImpl<T extends EntityManager> implements CustomerDAO<T> {
 	/*

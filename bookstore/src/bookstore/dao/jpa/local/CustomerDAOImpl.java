@@ -1,7 +1,5 @@
-package bookstore.dao.eclipselink;
+package bookstore.dao.jpa.local;
 
-import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,15 +10,13 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 
-import bookstore.annotation.UsedEclipselink;
-import bookstore.dao.OrderDetailDAO;
-import bookstore.pbean.TBook;
-import bookstore.pbean.TOrder;
-import bookstore.pbean.TOrderDetail;
+import bookstore.annotation.UsedJpaJta;
+import bookstore.dao.CustomerDAO;
+import bookstore.pbean.TCustomer;
 
-@UsedEclipselink
+@UsedJpaJta
 @Dependent
-public class OrderDetailDAOImpl<T extends EntityManager> implements OrderDetailDAO<T> {
+public class CustomerDAOImpl<T extends EntityManager> implements CustomerDAO<T> {
 	/*
 	 * RESOURCE_LOCALとJTA永続コンテキストの比較
 	 * <persistence-unit transaction-type = "RESOURCE_LOCAL">を使用すると、
@@ -43,28 +39,39 @@ public class OrderDetailDAOImpl<T extends EntityManager> implements OrderDetailD
 	@Inject private Logger log;
 
 	@Override
-	public void createOrderDetail(final T em2, TOrder inOrder, TBook inBook) throws SQLException {
+	public int getCustomerNumberByUid(final T em2, String inUid) {
 		EntityManager em = em2 != null ? em2 : emf.createEntityManager();
-		log.log(Level.INFO, "order_id={0}, book_id={1}"
-				, new Object[] { inOrder.getId(), inBook.getId() });
-
-		if ("0-0000-0000-0".equals(inBook.getIsbn())) {
-			throw new SQLException("isdn: 0-0000-0000-0");
-		}
-
-		TOrderDetail orderDetail = new TOrderDetail();
-		orderDetail.setTOrder(inOrder);
-		orderDetail.setTBook(inBook);
-		em.persist(orderDetail);
+		log.log(Level.INFO, "inUid={0}, em={1}"
+				, new Object[] { inUid, em.getClass().getName() });
+		Query q = em
+				.createQuery("select c from TCustomer c where c.username=:username");
+		q.setParameter("username", inUid);
+		return q.getResultList().size();
 	}
 
 	@Override
-	public List<TOrderDetail> listOrderDetails(final T em2, List<String> orders) {
+	public TCustomer findCustomerByUid(final T em2, String inUid) {
 		EntityManager em = em2 != null ? em2 : emf.createEntityManager();
-		Query query = em.createQuery("select d from TOrderDetail d");
-		@SuppressWarnings("unchecked")
-		List<TOrderDetail> details = query.getResultList();
-	    return details;
+		log.log(Level.FINE, "inUid={0}", inUid);
+		Query q = em
+				.createQuery("select c from TCustomer c where c.username=:username");
+		q.setParameter("username", inUid);
+		return (TCustomer) q.getSingleResult();
+	}
+
+	@Override
+	public void saveCustomer(final T em2, String inUsername, String inPasswordMD5, String inName, String inEmail) {
+		EntityManager em = em2 != null ? em2 : emf.createEntityManager();
+		em.getTransaction().begin();
+
+		TCustomer customer = new TCustomer();
+		customer.setUsername(inUsername);
+		customer.setPasswordmd5(inPasswordMD5);
+		customer.setName(inName);
+		customer.setEmail(inEmail);
+		em.persist(customer);
+
+		em.getTransaction().commit();
 	}
 
 }

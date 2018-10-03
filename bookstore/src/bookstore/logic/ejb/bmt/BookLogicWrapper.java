@@ -1,6 +1,6 @@
 package bookstore.logic.ejb.bmt;
 
-import bookstore.annotation.UsedOpenJpa;
+import bookstore.annotation.UsedJpaLocal;
 import bookstore.dao.BookDAO;
 import bookstore.logic.BookLogic;
 import bookstore.logic.AbstractBookLogic;
@@ -22,7 +22,7 @@ import javax.persistence.EntityManager;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class BookLogicWrapper extends AbstractBookLogic<EntityManager> {
 
-	@Inject @UsedOpenJpa private BookDAO<EntityManager> bookdao;
+	@Inject @UsedJpaLocal private BookDAO<EntityManager> bookdao;
 	@Inject private Logger log;
 
 	// UserTransaction‚ÍBMT‚É‘Î‚·‚é‚à‚Ì‚ÅCMT‚É‚Í—˜—p‚Å‚«‚È‚¢

@@ -12,6 +12,6 @@ import javax.inject.Qualifier;
 @Qualifier
 @Retention(RUNTIME)
 @Target({ TYPE, FIELD })
-public @interface UsedOpenJpa {
+public @interface UsedJpaLocal {
 
 }

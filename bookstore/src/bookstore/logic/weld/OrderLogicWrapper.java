@@ -11,7 +11,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceUnit;
 
 import bookstore.annotation.UsedWeld;
-import bookstore.annotation.UsedEclipselink;
+import bookstore.annotation.UsedJpaJta;
 import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
 import bookstore.dao.OrderDAO;
@@ -22,10 +22,10 @@ import bookstore.logic.AbstractOrderLogic;
 @Dependent
 public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 
-	@Inject @UsedEclipselink private BookDAO<EntityManager> bookdao;
-	@Inject @UsedEclipselink private CustomerDAO<EntityManager> customerdao;
-	@Inject @UsedEclipselink private OrderDAO<EntityManager> orderdao;
-	@Inject @UsedEclipselink private OrderDetailDAO<EntityManager> orderdetaildao;
+	@Inject @UsedJpaJta private BookDAO<EntityManager> bookdao;
+	@Inject @UsedJpaJta private CustomerDAO<EntityManager> customerdao;
+	@Inject @UsedJpaJta private OrderDAO<EntityManager> orderdao;
+	@Inject @UsedJpaJta private OrderDetailDAO<EntityManager> orderdetaildao;
 	@Inject private Logger log;
 
 	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;

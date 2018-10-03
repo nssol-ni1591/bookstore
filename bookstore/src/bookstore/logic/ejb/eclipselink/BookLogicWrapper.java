@@ -11,7 +11,7 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import bookstore.annotation.UsedEclipselink;
+import bookstore.annotation.UsedJpaJta;
 import bookstore.dao.BookDAO;
 import bookstore.logic.BookLogic;
 import bookstore.logic.AbstractBookLogic;
@@ -22,7 +22,7 @@ import bookstore.logic.AbstractBookLogic;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class BookLogicWrapper extends AbstractBookLogic<EntityManager> {
 
-	@Inject @UsedEclipselink private BookDAO<EntityManager> bookdao;
+	@Inject @UsedJpaJta private BookDAO<EntityManager> bookdao;
 	@Inject private Logger log;
 
 	@Override

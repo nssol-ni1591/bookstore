@@ -1,4 +1,4 @@
-package bookstore.dao.eclipselink;
+package bookstore.dao.jpa.local;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Disposes;

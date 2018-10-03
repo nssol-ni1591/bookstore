@@ -11,7 +11,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
 import bookstore.annotation.UsedWeld;
-import bookstore.annotation.UsedEclipselink;
+import bookstore.annotation.UsedJpaJta;
 import bookstore.dao.BookDAO;
 import bookstore.logic.AbstractBookLogic;
 
@@ -24,7 +24,7 @@ public class BookLogicWrapper extends AbstractBookLogic<EntityManager> implement
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Inject @UsedEclipselink private BookDAO<EntityManager> bookdao;
+	@Inject @UsedJpaJta private BookDAO<EntityManager> bookdao;
 	@Inject private Logger log;
 
 	@PersistenceUnit(name = "BookStore") private transient EntityManagerFactory emf;

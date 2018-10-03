@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
-import bookstore.annotation.UsedOpenJpa;
+import bookstore.annotation.UsedJpaLocal;
 import bookstore.dao.CustomerDAO;
 import bookstore.logic.CustomerLogic;
 import bookstore.logic.AbstractCustomerLogic;
@@ -24,7 +24,7 @@ import bookstore.logic.AbstractCustomerLogic;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class CustomerLogicWrapper extends AbstractCustomerLogic<EntityManager> {
 
-	@Inject @UsedOpenJpa CustomerDAO<EntityManager> customerdao;
+	@Inject @UsedJpaLocal CustomerDAO<EntityManager> customerdao;
 	@Inject private Logger log;
 
 	// UserTransaction‚ÍBMT‚É‘Î‚·‚é‚à‚Ì‚ÅCMT‚É‚Í—˜—p‚Å‚«‚È‚¢

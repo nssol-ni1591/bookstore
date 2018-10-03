@@ -1,4 +1,4 @@
-package bookstore.dao.openjpa;
+package bookstore.dao.jpa.jta;
 
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -9,13 +9,13 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import bookstore.annotation.UsedOpenJpa;
+import bookstore.annotation.UsedJpaLocal;
 import bookstore.dao.OrderDetailDAO;
 import bookstore.pbean.TBook;
 import bookstore.pbean.TOrder;
 import bookstore.pbean.TOrderDetail;
 
-@UsedOpenJpa
+@UsedJpaLocal
 @Dependent
 public class OrderDetailDAOImpl<T extends EntityManager> implements OrderDetailDAO<T> {
 	/*
