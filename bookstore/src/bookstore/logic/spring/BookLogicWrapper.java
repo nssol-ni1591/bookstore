@@ -33,9 +33,5 @@ public class BookLogicWrapper extends AbstractBookLogic<SessionFactory> {
 	protected SessionFactory getManager() {
 		return sessionFactory;
 	}
-/*
-	public void setBookdao(BookDAO<SessionFactory> bookdao) {
-		this.bookdao = bookdao;
-	}
-*/
+
 }

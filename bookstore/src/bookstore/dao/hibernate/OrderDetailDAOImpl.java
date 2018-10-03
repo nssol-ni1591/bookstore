@@ -27,7 +27,7 @@ public class OrderDetailDAOImpl<T extends SessionFactory> /*extends HibernateDao
 						, inBook == null ? "null" : inBook.getId()
 		});
 
-		if ("0-0000-0000-0".equals(inBook.getIsbn())) {
+		if (inBook == null || "0-0000-0000-0".equals(inBook.getIsbn())) {
 			throw new SQLException("isdn: 0-0000-0000-0");
 		}
 

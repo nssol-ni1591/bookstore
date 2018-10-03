@@ -81,7 +81,6 @@ public abstract class AbstractOrderBean {
 			orderLogic.orderBooks(uid, cart);
 	
 			vcustomer = customerLogic.createVCustomer(uid);
-			//itemsToBuy = bookLogic.createVCheckout(cart);
 	
 			session.setAttribute("Cart", null);
 		}

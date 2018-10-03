@@ -34,13 +34,10 @@ public class OrderDAOImpl<T extends Connection> implements OrderDAO<T> {
 			pst.setTimestamp(2, now);
 			log.log(Level.INFO, "execute sql: {0}, customer_id={1}", new Object[] { pst, inCustomer.getId() });
 			if (pst.executeUpdate() <= 0) {
-				log.log(Level.SEVERE, "failed sql: {0}", pst.toString());
-				/*
+				log.log(Level.SEVERE, "failed sql: {0}", pst);
 				if (con2 == null) {
 					con.rollback();
 				}
-				return null;
-				*/
 				throw new SQLException("failed insert");
 			}
 
@@ -75,8 +72,8 @@ public class OrderDAOImpl<T extends Connection> implements OrderDAO<T> {
 			log.log(Level.SEVERE, "", e);
 		}
 		finally {
-			DB.close(OrderDAOImpl.class.getName(), rs2, pst2, null);
-			DB.close(OrderDAOImpl.class.getName(), rs, pst, con2 != null ? null : con);
+			DB.close(rs2, pst2, null);
+			DB.close(rs, pst, con2 != null ? null : con);
 		}
 		return null;
 	}
@@ -111,7 +108,7 @@ public class OrderDAOImpl<T extends Connection> implements OrderDAO<T> {
 			}
 		}
 		finally {
-			DB.close(OrderDAOImpl.class.getName(), rs, pst, con2 != null ? null : con);
+			DB.close(rs, pst, con2 != null ? null : con);
 		}
 		return orderList;
 	}

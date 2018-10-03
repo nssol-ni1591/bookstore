@@ -34,6 +34,7 @@ public class TBook implements Serializable {
 	private String title;
 
 	public TBook() {
+		// Do nothing.
 	}
 
 	public int getId() {

@@ -1,6 +1,5 @@
 package bookstore.logic.spring.legacy;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -15,7 +14,6 @@ import bookstore.dao.OrderDAO;
 import bookstore.dao.OrderDetailDAO;
 import bookstore.logic.AbstractOrderLogic;
 import bookstore.logic.spring.SpringRuntimeException;
-import bookstore.vbean.VOrder;
 
 @UsedSpring
 @Component("LogicOrderImplBId2")
@@ -71,7 +69,7 @@ public class OrderLogicWrapper extends AbstractOrderLogic<JdbcTemplate> {
 	}
 
 	@Override
-	//@Transactional(propagation=Propagation.REQUIRED)	//この指定は無効。see:applicationContext.xml
+	//@Transactional(propagation=Propagation.REQUIRED)	//この指定は無効。applicationContext.xmlの設定が優先
 	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
 		//rollbackするための例外はRuntimeExceptionでないといけない
 		try {
@@ -83,12 +81,6 @@ public class OrderLogicWrapper extends AbstractOrderLogic<JdbcTemplate> {
 		catch (Exception e) {
 			throw new SpringRuntimeException(e);
 		}
-	}
-
-	@Override
-	//@Transactional(propagation=Propagation.REQUIRED, readOnly=true)	//この指定は無効。see:applicationContext.xml
-	public List<VOrder> listOrders(List<String> orderIdList) throws SQLException {
-		return super.listOrders(orderIdList);
 	}
 
 }

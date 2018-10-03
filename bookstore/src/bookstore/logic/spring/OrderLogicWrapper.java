@@ -56,20 +56,6 @@ public class OrderLogicWrapper extends AbstractOrderLogic<SessionFactory> {
 	protected SessionFactory getManager() {
 		return sessionFactory;
 	}
-/*
-	public void setBookdao(BookDAO<Object> bookdao) {
-		this.bookdao = bookdao;
-	}
-	public void setCustomerdao(CustomerDAO<Object> customerdao) {
-		this.customerdao = customerdao;
-	}
-	public void setOrderdao(OrderDAO<Object> orderdao) {
-		this.orderdao = orderdao;
-	}
-	public void setOrderdetaildao(OrderDetailDAO<Object> odetaildao) {
-		this.odetaildao = odetaildao;
-	}
-*/
 
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED)

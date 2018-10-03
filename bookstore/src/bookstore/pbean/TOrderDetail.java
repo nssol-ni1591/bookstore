@@ -21,14 +21,15 @@ public class TOrderDetail implements Serializable {
 	//uni-directional many-to-one association to TBook
 	@ManyToOne
 	@JoinColumn(name="BOOK_ID_FK", nullable=false)
-	private TBook TBook;
+	private TBook tBook;
 
 	//uni-directional many-to-one association to TOrder
 	@ManyToOne
 	@JoinColumn(name="ORDER_ID_FK", nullable=false)
-	private TOrder TOrder;
+	private TOrder tOrder;
 
 	public TOrderDetail() {
+		// Do nothing
 	}
 
 	public int getId() {
@@ -40,19 +41,19 @@ public class TOrderDetail implements Serializable {
 	}
 
 	public TBook getTBook() {
-		return this.TBook;
+		return this.tBook;
 	}
 
-	public void setTBook(TBook TBook) {
-		this.TBook = TBook;
+	public void setTBook(TBook tBook) {
+		this.tBook = tBook;
 	}
 
 	public TOrder getTOrder() {
-		return this.TOrder;
+		return this.tOrder;
 	}
 
-	public void setTOrder(TOrder TOrder) {
-		this.TOrder = TOrder;
+	public void setTOrder(TOrder tOrder) {
+		this.tOrder = tOrder;
 	}
 
 }

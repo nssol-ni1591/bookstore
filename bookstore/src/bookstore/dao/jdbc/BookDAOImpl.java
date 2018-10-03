@@ -18,7 +18,6 @@ public class BookDAOImpl<T extends Connection> implements BookDAO<T> {
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
-			con = con2 != null ? con2 : DB.createConnection();
 			pst = con.prepareStatement("select sum(price) from T_Book where isbn in ('" 
 					+ String.join("','", inISBNList.toArray(new String[0]))
 					+ "')");
@@ -28,7 +27,7 @@ public class BookDAOImpl<T extends Connection> implements BookDAO<T> {
 			}
 		}
 		finally {
-			DB.close(BookDAOImpl.class.getName(), rs, pst, con2 != null ? null : con);
+			DB.close(rs, pst, con2 != null ? null : con);
 		}
 		return 0;
 	}
@@ -40,7 +39,6 @@ public class BookDAOImpl<T extends Connection> implements BookDAO<T> {
 		ResultSet rs = null;
 		List<TBook> booksList = new ArrayList<>();
 		try {
-			con = con2 != null ? con2 : DB.createConnection();
 			pst = con.prepareStatement("select id, isbn, title, author, publisher, price from T_Book where author like ? or title like ? or publisher like ?");
 			String keyword = "%" + inKeyword + "%";
 			pst.setString(1, keyword);
@@ -66,7 +64,7 @@ public class BookDAOImpl<T extends Connection> implements BookDAO<T> {
 			}
 		}
 		finally {
-			DB.close(BookDAOImpl.class.getName(), rs, pst, con2 != null ? null : con);
+			DB.close(rs, pst, con2 != null ? null : con);
 		}
 		return booksList;
 	}
@@ -106,7 +104,7 @@ public class BookDAOImpl<T extends Connection> implements BookDAO<T> {
 			}
 		}
 		finally {
-			DB.close(BookDAOImpl.class.getName(), rs, pst, con2 != null ? null : con);
+			DB.close(rs, pst, con2 != null ? null : con);
 		}
 		return booksList;
 	}

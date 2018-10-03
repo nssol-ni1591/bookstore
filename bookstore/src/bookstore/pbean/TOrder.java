@@ -25,9 +25,10 @@ public class TOrder implements Serializable {
 	//uni-directional many-to-one association to TCustomer
 	@ManyToOne
 	@JoinColumn(name="CUSTOMER_ID_FK", nullable=false)
-	private TCustomer TCustomer;
+	private TCustomer tCustomer;
 
 	public TOrder() {
+		// Do nothing
 	}
 
 	public int getId() {
@@ -47,11 +48,11 @@ public class TOrder implements Serializable {
 	}
 
 	public TCustomer getTCustomer() {
-		return this.TCustomer;
+		return this.tCustomer;
 	}
 
-	public void setTCustomer(TCustomer TCustomer) {
-		this.TCustomer = TCustomer;
+	public void setTCustomer(TCustomer tCustomer) {
+		this.tCustomer = tCustomer;
 	}
 
 }

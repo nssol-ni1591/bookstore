@@ -23,7 +23,6 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic<EntityManager> {
 	@Inject private Logger log;
 
 	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
-
 	private EntityManager em = null;
 
 	@Override
@@ -36,7 +35,8 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic<EntityManager> {
 	}
 	@Override
 	protected EntityManager getManager() {
-		EntityManager em = emf.createEntityManager();
+		// emは更新TxのみLogic層で生成することにする
+		// よって、更新Tx以外ではemの値はnullとなるのでDAO層で生成される
 		return em;
 	}
 

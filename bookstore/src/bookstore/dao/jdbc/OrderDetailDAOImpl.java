@@ -24,7 +24,6 @@ public class OrderDetailDAOImpl<T extends Connection> implements OrderDetailDAO<
 
 		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
-		//TOrderDetail orderDetail = null;
 		try {
 			pst = con.prepareStatement("insert into T_Order_Detail (order_id_fk, book_id_fk) values (?,?)");
 			pst.setInt(1, inOrder.getId());
@@ -33,21 +32,18 @@ public class OrderDetailDAOImpl<T extends Connection> implements OrderDetailDAO<
 					, new Object[] { pst, inOrder.getId(), inBook.getId() });
 			if (pst.executeUpdate() <= 0) {
 				log.log(Level.SEVERE, "failed sql: {0}", pst);
-			}
-			else {
 				if (con2 == null) {
 					con.commit();
 				}
-				//orderDetail = new TOrderDetail();
-				//orderDetail.setTOrder(inOrder);
-				//orderDetail.setTBook(inBook);
 			}
-			if (con2 == null) {
-				con.commit();
+			else {
+				if (con2 == null) {
+					con.rollback();
+				}
 			}
 		}
 		finally {
-			DB.close(OrderDetailDAOImpl.class.getName(), null, pst, con2 != null ? null : con);
+			DB.close(null, pst, con2 != null ? null : con);
 		}
 	}
 

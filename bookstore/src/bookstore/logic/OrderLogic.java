@@ -1,6 +1,7 @@
 package bookstore.logic;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import bookstore.vbean.VOrder;
@@ -14,7 +15,7 @@ public interface OrderLogic {
 	public List<VOrder> listOrders(List<String> orderIdList) throws SQLException;
 
 	default List<VOrderDetail> listOrderDetails(List<String> orders) throws SQLException {
-		return null;
+		return new ArrayList<>();
 	}
 
 }

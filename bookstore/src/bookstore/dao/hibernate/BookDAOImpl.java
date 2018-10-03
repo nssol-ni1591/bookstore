@@ -21,7 +21,6 @@ public class BookDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport
 
 	@Override
 	public int getPriceByISBNs(final T sessionFactory, final List<String> inISBNList) {
-		//HibernateTemplate ht = getHibernateTemplate()
 		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		return ht.execute(session -> {
 			Query priceQuery = 
@@ -38,7 +37,6 @@ public class BookDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport
 
 		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		@SuppressWarnings("unchecked")
-		//List<TBook> booksList = (List<TBook>)getHibernateTemplate()
 		List<TBook> booksList = ht
 				.find("from TBook book where book.author like ?" + "or book.title like ? or book.publisher like ?",
 						keywords);
@@ -47,18 +45,15 @@ public class BookDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport
 
 	@Override
 	public List<TBook> retrieveBooksByISBNs(final T sessionFactory, final List<String> inISBNList) {
-		//HibernateTemplate ht = getHibernateTemplate()
 		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 
 		List<TBook> list = null;
 		if (inISBNList == null) {
-			//return (List<TBook>)ht.find("from TBook book")
 			@SuppressWarnings("unchecked")
 			List<TBook> list2 = (List<TBook>) ht.find("from TBook book");
 			list = list2;	// list2‚Ì‰E•Ó‚ð’¼Úlist‚É‘ã“ü‚·‚é‚ÆƒGƒ‰[‚È‚é WHY?
 		}
 		else {
-			//return ht.execute(session -> {-
 			list = ht.execute(session -> {
 				Query retrieveQuery = session.createQuery("from TBook book where book.isbn in ( :ISBNS )");
 				retrieveQuery.setParameterList("ISBNS", inISBNList);

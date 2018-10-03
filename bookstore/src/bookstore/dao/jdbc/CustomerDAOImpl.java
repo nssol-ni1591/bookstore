@@ -27,7 +27,7 @@ public class CustomerDAOImpl<T extends Connection> implements CustomerDAO<T> {
 			}
 		}
 		finally {
-			DB.close(OrderDAOImpl.class.getName(), rs, pst, con2 != null ? null : con);
+			DB.close(rs, pst, con2 != null ? null : con);
 		}
 		return 0;
 	}
@@ -57,7 +57,7 @@ public class CustomerDAOImpl<T extends Connection> implements CustomerDAO<T> {
 			}
 		}
 		finally {
-			DB.close(OrderDAOImpl.class.getName(), rs, pst, con2 != null ? null : con);
+			DB.close(rs, pst, con2 != null ? null : con);
 		}
 		return null;
 	}
@@ -80,7 +80,7 @@ public class CustomerDAOImpl<T extends Connection> implements CustomerDAO<T> {
 			}
 		}
 		finally {
-			DB.close(OrderDAOImpl.class.getName(), null, pst, con2 != null ? null : con);
+			DB.close(null, pst, con2 != null ? null : con);
 		}
 	}
 }

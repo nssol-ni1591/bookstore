@@ -27,7 +27,7 @@ public class BookLogicWrapper extends AbstractBookLogic<EntityManager> implement
 	@Inject @UsedEclipselink private BookDAO<EntityManager> bookdao;
 	@Inject private Logger log;
 
-	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
+	@PersistenceUnit(name = "BookStore") private transient EntityManagerFactory emf;
 
 	private transient EntityManager em = null;
 

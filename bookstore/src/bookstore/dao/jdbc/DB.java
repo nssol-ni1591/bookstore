@@ -60,8 +60,7 @@ public class DB {
 			Context context = new InitialContext();
 			DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/bookstoreDS");
 			Connection con = ds.getConnection();
-			//con.setAutoCommit(false);
-			//log.log(Level.INFO, "autocommit={0}", con.getAutoCommit());
+			//con.setAutoCommit(false)
 			log.log(Level.INFO, "ds={0}, con={1}", new Object[] { ds, con });
 			return con;
 		}
@@ -69,23 +68,8 @@ public class DB {
 			throw new SQLException(e);
 		}
 	}
-	public static Connection createConnection3() {
-		try {
-			Context context = new InitialContext();
-			DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/bookstoreDS");
-			Connection con = ds.getConnection();
-			con.setAutoCommit(false);
-			log.log(Level.INFO, "ds={0}, con={1}", new Object[] { ds, con });
-			return con;
-		}
-		//catch (ClassNotFoundException | SQLException | IOException | NamingException  e) {
-		catch (SQLException | NamingException  e) {
-			log.log(Level.SEVERE, "", e);
-		}
-		return null;
-	}
 
-	public static void close(String className, ResultSet rs, PreparedStatement pst, Connection con) {
+	public static void close(ResultSet rs, PreparedStatement pst, Connection con) {
 		if (rs != null) {
 			try {
 				rs.close();

@@ -29,7 +29,6 @@ public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 	@Inject private Logger log;
 
 	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
-
 	private EntityManager em = null;
 
 	@Override
@@ -54,6 +53,8 @@ public class OrderLogicWrapper extends AbstractOrderLogic<EntityManager> {
 	}
 	@Override
 	protected EntityManager getManager() {
+		// emは更新TxのみLogic層で生成することにする
+		// よって、更新Tx以外ではemの値はnullとなるのでDAO層で生成される
 		return em;
 	}
 

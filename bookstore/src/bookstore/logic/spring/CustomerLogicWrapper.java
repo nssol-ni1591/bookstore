@@ -36,11 +36,7 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic<SessionFactory> 
 	protected SessionFactory getManager() {
 		return sessionFactory;
 	}
-/*
-	public void setCustomerdao(CustomerDAO<SessionFactory> customerdao) {
-		this.customerdao = customerdao;
-	}
-*/
+
 	@Override
 	//@Transactional(propagation=Propagation.REQUIRED)
 	//-> applicationContext.xml‚ÉtransactionAttributes‚ğ’è‹`‚µ‚Ä‚¢‚é‚Ì‚Å@Transactional‚ğÈ—ª‚·‚é
@@ -54,7 +50,7 @@ public class CustomerLogicWrapper extends AbstractCustomerLogic<SessionFactory> 
 		Session sess = sessionFactory.openSession();
 		Transaction tx = sess.getTransaction();
 		try {
-			tx.begin();;
+			tx.begin();
 			boolean rc = super.createCustomer(inUid, inPassword, inName, inEmail);
 			tx.commit();
 			return rc;

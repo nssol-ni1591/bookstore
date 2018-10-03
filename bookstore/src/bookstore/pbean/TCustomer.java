@@ -31,6 +31,7 @@ public class TCustomer implements Serializable {
 	private String username;
 
 	public TCustomer() {
+		// Do nothing.
 	}
 
 	public int getId() {

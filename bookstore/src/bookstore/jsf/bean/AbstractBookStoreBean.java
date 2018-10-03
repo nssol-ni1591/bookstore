@@ -41,12 +41,11 @@ public abstract class AbstractBookStoreBean implements Serializable {
 		//log.log(Level.INFO, "this={0}", this)
 		//このタイミングでは早すぎる
 	}
-	
+
 	@PostConstruct
 	public void init() {
 		log.log(Level.INFO, THIS_0, this);
 	}
-	
 
 	public String getKeyword() {
 		return keyword;
