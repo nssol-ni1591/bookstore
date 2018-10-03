@@ -71,32 +71,6 @@ public class OrderLogicWrapper extends AbstractOrderLogic<SessionFactory> {
 		catch (Exception e) {
 			throw new SpringRuntimeException(e);
 		}
-
-		/*
-		// Non-managed environment idiom
-		log.log(Level.INFO, "sessionFactory={0}", sessionFactory);
-
-		Session sess = sessionFactory.openSession();
-		// No Hibernate Session bound to thread, and configuration does not allow creation of non-transactional one here
-		//Session sess = sessionFactory.getCurrentSession();
-
-		//Transaction tx = sess.beginTransaction();
-		Transaction tx = sess.getTransaction();
-		try {
-			tx.begin();
-			super.orderBooks(inUid, inISBNs);
-			tx.commit();
-		}
-		catch (Exception e) {
-			log.log(Level.SEVERE, "e={0}, tx={1}, active={2}", new Object[] { e.getMessage(), tx, tx == null ? "null" : tx.isActive() });
-			tx.rollback();
-			throw e;
-			//throw new RuntimeException(e);
-		}
-		finally {
-			sess.close();
-		}
-		 */
 	}
 
 	@Override

@@ -87,7 +87,6 @@ public class OrderDAOImpl<T extends JdbcTemplate> implements OrderDAO<T> {
 				Timestamp orderDay = rs.getTimestamp(3);
 
 				CustomerDAO<Connection> customerDAO = new CustomerDAOImpl<>();
-				//TCustomer customer = customerDAO.findCustomerByUid(con, custormerId)
 				TCustomer customer = customerDAO.findCustomerByUid(DB.createConnection(), customerId);
 
 				TOrder order = new TOrder();

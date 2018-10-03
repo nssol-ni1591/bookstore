@@ -74,9 +74,9 @@ public class OrderDAOImpl<T extends EntityManager> implements OrderDAO<T> {
 				" from sys.systables t, sys.syscolumns c" + 
 				" where t.tablename='T_ORDER'" + 
 				"   and c.referenceid=t.tableid" + 
-				"   and c.columnname='ID'");
-		Long id = (Long) q.getSingleResult();
-		order.setId(id.intValue());
+				"   and c.columnname='ID'")
+		Long id = (Long) q.getSingleResult()
+		order.setId(id.intValue())
 		*/
 		Query q = em.createNativeQuery(
 				"select max(id)" + 

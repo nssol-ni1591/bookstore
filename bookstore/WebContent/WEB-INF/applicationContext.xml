@@ -35,6 +35,9 @@
 	transactionManager.commit();
 	transactionManager.rollback();
 
+	=> springのTxManagerではcommit()やrollback()にTransactionStatusが必要となり詳細がわからない
+		よって、一般的ではないと考え、springでは以下の「宣言的トランザクション管理」を使用する
+
 	2.宣言的トランザクション管理
 	「あるメソッドを呼び出したときにトランザクションをかける」と宣言する方法。
 	メソッドやクラスに@Transactionalアノテーションを付与することで管理され、
@@ -45,7 +48,7 @@
 	発生した場合はロールバックされずコミットされる。
 	 -->
 
-	<!-- HibernateTransactionManager：SessionFactoryを使用してTXを制御する -->
+	<!-- HibernateのSessionFactoryを使用してTXを制御する -->
 	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory">
 			<ref local="sessionFactory" />
@@ -59,7 +62,7 @@
 		</property>
 	</bean>
 
-	<!-- DataSourceTransactionManager：JDBCのConnectionを利用してTX制御を行う
+	<!-- Springが提供する仕組みでJDBCのConnectionを利用してTX制御を行う
 		例えば、APサーバのDataSourceなど
 			org.apache.tomcat.jdbc.pool.DataSource
 			org.apache.commons.dbcp2.BasicDataSource
@@ -87,7 +90,7 @@
 		<constructor-arg ref="dataSource2" />
 	</bean>
 
-	<!-- JtaTransactionManager：JTAのUserTransactionを利用してTX制御を行う -->
+	<!-- APサーバが提供するJTAのUserTransactionを利用してTX制御を行う -->
 	<bean id="dataSource3" class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName"><value>java:comp/env/jdbc/bookstoreDS</value></property>
 	</bean>
@@ -99,7 +102,7 @@
 	</bean>
 
 
-	<!-- DAO -->
+	<!-- DAO Interface Layer -->
 	<!-- Logic層でトランザクションを開始しているのでDAOにトランザクション定義が必要か？ ⇒必要ない -->
 	<!-- targetの参照先はbean定義ファイル内で完結してしないといけない。ようだ -->
 	<bean id="BookDAOBId" class="org.springframework.aop.framework.ProxyFactoryBean">
@@ -228,7 +231,7 @@
 	</bean>
 	 -->
 
-	<!-- DAOImpl -->
+	<!-- DAO Implement Layer -->
 	<!-- この定義を省略するとsessionFactoryをautowiredできなかった -->
 	<!-- HibernateDaoSupportがHibernateTemplateを生成するためにsessionFactoryはsuperクラスのDIが必要なだけ
 		ただ、HibernateDaoSupportクラスを使用しなくても、
@@ -281,7 +284,7 @@
 	<bean id="OrderDetailDAOImplBId2" class="bookstore.dao.jdbctemplate.OrderDetailDAOImpl">
 	</bean>
 
-	<!-- Logic Layer -->
+	<!-- Logic Interface Layer -->
 	<bean id="LogicBookBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
@@ -370,7 +373,7 @@
 		</property>
 	</bean>
  
-	<!-- Logic Layer Implement -->
+	<!-- Logic Implement Layer -->
 	<!-- autowired設定によりコメントアウト化ができる部分：
 		クラスに@Autowiredが指定されているのでapplicationContext.xmlでの指定は不要
 	-->
