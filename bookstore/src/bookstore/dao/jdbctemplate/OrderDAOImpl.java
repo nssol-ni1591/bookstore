@@ -11,6 +11,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -29,11 +30,15 @@ import bookstore.pbean.TOrder;
 @Repository("OrderDAOImplBId2")
 public class OrderDAOImpl<T extends JdbcTemplate> implements OrderDAO<T> {
 
+	//JdbcTemplateの場合、Tx内ではJdbcTemplateのインスタンスを引き回すすこと
+	//よって、以下のjdbcTemplateを使用するロジックはNG
+	@Autowired JdbcTemplate jdbcTemplate3;
 	@Log private static Logger log;
 
-	public TOrder createOrder(final T jdbcTemplate, TCustomer inCustomer) throws SQLException {
-		log.log(Level.INFO, "jdbcTemplate={0}", jdbcTemplate);
+	public TOrder createOrder(final T jdbcTemplate2, TCustomer inCustomer) throws SQLException {
+		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 
+		log.log(Level.INFO, "jdbcTemplate={0}", jdbcTemplate);
 		LocalPreparedStatementCreator psc = new LocalPreparedStatementCreator() {
 			private PreparedStatement pst;
 
@@ -46,6 +51,8 @@ public class OrderDAOImpl<T extends JdbcTemplate> implements OrderDAO<T> {
 				pst.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
 				return pst;
 			}
+
+			@Override
 			public PreparedStatement getPreparedStatement() {
 				return pst;
 			}
@@ -57,7 +64,7 @@ public class OrderDAOImpl<T extends JdbcTemplate> implements OrderDAO<T> {
 			log.log(Level.SEVERE, "failed psc={0}", psc);
 			throw new SQLException("failed insert");
 		}
-		
+
 		TOrder order = new TOrder();
 		order.setTCustomer(inCustomer);
 		order.setOrderday(Timestamp.valueOf(LocalDateTime.now()));
@@ -68,7 +75,9 @@ public class OrderDAOImpl<T extends JdbcTemplate> implements OrderDAO<T> {
 		return order;
 	}
 
-	public List<TOrder> retrieveOrders(final T jdbcTemplate, final List<String> orderIdList) {
+	public List<TOrder> retrieveOrders(final T jdbcTemplate2, final List<String> orderIdList) {
+		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
+
 		String sql;
 		if (orderIdList == null || orderIdList.isEmpty()) {
 			sql = "select id, custormerId, orderDay from T_Order";
@@ -98,7 +107,7 @@ public class OrderDAOImpl<T extends JdbcTemplate> implements OrderDAO<T> {
 		});
 	}
 
-	interface LocalPreparedStatementCreator extends PreparedStatementCreator {
+	private interface LocalPreparedStatementCreator extends PreparedStatementCreator {
 		public PreparedStatement getPreparedStatement();
 	}
 

@@ -54,7 +54,10 @@ public class OrderLogicWrapper extends AbstractOrderLogic<SessionFactory> {
 	}
 	@Override
 	protected SessionFactory getManager() {
-		return sessionFactory;
+		// springのDIはsingletonらしいので、ここでnullを指定して、
+		// DAO実装クラス側でDIしたsessionFactoryを使用してもTx動作に違いはない。らしい
+		//return sessionFactory
+		return null;
 	}
 
 	@Override

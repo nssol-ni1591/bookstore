@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,39 +25,38 @@ public class OrderDAOImpl<T extends Connection> implements OrderDAO<T> {
 		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
 		PreparedStatement pst2 = null;
-		ResultSet rs = null;
 		ResultSet rs2 = null;
 
 		try {
 			Timestamp now = Timestamp.valueOf(LocalDateTime.now());
-			pst = con.prepareStatement("insert into T_Order (customer_id_fk, orderday) values (?,?)");
+			pst = con.prepareStatement("insert into T_Order (customer_id_fk, orderday) values (?,?)"
+					, Statement.RETURN_GENERATED_KEYS);
 			pst.setInt(1, inCustomer.getId());
 			pst.setTimestamp(2, now);
-			log.log(Level.INFO, "execute sql: {0}, customer_id={1}", new Object[] { pst, inCustomer.getId() });
 			if (pst.executeUpdate() <= 0) {
 				log.log(Level.SEVERE, "failed sql: {0}", pst);
-				if (con2 == null) {
-					con.rollback();
-				}
 				throw new SQLException("failed insert");
 			}
 
 			/* Ž©“®Ì”Ô‚³‚ê‚½’l‚ðŽæ“¾‚·‚é */
+			rs2 = pst.getGeneratedKeys();
+			/*
 			pst2 = con.prepareStatement("select max(id)"
 					+ " from t_order"
 					+ " where customer_id_fk = ?"
 					);
 			pst2.setInt(1, inCustomer.getId());
 			rs2 = pst2.executeQuery();
+			*/
 			if (rs2.next()) {
-				if (con2 == null) {
-					con.commit();
-				}
 				TOrder saveOrder = new TOrder();
 				saveOrder.setTCustomer(inCustomer);
 				saveOrder.setOrderday(now);
 				saveOrder.setId(rs2.getInt(1));
 
+				if (con2 == null) {
+					con.commit();
+				}
 				log.log(Level.INFO, "customer_id={0}, order_id={1}"
 						, new Object[] { inCustomer.getId(), saveOrder.getId() });
 				return saveOrder;
@@ -70,10 +70,13 @@ public class OrderDAOImpl<T extends Connection> implements OrderDAO<T> {
 		}
 		catch (SQLException e) {
 			log.log(Level.SEVERE, "", e);
+			if (con2 == null) {
+				con.rollback();
+			}
 		}
 		finally {
 			DB.close(rs2, pst2, null);
-			DB.close(rs, pst, con2 != null ? null : con);
+			DB.close(null, pst, con2 != null ? null : con);
 		}
 		return null;
 	}

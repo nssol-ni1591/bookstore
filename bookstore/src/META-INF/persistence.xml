@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <persistence version="2.1"
 	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 
-<!-- 
+<!-- transaction-typeのRESOURCE_LOCALとJTAの違い：
 <persistence-unit transaction-type = "RESOURCE_LOCAL">を使用すると、
 EntityManager（PersistenceContext / Cache）の作成と追跡が行われます。
 
@@ -31,7 +32,11 @@ CONTAINERはEntityManager（PersistenceContext / Cache）を作成および追�
 　自動的に同じPersistenceContext / Cacheへの参照を持ちます
 ・PersistenceContext / Cacheがフラッシュされ、JTA コミット時にクリアされる
  -->
-
+<!-- JPAインプリメントクラスの決定：
+JPAの実装クラスの決定は、<persistence-unit>内の<provider>で決定する
+DAOの実装はEntityManagerで隠蔽されるので、どの実装クラスを使用しても相違はない
+ただし、transaction-typeにRESOURCE_LOCALを使う場合は、EntityTransactionで自前でTx制御する必要がある。
+ -->
 	<!-- use bookstore.dao.eclipselink -->
 	<persistence-unit name="BookStore" transaction-type="RESOURCE_LOCAL">
 		<!-- 

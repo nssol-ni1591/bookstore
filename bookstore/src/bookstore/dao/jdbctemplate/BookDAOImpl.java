@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,15 +16,21 @@ import bookstore.pbean.TBook;
 
 public class BookDAOImpl<T extends JdbcTemplate> implements BookDAO<T> {
 
+	//JdbcTemplateの場合、Tx内ではJdbcTemplateのインスタンスを引き回すすこと
+	//よって、以下のjdbcTemplateを使用するロジックはNG
+	@Autowired JdbcTemplate jdbcTemplate3;
+
 	@Override
-	public int getPriceByISBNs(final T jdbcTemplate, final List<String> inISBNList) throws SQLException {
+	public int getPriceByISBNs(final T jdbcTemplate2, final List<String> inISBNList) throws SQLException {
+		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 		return jdbcTemplate.queryForObject("select sum(price) from T_Book where isbn in (?)"
 				, Integer.class
 				, String.join("','", inISBNList.toArray(new String[0])));
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByKeyword(final T jdbcTemplate, String inKeyword) throws SQLException {
+	public List<TBook> retrieveBooksByKeyword(final T jdbcTemplate2, String inKeyword) throws SQLException {
+		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 		return jdbcTemplate.query(
 				new PreparedStatementCreator() {
 
@@ -62,7 +69,8 @@ public class BookDAOImpl<T extends JdbcTemplate> implements BookDAO<T> {
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByISBNs(final T jdbcTemplate, final List<String> inISBNList) throws SQLException {
+	public List<TBook> retrieveBooksByISBNs(final T jdbcTemplate2, final List<String> inISBNList) throws SQLException {
+		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 		return jdbcTemplate.query(
 				new PreparedStatementCreator() {
 

@@ -7,29 +7,34 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+import bookstore.annotation.Log;
 import bookstore.dao.OrderDetailDAO;
 import bookstore.pbean.TBook;
 import bookstore.pbean.TOrder;
 
 public class OrderDetailDAOImpl<T extends JdbcTemplate> implements OrderDetailDAO<T> {
 
-	private static final Logger log = Logger.getLogger(OrderDetailDAOImpl.class.getName());
+	//JdbcTemplateの場合、Tx内ではJdbcTemplateのインスタンスを引き回すすこと
+	//よって、以下のjdbcTemplateを使用するロジックはNG
+	@Autowired JdbcTemplate jdbcTemplate3;
+	@Log private static Logger log;
 
-	public void createOrderDetail(final T jdbcTemplate, TOrder inOrder, TBook inBook) throws SQLException {
-		log.log(Level.INFO, "order_id={0}, book_id={1}"
-				, new Object[] { inOrder.getId(), inBook.getId() });
+	public void createOrderDetail(final T jdbcTemplate2, TOrder inOrder, TBook inBook) throws SQLException {
+		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 
+		log.log(Level.INFO, "jdbcTemplate={0}", jdbcTemplate);
+		log.log(Level.INFO, "order_id={0}, book_id={1}", new Object[] { inOrder.getId(), inBook.getId() });
 		if ("0-0000-0000-0".equals(inBook.getIsbn())) {
 			throw new SQLException("isdn: 0-0000-0000-0");
 		}
 
 		PreparedStatementCreator psc = new PreparedStatementCreator() {
-
 			@Override
 			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
 				PreparedStatement pst = con.prepareStatement(

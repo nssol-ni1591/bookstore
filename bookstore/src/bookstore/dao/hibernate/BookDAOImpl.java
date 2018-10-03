@@ -17,10 +17,15 @@ import bookstore.pbean.TBook;
 @Repository("BookDAOImplBId")
 public class BookDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport*/ implements BookDAO<T> {
 
+	// @Autowiredでもコンテキストxmlでも、少なくとも一連の処理では同じインスタンスが設定されていた
+	private SessionFactory sessionFactory3;
+	//@Autowired SessionFactory sessionFactory3
 	@Log private static Logger log;
 
 	@Override
-	public int getPriceByISBNs(final T sessionFactory, final List<String> inISBNList) {
+	public int getPriceByISBNs(final T sessionFactory2, final List<String> inISBNList) {
+		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
+
 		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		return ht.execute(session -> {
 			Query priceQuery = 
@@ -31,7 +36,9 @@ public class BookDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByKeyword(final T sessionFactory, String inKeyword) {
+	public List<TBook> retrieveBooksByKeyword(final T sessionFactory2, String inKeyword) {
+		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
+
 		String escapedKeyword = Pattern.compile("([%_])").matcher(inKeyword).replaceAll("\\\\$1");
 		Object[] keywords = { "%" + escapedKeyword + "%", "%" + escapedKeyword + "%", "%" + escapedKeyword + "%" };
 
@@ -44,9 +51,10 @@ public class BookDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByISBNs(final T sessionFactory, final List<String> inISBNList) {
-		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
+	public List<TBook> retrieveBooksByISBNs(final T sessionFactory2, final List<String> inISBNList) {
+		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
 
+		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		List<TBook> list = null;
 		if (inISBNList == null) {
 			@SuppressWarnings("unchecked")
@@ -68,4 +76,9 @@ public class BookDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport
 		}
 		return list;
 	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory3 = sessionFactory;
+	}
+
 }

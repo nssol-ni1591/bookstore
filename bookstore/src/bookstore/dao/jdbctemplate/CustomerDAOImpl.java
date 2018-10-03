@@ -7,24 +7,31 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
+import bookstore.annotation.Log;
 import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;
 
 public class CustomerDAOImpl<T extends JdbcTemplate> implements CustomerDAO<T> {
 
-	private static final Logger log = Logger.getLogger(CustomerDAOImpl.class.getName());
+	//JdbcTemplateの場合、Tx内ではJdbcTemplateのインスタンスを引き回すすこと
+	//よって、以下のjdbcTemplateを使用するロジックはNG
+	@Autowired JdbcTemplate jdbcTemplate3;
+	@Log private static Logger log;
 
-	public int getCustomerNumberByUid(final T jdbcTemplate, final String inUid) throws SQLException {
+	public int getCustomerNumberByUid(final T jdbcTemplate2, final String inUid) throws SQLException {
+		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 		return jdbcTemplate.queryForObject("select count(*) from T_Customer where username = ?"
 				, new Object[] { inUid }
 				, Integer.class);
 	}
 
-	public TCustomer findCustomerByUid(final T jdbcTemplate, final String inUid) throws SQLException {
+	public TCustomer findCustomerByUid(final T jdbcTemplate2, final String inUid) throws SQLException {
+		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 		return jdbcTemplate.query(
 				new PreparedStatementCreator() {
 
@@ -60,12 +67,12 @@ public class CustomerDAOImpl<T extends JdbcTemplate> implements CustomerDAO<T> {
 				});
 	}
 
-	public void saveCustomer(final T jdbcTemplate, 
+	public void saveCustomer(final T jdbcTemplate2, 
 			String inUid,
 			String inPasswordMD5,
 			String inName,
 			String inEmail) throws SQLException {
-
+		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 		PreparedStatementCreator psc = new PreparedStatementCreator() {
 
 			@Override

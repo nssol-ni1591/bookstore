@@ -62,11 +62,14 @@ public class OrderLogicWrapper extends AbstractOrderLogic<JdbcTemplate> {
 	@Override
 	protected JdbcTemplate getManager() {
 		return jdbcTemplate;
+		// nullの場合、jdbcTemplateとしては同じインスタンスが引き渡されるが、
+		// Connectionのleakが発生しているようだ
+		//return null;
 	}
 
 
 	@Override
-	@Transactional(value="multi", propagation=Propagation.REQUIRED)
+	@Transactional(value="jtatx", propagation=Propagation.REQUIRED)
 	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
 		log.log(Level.INFO, "datasource={0}"
 				, jdbcTemplate == null ? "null" : jdbcTemplate.getDataSource().getClass().getName());
@@ -84,7 +87,7 @@ public class OrderLogicWrapper extends AbstractOrderLogic<JdbcTemplate> {
 	}
 
 	@Override
-	@Transactional(value="multi", propagation=Propagation.REQUIRED, readOnly=true)
+	@Transactional(value="jtatx", propagation=Propagation.REQUIRED, readOnly=true)
 	public List<VOrder> listOrders(List<String> orderIdList) throws SQLException {
 		return super.listOrders(orderIdList);
 	}

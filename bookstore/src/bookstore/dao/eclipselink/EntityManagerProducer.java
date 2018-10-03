@@ -8,9 +8,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 /*
- * EntityManagerのDIに、@Injectではなく、
- * @PersistentUnitまたは@PersistentContextを使用しているので、
- * このクラスは使用していない
+ * EntityManagerのDIに@Injectを使用する場合のProducerクラス
+ * 
+ * ただし、今回はEntityManagerのDIに@PersistentUnitまたは
+ * @PersistentContextを使用しているので、このクラスは使用していない
  */
 @Dependent
 public class EntityManagerProducer {
@@ -20,6 +21,7 @@ public class EntityManagerProducer {
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("BookStore");
 		return factory.createEntityManager();
 	}
+
 	public void closeEntityManager(@Disposes EntityManager entityManager) {
 		if (entityManager.isOpen()) {
 			entityManager.close();

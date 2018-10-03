@@ -15,9 +15,14 @@ import bookstore.pbean.TCustomer;
 @Repository("CustomerDAOImplBId")
 public class CustomerDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport*/ implements CustomerDAO<T> {
 
+	// @Autowiredでもコンテキストxmlでも、少なくとも一連の処理では同じインスタンスが設定されていた
+	private SessionFactory sessionFactory3;
+	//@Autowired SessionFactory sessionFactory3
 	@Log private static Logger log;
 
-	public int getCustomerNumberByUid(final T sessionFactory, final String inUid) {
+	public int getCustomerNumberByUid(final T sessionFactory2, final String inUid) {
+		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
+
 		log.log(Level.INFO, "inUid={0}", new Object[] { inUid });
 
 		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
@@ -29,7 +34,9 @@ public class CustomerDAOImpl<T extends SessionFactory> /*extends HibernateDaoSup
 		}).intValue();
 	}
 
-	public TCustomer findCustomerByUid(final T sessionFactory, final String inUid) {
+	public TCustomer findCustomerByUid(final T sessionFactory2, final String inUid) {
+		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
+
 		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		return ht.execute(session -> {
 			Query priceQuery = session
@@ -39,14 +46,19 @@ public class CustomerDAOImpl<T extends SessionFactory> /*extends HibernateDaoSup
 		});
 	}
 
-	public void saveCustomer(final T sessionFactory, String inUid, String inPasswordMD5, String inName, String inEmail) {
-		TCustomer saveCustomer = new TCustomer();
+	public void saveCustomer(final T sessionFactory2, String inUid, String inPasswordMD5, String inName, String inEmail) {
+		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
 
+		TCustomer saveCustomer = new TCustomer();
 		saveCustomer.setUsername(inUid);
 		saveCustomer.setPasswordmd5(inPasswordMD5);
 		saveCustomer.setName(inName);
 		saveCustomer.setEmail(inEmail);
-
 		new HibernateTemplate(sessionFactory).save(saveCustomer);
 	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory3 = sessionFactory;
+	}
+
 }

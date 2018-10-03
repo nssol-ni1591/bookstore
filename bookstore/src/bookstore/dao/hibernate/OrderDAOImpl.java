@@ -19,23 +19,27 @@ import bookstore.pbean.TOrder;
 @Repository("OrderDAOImplBId")
 public class OrderDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport*/ implements OrderDAO<T> {
 
+	// @Autowiredでもコンテキストxmlでも、少なくとも一連の処理では同じインスタンスが設定されていた
+	private SessionFactory sessionFactory3;
+	//@Autowired SessionFactory sessionFactory3
 	@Log private static Logger log;
 
-	public TOrder createOrder(final T sessionFactory, TCustomer inCustomer) {
-		log.log(Level.INFO, "sessionFactory={0}", sessionFactory);
+	public TOrder createOrder(final T sessionFactory2, TCustomer inCustomer) {
+		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
 
+		log.log(Level.INFO, "sessionFactory={0}", sessionFactory);
 		TOrder saveOrder = new TOrder();
 		saveOrder.setTCustomer(inCustomer);
 		saveOrder.setOrderday(Timestamp.valueOf(LocalDateTime.now()));
-
 		new HibernateTemplate(sessionFactory).save(saveOrder);
-
 		log.log(Level.INFO, "customer_id={0}, order_id={1}"
 				, new Object[] { inCustomer.getId(), saveOrder.getId() });
 		return (saveOrder);
 	}
 
-	public List<TOrder> retrieveOrders(final T sessionFactory, final List<String> orderIdList) {
+	public List<TOrder> retrieveOrders(final T sessionFactory2, final List<String> orderIdList) {
+		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
+
 		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		if (orderIdList == null) {
 			@SuppressWarnings("unchecked")
@@ -52,4 +56,9 @@ public class OrderDAOImpl<T extends SessionFactory> /*extends HibernateDaoSuppor
 			});
 		}
 	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory3 = sessionFactory;
+	}
+
 }

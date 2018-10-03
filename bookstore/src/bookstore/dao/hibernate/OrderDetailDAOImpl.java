@@ -17,9 +17,14 @@ import bookstore.pbean.TOrderDetail;
 @Repository("OrderDetailDAOImplBId")
 public class OrderDetailDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport*/ implements OrderDetailDAO<T> {
 
+	// @Autowiredでもコンテキストxmlでも、少なくとも一連の処理では同じインスタンスが設定されていた
+	private SessionFactory sessionFactory3;
+	//@Autowired SessionFactory sessionFactory3
 	@Log private static Logger log;
 
-	public void createOrderDetail(final T sessionFactory, TOrder inOrder, TBook inBook) throws SQLException {
+	public void createOrderDetail(final T sessionFactory2, TOrder inOrder, TBook inBook) throws SQLException {
+		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
+
 		log.log(Level.INFO, "sessionFactory={0}", sessionFactory);
 		log.log(Level.INFO, "order_id={0}, book_id={1}"
 				, new Object[] {
@@ -36,4 +41,9 @@ public class OrderDetailDAOImpl<T extends SessionFactory> /*extends HibernateDao
 		saveOrderDetail.setTBook(inBook);
 		new HibernateTemplate(sessionFactory).save(saveOrderDetail);
 	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory3 = sessionFactory;
+	}
+
 }

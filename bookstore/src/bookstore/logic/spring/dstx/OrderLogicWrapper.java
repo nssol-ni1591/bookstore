@@ -58,6 +58,9 @@ public class OrderLogicWrapper extends AbstractOrderLogic<JdbcTemplate> {
 	@Override
 	protected JdbcTemplate getManager() {
 		return jdbcTemplate;
+		// nullの場合、jdbcTemplateとしては同じインスタンスが引き渡されるが、
+		// Connectionのleakが発生しているようだ
+		//return null
 	}
 
 	// DIを実現するためのSetterメソッドs
