@@ -1,14 +1,20 @@
 package bookstore.dao.jpa;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import bookstore.dao.BookDAO;
+import bookstore.dao.OrderDetailDAO;
 import bookstore.pbean.TBook;
+import bookstore.pbean.TOrder;
+import bookstore.pbean.TOrderDetail;
 
-public abstract class BookDAOImpl<T extends EntityManager> implements BookDAO<T> {
+public abstract class AbstractOrderDetailDAOImpl<T extends EntityManager> implements OrderDetailDAO<T> {
 	/*
 	 * RESOURCE_LOCALとJTA永続コンテキストの比較
 	 * <persistence-unit transaction-type = "RESOURCE_LOCAL">を使用すると、
@@ -27,47 +33,34 @@ public abstract class BookDAOImpl<T extends EntityManager> implements BookDAO<T>
 	 * EntityManagerの複数のインスタンスを使用することをお勧めします
 	 * （注意：最初のインスタンスを破棄しない限り、2つ目のインスタンスを作成しないでください）
 	 */
+	@Inject private Logger log;
 
 	protected abstract EntityManager getEntityManager();
 
 	@Override
-	public int getPriceByISBNs(final T em2, List<String> inISBNList) {
+	public void createOrderDetail(final T em2, TOrder inOrder, TBook inBook) throws SQLException {
 		EntityManager em =  getEntityManager();
-		Query q = em
-				.createQuery("select sum( book.price ) from TBook book where book.isbn in :SELECTED_ITEMS");
-		q.setParameter("SELECTED_ITEMS", inISBNList);
-		return ((Long) q.getSingleResult()).intValue();
-	}
+		log.log(Level.INFO, "order_id={0}, book_id={1}"
+				, new Object[] { inOrder.getId(), inBook.getId() });
 
-	@Override
-	public List<TBook> retrieveBooksByKeyword(final T em2, String inKeyword) {
-		EntityManager em =  getEntityManager();
-		Query q = em
-				.createQuery("select b from TBook b where "
-						+ "b.author like :keyword or b.title like :keyword or b.publisher like :keyword");
-		q.setParameter("keyword", "%" + inKeyword + "%");
-
-		@SuppressWarnings("unchecked")
-		List<TBook> list = q.getResultList();
-		return list;
-	}
-
-	@Override
-	public List<TBook> retrieveBooksByISBNs(final T em2, List<String> inISBNList) {
-		EntityManager em =  getEntityManager();
-		Query q;
-		if (inISBNList == null) {
-			q = em.createQuery("select b from TBook b");
-			@SuppressWarnings("unchecked")
-			List<TBook> resultList = q.getResultList();
-			return resultList;
+		if ("0-0000-0000-0".equals(inBook.getIsbn())) {
+			throw new SQLException("isdn: 0-0000-0000-0");
 		}
 
-		q = em.createQuery("select b from TBook b where b.isbn in :inISBNList");
-		q.setParameter("inISBNList", inISBNList);
+		TOrderDetail orderDetail = new TOrderDetail();
+		orderDetail.setTOrder(inOrder);
+		orderDetail.setTBook(inBook);
+		em.persist(orderDetail);
+	}
+
+	@Override
+	public List<TOrderDetail> listOrderDetails(final T em2, List<String> orders) {
+		EntityManager em =  getEntityManager();
+
+		Query query = em.createQuery("select d from TOrderDetail d");
 		@SuppressWarnings("unchecked")
-		List<TBook> resultList = q.getResultList();
-		return resultList;
+		List<TOrderDetail> details = query.getResultList();
+	    return details;
 	}
 
 }

@@ -1,6 +1,7 @@
 package bookstore.dao.jpa;
 
-import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,12 +10,11 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import bookstore.dao.OrderDetailDAO;
-import bookstore.pbean.TBook;
+import bookstore.dao.OrderDAO;
+import bookstore.pbean.TCustomer;
 import bookstore.pbean.TOrder;
-import bookstore.pbean.TOrderDetail;
 
-public abstract class OrderDetailDAOImpl<T extends EntityManager> implements OrderDetailDAO<T> {
+public abstract class AbstractOrderDAOImpl<T extends EntityManager> implements OrderDAO<T> {
 	/*
 	 * RESOURCE_LOCALとJTA永続コンテキストの比較
 	 * <persistence-unit transaction-type = "RESOURCE_LOCAL">を使用すると、
@@ -38,29 +38,40 @@ public abstract class OrderDetailDAOImpl<T extends EntityManager> implements Ord
 	protected abstract EntityManager getEntityManager();
 
 	@Override
-	public void createOrderDetail(final T em2, TOrder inOrder, TBook inBook) throws SQLException {
+	public List<TOrder> retrieveOrders(T em2, List<String> orderIdList) {
 		EntityManager em =  getEntityManager();
-		log.log(Level.INFO, "order_id={0}, book_id={1}"
-				, new Object[] { inOrder.getId(), inBook.getId() });
 
-		if ("0-0000-0000-0".equals(inBook.getIsbn())) {
-			throw new SQLException("isdn: 0-0000-0000-0");
+		Query q;
+		if (orderIdList == null) {
+			q = em.createQuery("select o from TOrder o");
+			@SuppressWarnings("unchecked")
+			List<TOrder> resultList = q.getResultList();
+			return resultList;
 		}
 
-		TOrderDetail orderDetail = new TOrderDetail();
-		orderDetail.setTOrder(inOrder);
-		orderDetail.setTBook(inBook);
-		em.persist(orderDetail);
+		q = em.createQuery("select o from TOrder o where o.id in ( :ID )");
+		q.setParameter("ID", orderIdList);
+		@SuppressWarnings("unchecked")
+		List<TOrder> orders = q.getResultList();
+		return orders;
 	}
 
 	@Override
-	public List<TOrderDetail> listOrderDetails(final T em2, List<String> orders) {
+	public TOrder createOrder(T em2, TCustomer inCustomer) {
 		EntityManager em =  getEntityManager();
 
-		Query query = em.createQuery("select d from TOrderDetail d");
-		@SuppressWarnings("unchecked")
-		List<TOrderDetail> details = query.getResultList();
-	    return details;
+		TOrder order = new TOrder();
+		order.setOrderday(Timestamp.valueOf(LocalDateTime.now()));
+		order.setTCustomer(inCustomer);
+		em.persist(order);
+
+		Query q = em.createQuery("select o from TOrder o where o.id = (select max(o2.id) from TOrder o2 where o2.TCustomer = :CUSTID)");
+		q.setParameter("CUSTID", inCustomer);
+		order = (TOrder) q.getSingleResult();
+
+		log.log(Level.INFO, "customer_id={0}, order_id={1}"
+				, new Object[] { inCustomer.getId(), order.getId() });
+		return order;
 	}
 
 }

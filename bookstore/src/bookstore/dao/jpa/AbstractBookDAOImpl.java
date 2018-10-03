@@ -1,20 +1,14 @@
 package bookstore.dao.jpa;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import bookstore.dao.OrderDAO;
-import bookstore.pbean.TCustomer;
-import bookstore.pbean.TOrder;
+import bookstore.dao.BookDAO;
+import bookstore.pbean.TBook;
 
-public abstract class OrderDAOImpl<T extends EntityManager> implements OrderDAO<T> {
+public abstract class AbstractBookDAOImpl<T extends EntityManager> implements BookDAO<T> {
 	/*
 	 * RESOURCE_LOCALとJTA永続コンテキストの比較
 	 * <persistence-unit transaction-type = "RESOURCE_LOCAL">を使用すると、
@@ -33,45 +27,47 @@ public abstract class OrderDAOImpl<T extends EntityManager> implements OrderDAO<
 	 * EntityManagerの複数のインスタンスを使用することをお勧めします
 	 * （注意：最初のインスタンスを破棄しない限り、2つ目のインスタンスを作成しないでください）
 	 */
-	@Inject private Logger log;
 
 	protected abstract EntityManager getEntityManager();
 
 	@Override
-	public List<TOrder> retrieveOrders(T em2, List<String> orderIdList) {
+	public int getPriceByISBNs(final T em2, List<String> inISBNList) {
 		EntityManager em =  getEntityManager();
-
-		Query q;
-		if (orderIdList == null) {
-			q = em.createQuery("select o from TOrder o");
-			@SuppressWarnings("unchecked")
-			List<TOrder> resultList = q.getResultList();
-			return resultList;
-		}
-
-		q = em.createQuery("select o from TOrder o where o.id in ( :ID )");
-		q.setParameter("ID", orderIdList);
-		@SuppressWarnings("unchecked")
-		List<TOrder> orders = q.getResultList();
-		return orders;
+		Query q = em
+				.createQuery("select sum( book.price ) from TBook book where book.isbn in :SELECTED_ITEMS");
+		q.setParameter("SELECTED_ITEMS", inISBNList);
+		return ((Long) q.getSingleResult()).intValue();
 	}
 
 	@Override
-	public TOrder createOrder(T em2, TCustomer inCustomer) {
+	public List<TBook> retrieveBooksByKeyword(final T em2, String inKeyword) {
 		EntityManager em =  getEntityManager();
+		Query q = em
+				.createQuery("select b from TBook b where "
+						+ "b.author like :keyword or b.title like :keyword or b.publisher like :keyword");
+		q.setParameter("keyword", "%" + inKeyword + "%");
 
-		TOrder order = new TOrder();
-		order.setOrderday(Timestamp.valueOf(LocalDateTime.now()));
-		order.setTCustomer(inCustomer);
-		em.persist(order);
+		@SuppressWarnings("unchecked")
+		List<TBook> list = q.getResultList();
+		return list;
+	}
 
-		Query q = em.createQuery("select o from TOrder o where o.id = (select max(o2.id) from TOrder o2 where o2.TCustomer = :CUSTID)");
-		q.setParameter("CUSTID", inCustomer);
-		order = (TOrder) q.getSingleResult();
+	@Override
+	public List<TBook> retrieveBooksByISBNs(final T em2, List<String> inISBNList) {
+		EntityManager em =  getEntityManager();
+		Query q;
+		if (inISBNList == null) {
+			q = em.createQuery("select b from TBook b");
+			@SuppressWarnings("unchecked")
+			List<TBook> resultList = q.getResultList();
+			return resultList;
+		}
 
-		log.log(Level.INFO, "customer_id={0}, order_id={1}"
-				, new Object[] { inCustomer.getId(), order.getId() });
-		return order;
+		q = em.createQuery("select b from TBook b where b.isbn in :inISBNList");
+		q.setParameter("inISBNList", inISBNList);
+		@SuppressWarnings("unchecked")
+		List<TBook> resultList = q.getResultList();
+		return resultList;
 	}
 
 }

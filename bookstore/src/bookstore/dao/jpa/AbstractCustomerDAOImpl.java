@@ -6,7 +6,7 @@ import javax.persistence.Query;
 import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;
 
-public abstract class CustomerDAOImpl<T extends EntityManager> implements CustomerDAO<T> {
+public abstract class AbstractCustomerDAOImpl<T extends EntityManager> implements CustomerDAO<T> {
 	/*
 	 * RESOURCE_LOCALとJTA永続コンテキストの比較
 	 * <persistence-unit transaction-type = "RESOURCE_LOCAL">を使用すると、
