@@ -27,12 +27,12 @@ public abstract class AbstractBookDAOImpl<T extends EntityManager> implements Bo
 	 * EntityManagerの複数のインスタンスを使用することをお勧めします
 	 * （注意：最初のインスタンスを破棄しない限り、2つ目のインスタンスを作成しないでください）
 	 */
-
 	protected abstract EntityManager getEntityManager();
 
 	@Override
 	public int getPriceByISBNs(final T em2, List<String> inISBNList) {
-		EntityManager em =  getEntityManager();
+		EntityManager em = em2 != null ? em2 : getEntityManager();
+
 		Query q = em
 				.createQuery("select sum( book.price ) from TBook book where book.isbn in :SELECTED_ITEMS");
 		q.setParameter("SELECTED_ITEMS", inISBNList);
@@ -41,12 +41,12 @@ public abstract class AbstractBookDAOImpl<T extends EntityManager> implements Bo
 
 	@Override
 	public List<TBook> retrieveBooksByKeyword(final T em2, String inKeyword) {
-		EntityManager em =  getEntityManager();
+		EntityManager em = em2 != null ? em2 : getEntityManager();
+
 		Query q = em
 				.createQuery("select b from TBook b where "
 						+ "b.author like :keyword or b.title like :keyword or b.publisher like :keyword");
 		q.setParameter("keyword", "%" + inKeyword + "%");
-
 		@SuppressWarnings("unchecked")
 		List<TBook> list = q.getResultList();
 		return list;
@@ -54,7 +54,8 @@ public abstract class AbstractBookDAOImpl<T extends EntityManager> implements Bo
 
 	@Override
 	public List<TBook> retrieveBooksByISBNs(final T em2, List<String> inISBNList) {
-		EntityManager em =  getEntityManager();
+		EntityManager em = em2 != null ? em2 : getEntityManager();
+
 		Query q;
 		if (inISBNList == null) {
 			q = em.createQuery("select b from TBook b");
@@ -62,7 +63,6 @@ public abstract class AbstractBookDAOImpl<T extends EntityManager> implements Bo
 			List<TBook> resultList = q.getResultList();
 			return resultList;
 		}
-
 		q = em.createQuery("select b from TBook b where b.isbn in :inISBNList");
 		q.setParameter("inISBNList", inISBNList);
 		@SuppressWarnings("unchecked")

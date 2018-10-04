@@ -33,13 +33,13 @@ public abstract class AbstractOrderDAOImpl<T extends EntityManager> implements O
 	 * EntityManagerの複数のインスタンスを使用することをお勧めします
 	 * （注意：最初のインスタンスを破棄しない限り、2つ目のインスタンスを作成しないでください）
 	 */
-	@Inject private Logger log;
-
 	protected abstract EntityManager getEntityManager();
+
+	@Inject private Logger log;
 
 	@Override
 	public List<TOrder> retrieveOrders(T em2, List<String> orderIdList) {
-		EntityManager em =  getEntityManager();
+		EntityManager em = em2 != null ? em2 : getEntityManager();
 
 		Query q;
 		if (orderIdList == null) {
@@ -58,14 +58,15 @@ public abstract class AbstractOrderDAOImpl<T extends EntityManager> implements O
 
 	@Override
 	public TOrder createOrder(T em2, TCustomer inCustomer) {
-		EntityManager em =  getEntityManager();
+		EntityManager em = em2 != null ? em2 : getEntityManager();
+		log.log(Level.INFO, "entityManager={0}", em);
 
 		TOrder order = new TOrder();
 		order.setOrderday(Timestamp.valueOf(LocalDateTime.now()));
 		order.setTCustomer(inCustomer);
 		em.persist(order);
 
-		Query q = em.createQuery("select o from TOrder o where o.id = (select max(o2.id) from TOrder o2 where o2.TCustomer = :CUSTID)");
+		Query q = em.createQuery("select o from TOrder o where o.id = (select max(o2.id) from TOrder o2 where o2.tCustomer = :CUSTID)");
 		q.setParameter("CUSTID", inCustomer);
 		order = (TOrder) q.getSingleResult();
 

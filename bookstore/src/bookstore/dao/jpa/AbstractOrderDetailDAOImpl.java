@@ -33,13 +33,13 @@ public abstract class AbstractOrderDetailDAOImpl<T extends EntityManager> implem
 	 * EntityManagerの複数のインスタンスを使用することをお勧めします
 	 * （注意：最初のインスタンスを破棄しない限り、2つ目のインスタンスを作成しないでください）
 	 */
-	@Inject private Logger log;
-
 	protected abstract EntityManager getEntityManager();
+
+	@Inject private Logger log;
 
 	@Override
 	public void createOrderDetail(final T em2, TOrder inOrder, TBook inBook) throws SQLException {
-		EntityManager em =  getEntityManager();
+		EntityManager em = em2 != null ? em2 : getEntityManager();
 		log.log(Level.INFO, "order_id={0}, book_id={1}"
 				, new Object[] { inOrder.getId(), inBook.getId() });
 
@@ -55,7 +55,7 @@ public abstract class AbstractOrderDetailDAOImpl<T extends EntityManager> implem
 
 	@Override
 	public List<TOrderDetail> listOrderDetails(final T em2, List<String> orders) {
-		EntityManager em =  getEntityManager();
+		EntityManager em = em2 != null ? em2 : getEntityManager();
 
 		Query query = em.createQuery("select d from TOrderDetail d");
 		@SuppressWarnings("unchecked")

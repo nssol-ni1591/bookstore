@@ -1,23 +1,15 @@
 package bookstore.dao.jpa.jta;
 
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import bookstore.annotation.UsedJpaLocal;
-import bookstore.dao.OrderDetailDAO;
-import bookstore.pbean.TBook;
-import bookstore.pbean.TOrder;
-import bookstore.pbean.TOrderDetail;
+import bookstore.annotation.UsedJpaJta;
+import bookstore.dao.jpa.AbstractOrderDetailDAOImpl;
 
-@UsedJpaLocal
+@UsedJpaJta
 @Dependent
-public class OrderDetailDAOImpl<T extends EntityManager> implements OrderDetailDAO<T> {
+public class OrderDetailDAOImpl<T extends EntityManager> extends AbstractOrderDetailDAOImpl<T> {
 	/*
 	 * RESOURCE_LOCALとJTA永続コンテキストの比較
 	 * <persistence-unit transaction-type = "RESOURCE_LOCAL">を使用すると、
@@ -36,26 +28,13 @@ public class OrderDetailDAOImpl<T extends EntityManager> implements OrderDetailD
 	 * EntityManagerの複数のインスタンスを使用することをお勧めします
 	 * （注意：最初のインスタンスを破棄しない限り、2つ目のインスタンスを作成しないでください）
 	 */
-	//openjpaではJTAを使用しているので@PersistenceContextを使用する
-	@PersistenceContext(unitName = "BookStore2") private EntityManager em3;
-	@Inject private Logger log;
+
+	//JTAでは@PersistenceContextを使用する
+	@PersistenceContext(unitName = "BookStore2") private EntityManager em;
 
 	@Override
-	public void createOrderDetail(final T em2, TOrder inOrder, TBook inBook) throws SQLException {
-		EntityManager em = em2 != null ? em2 : em3;
-
-		log.log(Level.INFO, "em={0}", em);
-		log.log(Level.INFO, "order_id={0}, book_id={1}"
-				, new Object[] { inOrder.getId(), inBook.getId() });
-
-		if ("0-0000-0000-0".equals(inBook.getIsbn())) {
-			throw new SQLException("isdn: 0-0000-0000-0");
-		}
-
-		TOrderDetail orderDetail = new TOrderDetail();
-		orderDetail.setTOrder(inOrder);
-		orderDetail.setTBook(inBook);
-		em.persist(orderDetail);
+	protected EntityManager getEntityManager() {
+		return em;
 	}
 
 }

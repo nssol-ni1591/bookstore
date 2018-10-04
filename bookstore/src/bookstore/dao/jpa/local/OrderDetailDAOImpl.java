@@ -1,26 +1,16 @@
 package bookstore.dao.jpa.local;
 
-import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
-import javax.persistence.Query;
 
-import bookstore.annotation.UsedJpaJta;
-import bookstore.dao.OrderDetailDAO;
-import bookstore.pbean.TBook;
-import bookstore.pbean.TOrder;
-import bookstore.pbean.TOrderDetail;
+import bookstore.annotation.UsedJpaLocal;
+import bookstore.dao.jpa.AbstractOrderDetailDAOImpl;
 
-@UsedJpaJta
+@UsedJpaLocal
 @Dependent
-public class OrderDetailDAOImpl<T extends EntityManager> implements OrderDetailDAO<T> {
+public class OrderDetailDAOImpl<T extends EntityManager> extends AbstractOrderDetailDAOImpl<T> {
 	/*
 	 * RESOURCE_LOCALとJTA永続コンテキストの比較
 	 * <persistence-unit transaction-type = "RESOURCE_LOCAL">を使用すると、
@@ -39,32 +29,13 @@ public class OrderDetailDAOImpl<T extends EntityManager> implements OrderDetailD
 	 * EntityManagerの複数のインスタンスを使用することをお勧めします
 	 * （注意：最初のインスタンスを破棄しない限り、2つ目のインスタンスを作成しないでください）
 	 */
+
+	//RESOURCE_LOCALでは@PersistenceContextを使用する
 	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
-	@Inject private Logger log;
 
 	@Override
-	public void createOrderDetail(final T em2, TOrder inOrder, TBook inBook) throws SQLException {
-		EntityManager em = em2 != null ? em2 : emf.createEntityManager();
-		log.log(Level.INFO, "order_id={0}, book_id={1}"
-				, new Object[] { inOrder.getId(), inBook.getId() });
-
-		if ("0-0000-0000-0".equals(inBook.getIsbn())) {
-			throw new SQLException("isdn: 0-0000-0000-0");
-		}
-
-		TOrderDetail orderDetail = new TOrderDetail();
-		orderDetail.setTOrder(inOrder);
-		orderDetail.setTBook(inBook);
-		em.persist(orderDetail);
-	}
-
-	@Override
-	public List<TOrderDetail> listOrderDetails(final T em2, List<String> orders) {
-		EntityManager em = em2 != null ? em2 : emf.createEntityManager();
-		Query query = em.createQuery("select d from TOrderDetail d");
-		@SuppressWarnings("unchecked")
-		List<TOrderDetail> details = query.getResultList();
-	    return details;
+	protected EntityManager getEntityManager() {
+		return emf.createEntityManager();
 	}
 
 }
