@@ -8,7 +8,7 @@ import javax.inject.Named;
 
 import bookstore.annotation.UsedWeld;
 import bookstore.jsf.bean.AbstractBookStoreBean;
-import bookstore.logic.BookLogic;
+import bookstore.service.BookService;
 
 @Named
 @SessionScoped
@@ -16,7 +16,7 @@ public class BookStoreBean extends AbstractBookStoreBean implements Serializable
 
 	private static final long serialVersionUID = 1L;
 
-	@Inject @UsedWeld private BookLogic bookLogic;
+	@Inject @UsedWeld private BookService bookLogic;
 
 	public BookStoreBean() {
 		super();
@@ -25,7 +25,7 @@ public class BookStoreBean extends AbstractBookStoreBean implements Serializable
 	protected String getBookStorePage() {
 		return "BookStore";
 	}
-	protected BookLogic getBookLogic() {
+	protected BookService getBookLogic() {
 		return bookLogic;
 	}
 	

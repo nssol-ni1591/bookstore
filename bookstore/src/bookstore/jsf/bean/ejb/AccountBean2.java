@@ -6,7 +6,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
-import bookstore.logic.ejb.cmt.CustomerLogicWrapper;
+import bookstore.service.ejb.cmt.CustomerServiceWrapper;
 import bookstore.util.Messages;
 
 @Named(value="accountBean2")
@@ -15,7 +15,7 @@ public class AccountBean2 {
 
 	private static final String CREATE_ACCOUNT = "CreateAccount2";
 
-	@EJB private CustomerLogicWrapper customerLogic;
+	@EJB private CustomerServiceWrapper customerLogic;
 
 	private String account;
 	private String name;

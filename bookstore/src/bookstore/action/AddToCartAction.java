@@ -15,12 +15,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import bookstore.action.bean.AddToCartActionFormBean;
-import bookstore.logic.BookLogic;
+import bookstore.service.BookService;
 import bookstore.vbean.VBook;
 
 public class AddToCartAction extends Action {
 
-	private BookLogic bookLogic;
+	private BookService bookLogic;
 
 	@Override
 	public ActionForward execute(ActionMapping mapping
@@ -64,7 +64,7 @@ public class AddToCartAction extends Action {
 		return (mapping.findForward("Continue"));
 	}
 
-	public void setBookLogic(BookLogic bookLogic) {
+	public void setBookLogic(BookService bookLogic) {
 		this.bookLogic = bookLogic;
 	}
 }

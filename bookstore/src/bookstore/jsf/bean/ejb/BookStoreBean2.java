@@ -7,8 +7,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
 import bookstore.jsf.bean.AbstractBookStoreBean;
-import bookstore.logic.BookLogic;
-import bookstore.logic.ejb.cmt.BookLogicWrapper;
+import bookstore.service.BookService;
+import bookstore.service.ejb.cmt.BookServiceWrapper;
 
 @Named
 @SessionScoped
@@ -16,7 +16,7 @@ public class BookStoreBean2 extends AbstractBookStoreBean implements Serializabl
 
 	private static final long serialVersionUID = 1L;
 
-	@EJB private BookLogicWrapper bookLogic;
+	@EJB private BookServiceWrapper bookLogic;
 
 	public BookStoreBean2() {
 		super();
@@ -25,7 +25,7 @@ public class BookStoreBean2 extends AbstractBookStoreBean implements Serializabl
 	protected String getBookStorePage() {
 		return "BookStore2";
 	}
-	protected BookLogic getBookLogic() {
+	protected BookService getBookLogic() {
 		return bookLogic;
 	}
 

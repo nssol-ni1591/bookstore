@@ -5,28 +5,28 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 import bookstore.jsf.bean.AbstractOrderBean;
-import bookstore.logic.BookLogic;
-import bookstore.logic.CustomerLogic;
-import bookstore.logic.OrderLogic;
-import bookstore.logic.ejb.cmt.BookLogicWrapper;
-import bookstore.logic.ejb.cmt.CustomerLogicWrapper;
-import bookstore.logic.ejb.cmt.OrderLogicWrapper;
+import bookstore.service.BookService;
+import bookstore.service.CustomerService;
+import bookstore.service.OrderService;
+import bookstore.service.ejb.cmt.BookServiceWrapper;
+import bookstore.service.ejb.cmt.CustomerServiceWrapper;
+import bookstore.service.ejb.cmt.OrderServiceWrapper;
 
 @Named
 @RequestScoped
 public class OrderBean2 extends AbstractOrderBean {
 
-	@EJB private BookLogicWrapper bookLogic;
-	@EJB private CustomerLogicWrapper customerLogic;
-	@EJB private OrderLogicWrapper orderLogic;
+	@EJB private BookServiceWrapper bookLogic;
+	@EJB private CustomerServiceWrapper customerLogic;
+	@EJB private OrderServiceWrapper orderLogic;
 
-	protected BookLogic getBookLogic() {
+	protected BookService getBookLogic() {
 		return bookLogic;
 	}
-	protected CustomerLogic getCustomerLogic() {
+	protected CustomerService getCustomerLogic() {
 		return customerLogic;
 	}
-	protected OrderLogic getOrderLogic() {
+	protected OrderService getOrderLogic() {
 		return orderLogic;
 	}
 

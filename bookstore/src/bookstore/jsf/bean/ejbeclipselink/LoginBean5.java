@@ -5,20 +5,20 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 import bookstore.jsf.bean.AbstractLoginBean;
-import bookstore.logic.CustomerLogic;
+import bookstore.service.CustomerService;
 
 @Named
 @RequestScoped
 public class LoginBean5 extends AbstractLoginBean {
 
-	@EJB(mappedName="CustomerLogicEclipseLinkWrapper") private CustomerLogic customerLogic;
+	@EJB(mappedName="CustomerLogicEclipseLinkWrapper") private CustomerService customerLogic;
 
 	public LoginBean5() {
 		super();
 	}
 
 	@Override
-	protected CustomerLogic getCustomerLogic() {
+	protected CustomerService getCustomerLogic() {
 		return customerLogic;
 	}
 

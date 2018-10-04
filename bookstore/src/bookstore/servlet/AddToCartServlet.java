@@ -15,15 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import bookstore.logic.BookLogic;
-import bookstore.logic.pojo.BookLogicWrapper;
+import bookstore.service.BookService;
+import bookstore.service.pojo.BookServiceWrapper;
 import bookstore.util.Messages;
 import bookstore.vbean.VBook;
 
 /*
  * Logic Layerの参照でDAOを切替える
- * ・jdbc native - bookstore.logic.wrapper.xxxxLogicWrapper
- * ・eclipselink - bookstore.logic.jpa.xxxxLogicWrapper
+ * ・jdbc native - bookstore.service.wrapper.xxxxServiceWrapper
+ * ・eclipselink - bookstore.service.jpa.xxxxServiceWrapper
  */
 public class AddToCartServlet extends HttpServlet {
 
@@ -45,7 +45,7 @@ public class AddToCartServlet extends HttpServlet {
 			dispatcher = req.getRequestDispatcher("sessionError.html");
 		}
 		else {
-			BookLogic bookLogic = new BookLogicWrapper();
+			BookService bookLogic = new BookServiceWrapper();
 
 			@SuppressWarnings("unchecked")
 			List<String> cart = (List<String>)httpSession.getAttribute("Cart");

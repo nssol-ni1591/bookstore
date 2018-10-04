@@ -10,7 +10,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
-import bookstore.logic.CustomerLogic;
+import bookstore.service.CustomerService;
 import bookstore.util.Messages;
 
 public abstract class AbstractLoginBean {
@@ -20,7 +20,7 @@ public abstract class AbstractLoginBean {
 	private String uid;
 	private String passwd;
 
-	protected abstract CustomerLogic getCustomerLogic();
+	protected abstract CustomerService getCustomerLogic();
 	protected abstract String getLoginPage();
 	protected abstract String getBookStorePage();
 
@@ -46,7 +46,7 @@ public abstract class AbstractLoginBean {
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		HttpSession session = (HttpSession) externalContext.getSession(true);
 
-		CustomerLogic customerLogic = getCustomerLogic();
+		CustomerService customerLogic = getCustomerLogic();
 		// password match
 		if (!customerLogic.isPasswordMatched(getUid(), getPasswd())) {
 			// Account mismatched

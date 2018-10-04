@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import bookstore.logic.BookLogic;
-import bookstore.logic.pojo.BookLogicWrapper;
+import bookstore.service.BookService;
+import bookstore.service.pojo.BookServiceWrapper;
 import bookstore.util.Messages;
 import bookstore.vbean.VBook;
 
@@ -47,7 +47,7 @@ public class SearchServlet extends HttpServlet {
 		}
 		else {
 			try {
-				BookLogic bookLogic = new BookLogicWrapper();
+				BookService bookLogic = new BookServiceWrapper();
 				@SuppressWarnings("unchecked")
 				List<String> cart = (List<String>) httpSession.getAttribute("Cart");
 				List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(keyword);

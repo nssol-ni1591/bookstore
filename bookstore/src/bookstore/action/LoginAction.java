@@ -15,14 +15,14 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import bookstore.action.bean.LoginActionFormBean;
-import bookstore.logic.BookLogic;
-import bookstore.logic.CustomerLogic;
+import bookstore.service.BookService;
+import bookstore.service.CustomerService;
 import bookstore.vbean.VBook;
 
 public class LoginAction extends Action {
 
-	private CustomerLogic customerLogic;
-	private BookLogic bookLogic;
+	private CustomerService customerLogic;
+	private BookService bookLogic;
 
 	@Override
 	public ActionForward execute(ActionMapping mapping,
@@ -60,11 +60,11 @@ public class LoginAction extends Action {
 		return (mapping.findForward("LoginSuccess"));
 	}
 
-	public void setCustomerLogic(CustomerLogic customerLogic) {
+	public void setCustomerLogic(CustomerService customerLogic) {
 		this.customerLogic = customerLogic;
 	}
 
-	public void setBookLogic(BookLogic bookLogic) {
+	public void setBookLogic(BookService bookLogic) {
 		this.bookLogic = bookLogic;
 	}
 }

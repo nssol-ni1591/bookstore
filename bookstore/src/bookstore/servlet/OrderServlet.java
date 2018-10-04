@@ -12,10 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import bookstore.logic.CustomerLogic;
-import bookstore.logic.OrderLogic;
-import bookstore.logic.pojo.CustomerLogicWrapper;
-import bookstore.logic.pojo.OrderLogicWrapper;
+import bookstore.service.CustomerService;
+import bookstore.service.OrderService;
+import bookstore.service.pojo.CustomerServiceWrapper;
+import bookstore.service.pojo.OrderServiceWrapper;
 import bookstore.util.Messages;
 
 /*
@@ -43,8 +43,8 @@ public class OrderServlet extends HttpServlet {
 			dispatcher = req.getRequestDispatcher("sessionError.html");
 		}
 		else {
-			OrderLogic orderLogic = new OrderLogicWrapper();
-			CustomerLogic customerLogic = new CustomerLogicWrapper();
+			OrderService orderLogic = new OrderServiceWrapper();
+			CustomerService customerLogic = new CustomerServiceWrapper();
 
 			String uid = (String) httpSession.getAttribute("Login");
 

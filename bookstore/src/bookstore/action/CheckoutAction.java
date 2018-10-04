@@ -14,11 +14,11 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import bookstore.logic.BookLogic;
+import bookstore.service.BookService;
 
 public class CheckoutAction extends Action {
 
-	private BookLogic bookLogic;
+	private BookService bookLogic;
 
 	@Override
 	public ActionForward execute(ActionMapping mapping
@@ -47,7 +47,7 @@ public class CheckoutAction extends Action {
 		return (mapping.findForward("ToCheck"));
 	}
 
-	public void setBookLogic(BookLogic bookLogic) {
+	public void setBookLogic(BookService bookLogic) {
 		this.bookLogic = bookLogic;
 	}
 }

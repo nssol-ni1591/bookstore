@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import bookstore.annotation.UsedWeld;
-import bookstore.logic.CustomerLogic;
+import bookstore.service.CustomerService;
 import bookstore.util.Messages;
 
 @Named
@@ -16,7 +16,7 @@ public class AccountBean {
 
 	private static final String CREATE_ACCOUNT = "CreateAccount";
 
-	@Inject @UsedWeld private CustomerLogic customerLogic;
+	@Inject @UsedWeld private CustomerService customerLogic;
 
 	private String account;
 	private String name;

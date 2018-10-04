@@ -11,13 +11,13 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import bookstore.action.bean.CreateUserActionFormBean;
-import bookstore.logic.CustomerLogic;
+import bookstore.service.CustomerService;
 
 public class CreateUserAction extends Action {
 
 	private static final String ILLEGAL_CREATE_USER = "illegalCreateUser";
 
-	private CustomerLogic customerLogic;
+	private CustomerService customerLogic;
 
 	@Override
 	public ActionForward execute(ActionMapping mapping
@@ -61,7 +61,7 @@ public class CreateUserAction extends Action {
 		return (mapping.findForward("UserCreated"));
 	}
 
-	public void setCustomerLogic(CustomerLogic inCustomerLogic) {
+	public void setCustomerLogic(CustomerService inCustomerLogic) {
 		this.customerLogic = inCustomerLogic;
 	}
 }

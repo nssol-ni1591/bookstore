@@ -5,25 +5,25 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 import bookstore.jsf.bean.AbstractOrderBean;
-import bookstore.logic.BookLogic;
-import bookstore.logic.CustomerLogic;
-import bookstore.logic.OrderLogic;
+import bookstore.service.BookService;
+import bookstore.service.CustomerService;
+import bookstore.service.OrderService;
 
 @Named
 @RequestScoped
 public class OrderBean5 extends AbstractOrderBean {
 
-	@EJB(mappedName="BookLogicEclipseLinkWrapper") private BookLogic bookLogic;
-	@EJB(mappedName="CustomerLogicEclipseLinkWrapper") private CustomerLogic customerLogic;
-	@EJB(mappedName="OrderLogicEclipseLinkWrapper") private OrderLogic orderLogic;
+	@EJB(mappedName="BookLogicEclipseLinkWrapper") private BookService bookLogic;
+	@EJB(mappedName="CustomerLogicEclipseLinkWrapper") private CustomerService customerLogic;
+	@EJB(mappedName="OrderLogicEclipseLinkWrapper") private OrderService orderLogic;
 
-	protected BookLogic getBookLogic() {
+	protected BookService getBookLogic() {
 		return bookLogic;
 	}
-	protected CustomerLogic getCustomerLogic() {
+	protected CustomerService getCustomerLogic() {
 		return customerLogic;
 	}
-	protected OrderLogic getOrderLogic() {
+	protected OrderService getOrderLogic() {
 		return orderLogic;
 	}
 

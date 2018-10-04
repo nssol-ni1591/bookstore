@@ -11,9 +11,9 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
-import bookstore.logic.BookLogic;
-import bookstore.logic.CustomerLogic;
-import bookstore.logic.OrderLogic;
+import bookstore.service.BookService;
+import bookstore.service.CustomerService;
+import bookstore.service.OrderService;
 import bookstore.util.Messages;
 import bookstore.vbean.VCheckout;
 import bookstore.vbean.VCustomer;
@@ -27,9 +27,9 @@ public abstract class AbstractOrderBean {
 
 	@Inject private Logger log;
 
-	protected abstract BookLogic getBookLogic();
-	protected abstract CustomerLogic getCustomerLogic();
-	protected abstract OrderLogic getOrderLogic();
+	protected abstract BookService getBookLogic();
+	protected abstract CustomerService getCustomerLogic();
+	protected abstract OrderService getOrderLogic();
 
 	protected abstract String getBookStorePage();
 	protected abstract String getCheckPage();
@@ -70,9 +70,9 @@ public abstract class AbstractOrderBean {
 			return SESSION_ERROR;
 		}
 
-		BookLogic bookLogic = getBookLogic();
-		CustomerLogic customerLogic = getCustomerLogic();
-		OrderLogic orderLogic = getOrderLogic();
+		BookService bookLogic = getBookLogic();
+		CustomerService customerLogic = getCustomerLogic();
+		OrderService orderLogic = getOrderLogic();
 
 		@SuppressWarnings("unchecked")
 		List<String> cart = (List<String>) session.getAttribute("Cart");
@@ -126,7 +126,7 @@ public abstract class AbstractOrderBean {
 			return getBookStorePage();
 		}
 
-		BookLogic bookLogic = getBookLogic();
+		BookService bookLogic = getBookLogic();
 		itemsToBuy = bookLogic.createVCheckout(cart);
 		return getCheckPage();
 	}
@@ -134,7 +134,7 @@ public abstract class AbstractOrderBean {
 	public String listOrders() throws SQLException {
 		log.log(Level.INFO, THIS_0, this);
 
-		OrderLogic orderLogic = getOrderLogic();
+		OrderService orderLogic = getOrderLogic();
 		orders = orderLogic.listOrders(null);
 		details = orderLogic.listOrderDetails(null);
 

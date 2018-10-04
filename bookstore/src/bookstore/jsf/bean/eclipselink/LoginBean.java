@@ -6,20 +6,20 @@ import javax.inject.Named;
 
 import bookstore.annotation.UsedWeld;
 import bookstore.jsf.bean.AbstractLoginBean;
-import bookstore.logic.CustomerLogic;
+import bookstore.service.CustomerService;
 
 @Named
 @RequestScoped
 public class LoginBean extends AbstractLoginBean {
 
-	@Inject @UsedWeld private CustomerLogic customerLogic;
+	@Inject @UsedWeld private CustomerService customerLogic;
 
 	public LoginBean() {
 		super();
 	}
 
 	@Override
-	protected CustomerLogic getCustomerLogic() {
+	protected CustomerService getCustomerLogic() {
 		return customerLogic;
 	}
 

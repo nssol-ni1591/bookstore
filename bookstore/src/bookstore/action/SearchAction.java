@@ -15,12 +15,12 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import bookstore.action.bean.SearchActionFormBean;
-import bookstore.logic.BookLogic;
+import bookstore.service.BookService;
 import bookstore.vbean.VBook;
 
 public class SearchAction extends Action {
 
-	private BookLogic bookLogic;
+	private BookService bookLogic;
 
 	@Override
 	public ActionForward execute(ActionMapping mapping
@@ -59,7 +59,7 @@ public class SearchAction extends Action {
 		return (mapping.findForward("SearchSuccess"));
 	}
 
-	public void setBookLogic(BookLogic bookLogic) {
+	public void setBookLogic(BookService bookLogic) {
 		this.bookLogic = bookLogic;
 	}
 }

@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import bookstore.logic.CustomerLogic;
-import bookstore.logic.pojo.CustomerLogicWrapper;
+import bookstore.service.CustomerService;
+import bookstore.service.pojo.CustomerServiceWrapper;
 import bookstore.util.Messages;
 
 /*
@@ -41,7 +41,7 @@ public class CreateUserServlet extends HttpServlet {
 		String name = req.getParameter("name");
 		String email = req.getParameter("email");
 
-		CustomerLogic customerLogic = new CustomerLogicWrapper();
+		CustomerService customerLogic = new CustomerServiceWrapper();
 		Messages errors = new Messages(req);
 
 		RequestDispatcher dispatcher;

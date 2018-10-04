@@ -16,7 +16,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
-import bookstore.logic.BookLogic;
+import bookstore.service.BookService;
 import bookstore.util.Messages;
 import bookstore.vbean.VBook;
 
@@ -35,7 +35,7 @@ public abstract class AbstractBookStoreBean implements Serializable {
 	private List<String> selectedItems;
 
 	protected abstract String getBookStorePage();
-	protected abstract BookLogic getBookLogic();
+	protected abstract BookService getBookLogic();
 
 	public AbstractBookStoreBean() {
 		//log.log(Level.INFO, "this={0}", this)
@@ -68,7 +68,7 @@ public abstract class AbstractBookStoreBean implements Serializable {
 					, new Object[] { productListView.size(), productListView });
 			return productListView;
 		}
-		BookLogic bookLogic = getBookLogic();
+		BookService bookLogic = getBookLogic();
 
 		// LoginBeanÇ©ÇÁëJà⁄ÇµÇƒÇ´ÇΩèÍçáÇÕproductListViewÇ™nullÇ…Ç»ÇÈ
 		if (productList == null || productList.isEmpty()) {
@@ -91,7 +91,7 @@ public abstract class AbstractBookStoreBean implements Serializable {
 
 		log.log(Level.FINE, "keyword={0}", keyword);
 
-		BookLogic bookLogic = getBookLogic();
+		BookService bookLogic = getBookLogic();
 		List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(keyword);
 		if (foundBooks == null || foundBooks.isEmpty()) {
 			foundBooks = bookLogic.getAllBookISBNs();
@@ -150,7 +150,7 @@ public abstract class AbstractBookStoreBean implements Serializable {
 			return getBookStorePage();
 		}
 
-		BookLogic bookLogic = getBookLogic();
+		BookService bookLogic = getBookLogic();
 		List<String> newCart = bookLogic.createCart(productList, selectedItems, cart);
 		session.setAttribute("Cart", newCart);
 		log.log(Level.INFO, "newCart.size={0}, newCart={1}", new Object[] { newCart.size(),  newCart });

@@ -16,13 +16,13 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import bookstore.annotation.Log;
-import bookstore.logic.CustomerLogic;
-import bookstore.logic.OrderLogic;
+import bookstore.service.CustomerService;
+import bookstore.service.OrderService;
 
 public class OrderAction extends Action {
 
-	private OrderLogic orderLogic;
-	private CustomerLogic customerLogic;
+	private OrderService orderLogic;
+	private CustomerService customerLogic;
 	@Log private static Logger log;
 
 	@Override
@@ -55,11 +55,11 @@ public class OrderAction extends Action {
 		}
 	}
 
-	public void setOrderLogic(OrderLogic orderLogic) {
+	public void setOrderLogic(OrderService orderLogic) {
 		this.orderLogic = orderLogic;
 	}
 
-	public void setCustomerLogic(CustomerLogic customerLogic) {
+	public void setCustomerLogic(CustomerService customerLogic) {
 		this.customerLogic = customerLogic;
 	}
 }

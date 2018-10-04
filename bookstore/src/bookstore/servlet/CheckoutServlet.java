@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import bookstore.logic.BookLogic;
-import bookstore.logic.pojo.BookLogicWrapper;
+import bookstore.service.BookService;
+import bookstore.service.pojo.BookServiceWrapper;
 import bookstore.util.Messages;
 
 /*
@@ -51,7 +51,7 @@ public class CheckoutServlet extends HttpServlet {
 			}
 			else {
 				try {
-					BookLogic bookLogic = new BookLogicWrapper();
+					BookService bookLogic = new BookServiceWrapper();
 					httpSession.setAttribute("ItemsToBuy", bookLogic.createVCheckout(selectedItems));
 					dispatcher = req.getRequestDispatcher("Check.jsp");
 				}

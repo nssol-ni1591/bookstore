@@ -6,25 +6,25 @@ import javax.inject.Named;
 
 import bookstore.annotation.UsedWeld;
 import bookstore.jsf.bean.AbstractOrderBean;
-import bookstore.logic.BookLogic;
-import bookstore.logic.CustomerLogic;
-import bookstore.logic.OrderLogic;
+import bookstore.service.BookService;
+import bookstore.service.CustomerService;
+import bookstore.service.OrderService;
 
 @Named
 @RequestScoped
 public class OrderBean extends AbstractOrderBean {
 
-	@Inject @UsedWeld private BookLogic bookLogic;
-	@Inject @UsedWeld private CustomerLogic customerLogic;
-	@Inject @UsedWeld private OrderLogic orderLogic;
+	@Inject @UsedWeld private BookService bookLogic;
+	@Inject @UsedWeld private CustomerService customerLogic;
+	@Inject @UsedWeld private OrderService orderLogic;
 
-	protected BookLogic getBookLogic() {
+	protected BookService getBookLogic() {
 		return bookLogic;
 	}
-	protected CustomerLogic getCustomerLogic() {
+	protected CustomerService getCustomerLogic() {
 		return customerLogic;
 	}
-	protected OrderLogic getOrderLogic() {
+	protected OrderService getOrderLogic() {
 		return orderLogic;
 	}
 
