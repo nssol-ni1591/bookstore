@@ -21,8 +21,8 @@ import bookstore.service.OrderService;
 
 public class OrderAction extends Action {
 
-	private OrderService orderLogic;
-	private CustomerService customerLogic;
+	private OrderService orderService;
+	private CustomerService customerService;
 	@Log private static Logger log;
 
 	@Override
@@ -41,8 +41,8 @@ public class OrderAction extends Action {
 		List<String> cart = (List<String>)httpSession.getAttribute("Cart");
 
 		try {
-			orderLogic.orderBooks(uid, cart);
-			req.setAttribute("Customer", customerLogic.createVCustomer(uid));
+			orderService.orderBooks(uid, cart);
+			req.setAttribute("Customer", customerService.createVCustomer(uid));
 			return (mapping.findForward("OrderSuccess"));
 		}
 		catch (Exception e) {
@@ -55,11 +55,11 @@ public class OrderAction extends Action {
 		}
 	}
 
-	public void setOrderLogic(OrderService orderLogic) {
-		this.orderLogic = orderLogic;
+	public void setOrderService(OrderService orderService) {
+		this.orderService = orderService;
 	}
 
-	public void setCustomerLogic(CustomerService customerLogic) {
-		this.customerLogic = customerLogic;
+	public void setCustomerService(CustomerService customerService) {
+		this.customerService = customerService;
 	}
 }

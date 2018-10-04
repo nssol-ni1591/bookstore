@@ -12,15 +12,15 @@ import bookstore.service.CustomerService;
 @RequestScoped
 public class LoginBean extends AbstractLoginBean {
 
-	@Inject @UsedWeld private CustomerService customerLogic;
+	@Inject @UsedWeld private CustomerService customerService;
 
 	public LoginBean() {
 		super();
 	}
 
 	@Override
-	protected CustomerService getCustomerLogic() {
-		return customerLogic;
+	protected CustomerService getCustomerService() {
+		return customerService;
 	}
 
 	protected String getLoginPage() {

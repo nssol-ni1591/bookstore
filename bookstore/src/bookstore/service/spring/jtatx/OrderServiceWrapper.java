@@ -28,7 +28,7 @@ import bookstore.vbean.VOrder;
  * このクラスでは敢えて@Autowairedを使用する
  */
 @UsedSpring
-@Component("LogicOrderImplBId3")
+@Component("ServiceOrderImplBId3")
 public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 
 	@Log private static Logger log;

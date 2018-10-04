@@ -12,15 +12,15 @@ import bookstore.service.ejb.cmt.CustomerServiceWrapper;
 @RequestScoped
 public class LoginBean2 extends AbstractLoginBean {
 
-	@EJB private CustomerServiceWrapper customerLogic;
+	@EJB private CustomerServiceWrapper customerService;
 
 	public LoginBean2() {
 		super();
 	}
 
 	@Override
-	protected CustomerService getCustomerLogic() {
-		return customerLogic;
+	protected CustomerService getCustomerService() {
+		return customerService;
 	}
 
 	protected String getLoginPage() {

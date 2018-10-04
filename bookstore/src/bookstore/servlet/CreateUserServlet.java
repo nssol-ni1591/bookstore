@@ -15,9 +15,9 @@ import bookstore.service.pojo.CustomerServiceWrapper;
 import bookstore.util.Messages;
 
 /*
- * Logic Layerの参照でDAOを切替える
- * ・jdbc native - bookstore.logic.wrapper.xxxxLogicWrapper
- * ・eclipselink - bookstore.logic.jpa.xxxxLogicWrapper
+ * Service Layerの参照でDAOを切替える
+ * ・jdbc native - bookstore.service.wrapper.xxxxServiceWrapper
+ * ・eclipselink - bookstore.service.jpa.xxxxServiceWrapper
  */
 public class CreateUserServlet extends HttpServlet {
 
@@ -41,7 +41,7 @@ public class CreateUserServlet extends HttpServlet {
 		String name = req.getParameter("name");
 		String email = req.getParameter("email");
 
-		CustomerService customerLogic = new CustomerServiceWrapper();
+		CustomerService customerService = new CustomerServiceWrapper();
 		Messages errors = new Messages(req);
 
 		RequestDispatcher dispatcher;
@@ -62,12 +62,12 @@ public class CreateUserServlet extends HttpServlet {
 				errors.add(ILLEGAL_CREATE_USER, "error.createuser.pass2inmatch");
 				dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
 			}
-			else if (customerLogic.isAlreadyExsited(account)) {
+			else if (customerService.isAlreadyExsited(account)) {
 				// user has already exsited
 				errors.add(ILLEGAL_CREATE_USER, "error.createuser.useralreadyexist");
 				dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);
 			}
-			else if (!customerLogic.createCustomer(account, passwd, name, email)) {
+			else if (!customerService.createCustomer(account, passwd, name, email)) {
 				// user was not created
 				errors.add(ILLEGAL_CREATE_USER, "error.createuser.cannotcreate");
 				dispatcher = req.getRequestDispatcher(CREATE_ACCOUNT_JSP);

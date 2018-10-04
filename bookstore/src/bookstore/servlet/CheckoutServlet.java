@@ -18,9 +18,9 @@ import bookstore.service.pojo.BookServiceWrapper;
 import bookstore.util.Messages;
 
 /*
- * Logic Layerの参照でDAOを切替える
- * ・jdbc native - bookstore.logic.wrapper.xxxxLogicWrapper
- * ・eclipselink - bookstore.logic.jpa.xxxxLogicWrapper
+ * Service Layerの参照でDAOを切替える
+ * ・jdbc native - bookstore.service.wrapper.xxxxServiceWrapper
+ * ・eclipselink - bookstore.service.jpa.xxxxServiceWrapper
  */
 public class CheckoutServlet extends HttpServlet {
 
@@ -51,8 +51,8 @@ public class CheckoutServlet extends HttpServlet {
 			}
 			else {
 				try {
-					BookService bookLogic = new BookServiceWrapper();
-					httpSession.setAttribute("ItemsToBuy", bookLogic.createVCheckout(selectedItems));
+					BookService bookService = new BookServiceWrapper();
+					httpSession.setAttribute("ItemsToBuy", bookService.createVCheckout(selectedItems));
 					dispatcher = req.getRequestDispatcher("Check.jsp");
 				}
 				catch (SQLException e) {

@@ -13,7 +13,7 @@ import bookstore.dao.BookDAO;
 import bookstore.service.AbstractBookService;
 
 @UsedSpring
-@Component("LogicBookImplBId")
+@Component("ServiceBookImplBId")
 public class BookServiceWrapper extends AbstractBookService<SessionFactory> {
 
 	@Log private static Logger log;

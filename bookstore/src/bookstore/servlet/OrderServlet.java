@@ -19,9 +19,9 @@ import bookstore.service.pojo.OrderServiceWrapper;
 import bookstore.util.Messages;
 
 /*
- * Logic Layerの参照でDAOを切替える
- * ・jdbc native - bookstore.logic.wrapper.xxxxLogicWrapper
- * ・eclipselink - bookstore.logic.jpa.xxxxLogicWrapper
+ * Service Layerの参照でDAOを切替える
+ * ・jdbc native - bookstore.service.wrapper.xxxxServiceWrapper
+ * ・eclipselink - bookstore.service.jpa.xxxxServiceWrapper
  */
 public class OrderServlet extends HttpServlet {
 
@@ -43,8 +43,8 @@ public class OrderServlet extends HttpServlet {
 			dispatcher = req.getRequestDispatcher("sessionError.html");
 		}
 		else {
-			OrderService orderLogic = new OrderServiceWrapper();
-			CustomerService customerLogic = new CustomerServiceWrapper();
+			OrderService orderService = new OrderServiceWrapper();
+			CustomerService customerService = new CustomerServiceWrapper();
 
 			String uid = (String) httpSession.getAttribute("Login");
 
@@ -52,8 +52,8 @@ public class OrderServlet extends HttpServlet {
 			List<String> cart = (List<String>)httpSession.getAttribute("Cart");
 
 			try {
-				orderLogic.orderBooks(uid, cart);
-				req.setAttribute("Customer", customerLogic.createVCustomer(uid));
+				orderService.orderBooks(uid, cart);
+				req.setAttribute("Customer", customerService.createVCustomer(uid));
 				dispatcher = req.getRequestDispatcher("Order.jsp");
 			}
 			catch (Exception e) {

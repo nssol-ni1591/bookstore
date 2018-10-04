@@ -16,7 +16,7 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-@Stateless(name="BookLogicBmtWrapper")
+@Stateless(name="BookServiceBmtWrapper")
 @LocalBean
 @Local(BookService.class)
 @TransactionManagement(TransactionManagementType.BEAN)
@@ -45,7 +45,7 @@ public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 	/*
 	 * JSFの実装の都合上、selectedItemsには表示されているitem以外も設定されている
 	 * このため、単純にaddAllでは、同じitemが複数登録される場合がある
-	 * @see bookstore.service.impl.BookLogicService#createCart(java.util.List, java.util.List, java.util.List)
+	 * @see bookstore.service.impl.BookServiceService#createCart(java.util.List, java.util.List, java.util.List)
 	 */
 	@Override
 	public List<String> createCart(List<String> inProductList, List<String> inSelectedList, List<String> inCart) {

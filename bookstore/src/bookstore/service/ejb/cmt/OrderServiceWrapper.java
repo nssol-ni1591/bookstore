@@ -24,7 +24,7 @@ import bookstore.dao.OrderDetailDAO;
 import bookstore.service.AbstractOrderService;
 import bookstore.service.OrderService;
 
-@Stateless(name="OrderLogicCmtWrapper")
+@Stateless(name="OrderServiceCmtWrapper")
 @LocalBean
 @Local(OrderService.class)
 @TransactionManagement(TransactionManagementType.CONTAINER)

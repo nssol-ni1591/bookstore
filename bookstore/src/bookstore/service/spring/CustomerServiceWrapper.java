@@ -16,7 +16,7 @@ import bookstore.dao.CustomerDAO;
 import bookstore.service.AbstractCustomerService;
 
 @UsedSpring
-@Component("LogicCustomerImplBId")
+@Component("ServiceCustomerImplBId")
 public class CustomerServiceWrapper extends AbstractCustomerService<SessionFactory> {
 
 	@Log private static Logger log;

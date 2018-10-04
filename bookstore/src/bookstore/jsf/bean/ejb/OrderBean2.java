@@ -16,18 +16,18 @@ import bookstore.service.ejb.cmt.OrderServiceWrapper;
 @RequestScoped
 public class OrderBean2 extends AbstractOrderBean {
 
-	@EJB private BookServiceWrapper bookLogic;
-	@EJB private CustomerServiceWrapper customerLogic;
-	@EJB private OrderServiceWrapper orderLogic;
+	@EJB private BookServiceWrapper bookService;
+	@EJB private CustomerServiceWrapper customerService;
+	@EJB private OrderServiceWrapper orderService;
 
-	protected BookService getBookLogic() {
-		return bookLogic;
+	protected BookService getBookService() {
+		return bookService;
 	}
-	protected CustomerService getCustomerLogic() {
-		return customerLogic;
+	protected CustomerService getCustomerService() {
+		return customerService;
 	}
-	protected OrderService getOrderLogic() {
-		return orderLogic;
+	protected OrderService getOrderService() {
+		return orderService;
 	}
 
 	protected String getBookStorePage() {

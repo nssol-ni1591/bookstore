@@ -21,7 +21,7 @@ import bookstore.util.Messages;
 import bookstore.vbean.VBook;
 
 /*
- * Logic Layerの参照でDAOを切替える
+ * Service Layerの参照でDAOを切替える
  * ・jdbc native - bookstore.service.wrapper.xxxxServiceWrapper
  * ・eclipselink - bookstore.service.jpa.xxxxServiceWrapper
  */
@@ -45,7 +45,7 @@ public class AddToCartServlet extends HttpServlet {
 			dispatcher = req.getRequestDispatcher("sessionError.html");
 		}
 		else {
-			BookService bookLogic = new BookServiceWrapper();
+			BookService bookService = new BookServiceWrapper();
 
 			@SuppressWarnings("unchecked")
 			List<String> cart = (List<String>)httpSession.getAttribute("Cart");
@@ -68,15 +68,15 @@ public class AddToCartServlet extends HttpServlet {
 				log.log(Level.INFO, "cart.size={0}, cart={1}"
 						, new Object[] { cart.size(), cart });
 
-				List<String> newCart = bookLogic.createCart(productList, selectedItems, cart);
+				List<String> newCart = bookService.createCart(productList, selectedItems, cart);
 				log.log(Level.INFO, "newCart.size={0}, newCart={1}"
 						, new Object[] { newCart.size(), newCart });
 
 				httpSession.setAttribute("Cart", newCart);
 
 				try {
-					List<String> productListAll = bookLogic.getAllBookISBNs();
-					List<VBook> vProductList = bookLogic.createVBookList(productListAll, newCart);
+					List<String> productListAll = bookService.getAllBookISBNs();
+					List<VBook> vProductList = bookService.createVBookList(productListAll, newCart);
 	
 					httpSession.setAttribute("ProductList", productListAll);
 					httpSession.setAttribute("ProductListView", vProductList);

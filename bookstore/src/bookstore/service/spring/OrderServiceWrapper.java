@@ -21,7 +21,7 @@ import bookstore.service.AbstractOrderService;
 import bookstore.vbean.VOrder;
 
 @UsedSpring
-@Component("LogicOrderImplBId")
+@Component("ServiceOrderImplBId")
 public class OrderServiceWrapper extends AbstractOrderService<SessionFactory> {
 
 	@Log private static Logger log;

@@ -19,9 +19,9 @@ import bookstore.util.Messages;
 import bookstore.vbean.VBook;
 
 /*
- * Logic Layerの参照でDAOを切替える
- * ・jdbc native - bookstore.logic.wrapper.xxxxLogicWrapper
- * ・eclipselink - bookstore.logic.jpa.xxxxLogicWrapper
+ * Service Layerの参照でDAOを切替える
+ * ・jdbc native - bookstore.service.wrapper.xxxxServiceWrapper
+ * ・eclipselink - bookstore.service.jpa.xxxxServiceWrapper
  */
 public class SearchServlet extends HttpServlet {
 
@@ -47,16 +47,16 @@ public class SearchServlet extends HttpServlet {
 		}
 		else {
 			try {
-				BookService bookLogic = new BookServiceWrapper();
+				BookService bookService = new BookServiceWrapper();
 				@SuppressWarnings("unchecked")
 				List<String> cart = (List<String>) httpSession.getAttribute("Cart");
-				List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(keyword);
+				List<String> foundBooks = bookService.retrieveBookISBNsByKeyword(keyword);
 	
 				if (foundBooks == null || foundBooks.isEmpty()) {
-					foundBooks = bookLogic.getAllBookISBNs();
+					foundBooks = bookService.getAllBookISBNs();
 					errors.add("productalart", "error.search.notfound");
 				}
-				List<VBook> vProductList = bookLogic.createVBookList(foundBooks, cart);
+				List<VBook> vProductList = bookService.createVBookList(foundBooks, cart);
 	
 				httpSession.setAttribute("ProductList", foundBooks);
 				httpSession.setAttribute("ProductListView", vProductList);

@@ -20,7 +20,7 @@ import bookstore.vbean.VBook;
 
 public class AddToCartAction extends Action {
 
-	private BookService bookLogic;
+	private BookService bookService;
 
 	@Override
 	public ActionForward execute(ActionMapping mapping
@@ -51,12 +51,12 @@ public class AddToCartAction extends Action {
 			selectedItems = Arrays.asList(atcafb.getSelecteditems());
 		}
 
-		List<String> newCart = bookLogic.createCart(productList, selectedItems, cart);
+		List<String> newCart = bookService.createCart(productList, selectedItems, cart);
 
 		httpSession.setAttribute("Cart", newCart);
 
-		List<String> productListAll = bookLogic.getAllBookISBNs();
-		List<VBook> vProductList = bookLogic.createVBookList(productListAll, newCart);
+		List<String> productListAll = bookService.getAllBookISBNs();
+		List<VBook> vProductList = bookService.createVBookList(productListAll, newCart);
 
 		httpSession.setAttribute("ProductList", productListAll);
 		httpSession.setAttribute("ProductListView", vProductList);
@@ -64,7 +64,7 @@ public class AddToCartAction extends Action {
 		return (mapping.findForward("Continue"));
 	}
 
-	public void setBookLogic(BookService bookLogic) {
-		this.bookLogic = bookLogic;
+	public void setBookService(BookService bookService) {
+		this.bookService = bookService;
 	}
 }

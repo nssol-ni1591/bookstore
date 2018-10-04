@@ -18,7 +18,7 @@ import bookstore.service.BookService;
 
 public class CheckoutAction extends Action {
 
-	private BookService bookLogic;
+	private BookService bookService;
 
 	@Override
 	public ActionForward execute(ActionMapping mapping
@@ -43,11 +43,11 @@ public class CheckoutAction extends Action {
 			return (mapping.findForward("illegalCheckout"));
 		}
 
-		httpSession.setAttribute("ItemsToBuy", bookLogic.createVCheckout(selectedItems));
+		httpSession.setAttribute("ItemsToBuy", bookService.createVCheckout(selectedItems));
 		return (mapping.findForward("ToCheck"));
 	}
 
-	public void setBookLogic(BookService bookLogic) {
-		this.bookLogic = bookLogic;
+	public void setBookService(BookService bookService) {
+		this.bookService = bookService;
 	}
 }

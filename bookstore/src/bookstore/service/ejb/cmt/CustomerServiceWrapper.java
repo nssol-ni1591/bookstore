@@ -20,7 +20,7 @@ import bookstore.dao.CustomerDAO;
 import bookstore.service.AbstractCustomerService;
 import bookstore.service.CustomerService;
 
-@Stateless(name="CustomerLogicCmtWrapper")
+@Stateless(name="CustomerServiceCmtWrapper")
 @LocalBean
 @Local(CustomerService.class)
 @TransactionManagement(TransactionManagementType.CONTAINER)

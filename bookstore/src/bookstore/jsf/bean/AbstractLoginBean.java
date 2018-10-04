@@ -20,7 +20,7 @@ public abstract class AbstractLoginBean {
 	private String uid;
 	private String passwd;
 
-	protected abstract CustomerService getCustomerLogic();
+	protected abstract CustomerService getCustomerService();
 	protected abstract String getLoginPage();
 	protected abstract String getBookStorePage();
 
@@ -46,9 +46,9 @@ public abstract class AbstractLoginBean {
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		HttpSession session = (HttpSession) externalContext.getSession(true);
 
-		CustomerService customerLogic = getCustomerLogic();
+		CustomerService customerService = getCustomerService();
 		// password match
-		if (!customerLogic.isPasswordMatched(getUid(), getPasswd())) {
+		if (!customerService.isPasswordMatched(getUid(), getPasswd())) {
 			// Account mismatched
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR
 					, Messages.getMessage("error.login.pwmismatch")

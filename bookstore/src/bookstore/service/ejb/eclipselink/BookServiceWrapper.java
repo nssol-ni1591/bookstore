@@ -16,7 +16,7 @@ import bookstore.dao.BookDAO;
 import bookstore.service.AbstractBookService;
 import bookstore.service.BookService;
 
-@Stateless(name="BookLogicEclipseLinkWrapper")
+@Stateless(name="BookServiceEclipseLinkWrapper")
 @LocalBean
 @Local(BookService.class)
 @TransactionManagement(TransactionManagementType.CONTAINER)

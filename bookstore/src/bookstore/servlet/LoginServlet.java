@@ -21,9 +21,9 @@ import bookstore.util.Messages;
 import bookstore.vbean.VBook;
 
 /*
- * Logic Layerの参照でDAOを切替える
- * ・jdbc native - bookstore.logic.wrapper.xxxxLogicWrapper
- * ・eclipselink - bookstore.logic.jpa.xxxxLogicWrapper
+ * Service Layerの参照でDAOを切替える
+ * ・jdbc native - bookstore.service.wrapper.xxxxServiceWrapper
+ * ・eclipselink - bookstore.service.jpa.xxxxServiceWrapper
  */
 public class LoginServlet extends HttpServlet {
 
@@ -41,20 +41,20 @@ public class LoginServlet extends HttpServlet {
 		String account = req.getParameter("account");
 		String passwd = req.getParameter("passwd");
 
-		CustomerService customerLogic = new CustomerServiceWrapper();
+		CustomerService customerService = new CustomerServiceWrapper();
 		Messages errors = new Messages(req);
 
 		RequestDispatcher dispatcher;
 
 		try {
 		// check password
-		if (!customerLogic.isPasswordMatched(account, passwd)) {
+		if (!customerService.isPasswordMatched(account, passwd)) {
 			// Account mismatched
 			errors.add("illegallogin", "error.login.pwmismatch");
 			dispatcher = req.getRequestDispatcher("Login.jsp");
 		}
 		else {
-			BookService bookLogic = new BookServiceWrapper();
+			BookService bookService = new BookServiceWrapper();
 
 			// getSession()
 			HttpSession httpSession = req.getSession(false);
@@ -66,8 +66,8 @@ public class LoginServlet extends HttpServlet {
 
 			httpSession.setAttribute("Login", account);
 
-			List<String> productListAll = bookLogic.getAllBookISBNs();
-			List<VBook> vProductList = bookLogic.createVBookList(productListAll, null);
+			List<String> productListAll = bookService.getAllBookISBNs();
+			List<VBook> vProductList = bookService.createVBookList(productListAll, null);
 
 			httpSession.setAttribute("ProductList", productListAll);
 			httpSession.setAttribute("ProductListView", vProductList);

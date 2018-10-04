@@ -35,7 +35,7 @@ public abstract class AbstractBookStoreBean implements Serializable {
 	private List<String> selectedItems;
 
 	protected abstract String getBookStorePage();
-	protected abstract BookService getBookLogic();
+	protected abstract BookService getBookService();
 
 	public AbstractBookStoreBean() {
 		//log.log(Level.INFO, "this={0}", this)
@@ -68,13 +68,13 @@ public abstract class AbstractBookStoreBean implements Serializable {
 					, new Object[] { productListView.size(), productListView });
 			return productListView;
 		}
-		BookService bookLogic = getBookLogic();
+		BookService bookService = getBookService();
 
 		// LoginBeanÇ©ÇÁëJà⁄ÇµÇƒÇ´ÇΩèÍçáÇÕproductListViewÇ™nullÇ…Ç»ÇÈ
 		if (productList == null || productList.isEmpty()) {
-			productList = bookLogic.getAllBookISBNs();
+			productList = bookService.getAllBookISBNs();
 		}
-		productListView = bookLogic.createVBookList(productList, null);
+		productListView = bookService.createVBookList(productList, null);
 		log.log(Level.FINE, "(2): bookList.size={0}, bookList={1}"
 				, new Object[] { productListView.size(), productListView });
 		return productListView;
@@ -91,10 +91,10 @@ public abstract class AbstractBookStoreBean implements Serializable {
 
 		log.log(Level.FINE, "keyword={0}", keyword);
 
-		BookService bookLogic = getBookLogic();
-		List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(keyword);
+		BookService bookService = getBookService();
+		List<String> foundBooks = bookService.retrieveBookISBNsByKeyword(keyword);
 		if (foundBooks == null || foundBooks.isEmpty()) {
-			foundBooks = bookLogic.getAllBookISBNs();
+			foundBooks = bookService.getAllBookISBNs();
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR
 					, Messages.getMessage("error.search.notfound")
 					, "[error.search.notfound]Ç≈Ç∑ÅB");
@@ -106,7 +106,7 @@ public abstract class AbstractBookStoreBean implements Serializable {
 		log.log(Level.INFO, "cart.size={0}, cart={1}"
 				, new Object[] { cart == null ? 0 : cart.size(), cart });
 
-		productListView = bookLogic.createVBookList(foundBooks, cart);
+		productListView = bookService.createVBookList(foundBooks, cart);
 		log.log(Level.INFO, "productListView.size={0}, productListView={1}"
 				, new Object[] { productListView == null ? 0 : productListView.size(), productListView });
 
@@ -150,8 +150,8 @@ public abstract class AbstractBookStoreBean implements Serializable {
 			return getBookStorePage();
 		}
 
-		BookService bookLogic = getBookLogic();
-		List<String> newCart = bookLogic.createCart(productList, selectedItems, cart);
+		BookService bookService = getBookService();
+		List<String> newCart = bookService.createCart(productList, selectedItems, cart);
 		session.setAttribute("Cart", newCart);
 		log.log(Level.INFO, "newCart.size={0}, newCart={1}", new Object[] { newCart.size(),  newCart });
 
@@ -163,8 +163,8 @@ public abstract class AbstractBookStoreBean implements Serializable {
 			fc.addMessage(null, fm);
 		}
 
-		productList = bookLogic.getAllBookISBNs();
-		productListView = bookLogic.createVBookList(productList, newCart);
+		productList = bookService.getAllBookISBNs();
+		productListView = bookService.createVBookList(productList, newCart);
 
 		productListView.stream().forEach(book ->
 			log.log(Level.FINEST, "isbn={0}, title={1}, selected={2}"
@@ -183,8 +183,8 @@ public abstract class AbstractBookStoreBean implements Serializable {
 			return SESSION_ERROR;
 		}
 
-		//productList = bookLogic.getAllBookISBNs()
-		//productListView = bookLogic.createVBookList(productList, null)
+		//productList = bookService.getAllBookISBNs()
+		//productListView = bookService.createVBookList(productList, null)
 		productList = null;
 		productListView = null;
 

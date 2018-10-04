@@ -22,7 +22,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
-@Stateless(name="OrderLogicBmtWrapper")
+@Stateless(name="OrderServiceBmtWrapper")
 @LocalBean
 @Local(OrderService.class)
 @TransactionManagement(TransactionManagementType.BEAN)

@@ -27,9 +27,9 @@ public abstract class AbstractOrderBean {
 
 	@Inject private Logger log;
 
-	protected abstract BookService getBookLogic();
-	protected abstract CustomerService getCustomerLogic();
-	protected abstract OrderService getOrderLogic();
+	protected abstract BookService getBookService();
+	protected abstract CustomerService getCustomerService();
+	protected abstract OrderService getOrderService();
 
 	protected abstract String getBookStorePage();
 	protected abstract String getCheckPage();
@@ -70,17 +70,17 @@ public abstract class AbstractOrderBean {
 			return SESSION_ERROR;
 		}
 
-		BookService bookLogic = getBookLogic();
-		CustomerService customerLogic = getCustomerLogic();
-		OrderService orderLogic = getOrderLogic();
+		BookService bookService = getBookService();
+		CustomerService customerService = getCustomerService();
+		OrderService orderService = getOrderService();
 
 		@SuppressWarnings("unchecked")
 		List<String> cart = (List<String>) session.getAttribute("Cart");
 
 		try {
-			orderLogic.orderBooks(uid, cart);
+			orderService.orderBooks(uid, cart);
 	
-			vcustomer = customerLogic.createVCustomer(uid);
+			vcustomer = customerService.createVCustomer(uid);
 	
 			session.setAttribute("Cart", null);
 		}
@@ -96,7 +96,7 @@ public abstract class AbstractOrderBean {
 		}
 		finally {
 			try {
-				itemsToBuy = bookLogic.createVCheckout(cart);
+				itemsToBuy = bookService.createVCheckout(cart);
 			}
 			catch (SQLException e) {
 				// nothing to do
@@ -126,17 +126,17 @@ public abstract class AbstractOrderBean {
 			return getBookStorePage();
 		}
 
-		BookService bookLogic = getBookLogic();
-		itemsToBuy = bookLogic.createVCheckout(cart);
+		BookService bookService = getBookService();
+		itemsToBuy = bookService.createVCheckout(cart);
 		return getCheckPage();
 	}
 
 	public String listOrders() throws SQLException {
 		log.log(Level.INFO, THIS_0, this);
 
-		OrderService orderLogic = getOrderLogic();
-		orders = orderLogic.listOrders(null);
-		details = orderLogic.listOrderDetails(null);
+		OrderService orderService = getOrderService();
+		orders = orderService.listOrders(null);
+		details = orderService.listOrderDetails(null);
 
 		return getOrderListPage();
 	}

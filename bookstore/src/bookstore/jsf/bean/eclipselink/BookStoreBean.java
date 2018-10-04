@@ -16,7 +16,7 @@ public class BookStoreBean extends AbstractBookStoreBean implements Serializable
 
 	private static final long serialVersionUID = 1L;
 
-	@Inject @UsedWeld private BookService bookLogic;
+	@Inject @UsedWeld private BookService bookService;
 
 	public BookStoreBean() {
 		super();
@@ -25,8 +25,8 @@ public class BookStoreBean extends AbstractBookStoreBean implements Serializable
 	protected String getBookStorePage() {
 		return "BookStore";
 	}
-	protected BookService getBookLogic() {
-		return bookLogic;
+	protected BookService getBookService() {
+		return bookService;
 	}
 	
 }

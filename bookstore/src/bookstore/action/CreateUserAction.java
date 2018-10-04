@@ -17,7 +17,7 @@ public class CreateUserAction extends Action {
 
 	private static final String ILLEGAL_CREATE_USER = "illegalCreateUser";
 
-	private CustomerService customerLogic;
+	private CustomerService customerService;
 
 	@Override
 	public ActionForward execute(ActionMapping mapping
@@ -42,7 +42,7 @@ public class CreateUserAction extends Action {
 			return (mapping.findForward(ILLEGAL_CREATE_USER));
 		}
 
-		if (customerLogic.isAlreadyExsited(account)) {
+		if (customerService.isAlreadyExsited(account)) {
 			// user has already exsited
 			errors = new ActionMessages();
 			errors.add(ILLEGAL_CREATE_USER, new ActionMessage("error.createuser.useralreadyexist"));
@@ -50,7 +50,7 @@ public class CreateUserAction extends Action {
 			return (mapping.findForward(ILLEGAL_CREATE_USER));
 		}
 
-		if (!customerLogic.createCustomer(account, passwd, cuafb.getName(), cuafb.getEmail())) {
+		if (!customerService.createCustomer(account, passwd, cuafb.getName(), cuafb.getEmail())) {
 			// user was not created
 			errors = new ActionMessages();
 			errors.add(ILLEGAL_CREATE_USER, new ActionMessage("error.createuser.cannotcreate"));
@@ -61,7 +61,7 @@ public class CreateUserAction extends Action {
 		return (mapping.findForward("UserCreated"));
 	}
 
-	public void setCustomerLogic(CustomerService inCustomerLogic) {
-		this.customerLogic = inCustomerLogic;
+	public void setCustomerService(CustomerService inCustomerService) {
+		this.customerService = inCustomerService;
 	}
 }

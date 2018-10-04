@@ -18,7 +18,7 @@ import bookstore.dao.CustomerDAO;
 import bookstore.service.AbstractCustomerService;
 import bookstore.service.CustomerService;
 
-@Stateless(name="CustomerLogicBmtWrapper")
+@Stateless(name="CustomerServiceBmtWrapper")
 @LocalBean
 @Local(CustomerService.class)
 @TransactionManagement(TransactionManagementType.BEAN)

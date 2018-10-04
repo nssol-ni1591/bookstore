@@ -24,7 +24,7 @@ import bookstore.vbean.VOrder;
  * このクラスでは敢えて@Autowairedを使用せず. DIするためのsetterを実装する
  */
 @UsedSpring
-@Component("LogicOrderImplBId2")
+@Component("ServiceOrderImplBId2")
 public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 
 	@Log private static Logger log;

@@ -20,7 +20,7 @@ import bookstore.vbean.VBook;
 
 public class SearchAction extends Action {
 
-	private BookService bookLogic;
+	private BookService bookService;
 
 	@Override
 	public ActionForward execute(ActionMapping mapping
@@ -40,18 +40,18 @@ public class SearchAction extends Action {
 
 		SearchActionFormBean safb = (SearchActionFormBean) form;
 
-		List<String> foundBooks = bookLogic.retrieveBookISBNsByKeyword(safb.getKeyword());
+		List<String> foundBooks = bookService.retrieveBookISBNsByKeyword(safb.getKeyword());
 
 		if (foundBooks == null || foundBooks.isEmpty()) {
 
-			foundBooks = bookLogic.getAllBookISBNs();
+			foundBooks = bookService.getAllBookISBNs();
 
 			errors = new ActionMessages();
 			errors.add("productalart", new ActionMessage("error.search.notfound"));
 			saveMessages(req, errors);
 		}
 
-		List<VBook> vProductList = bookLogic.createVBookList(foundBooks, cart);
+		List<VBook> vProductList = bookService.createVBookList(foundBooks, cart);
 
 		httpSession.setAttribute("ProductList", foundBooks);
 		httpSession.setAttribute("ProductListView", vProductList);
@@ -59,7 +59,7 @@ public class SearchAction extends Action {
 		return (mapping.findForward("SearchSuccess"));
 	}
 
-	public void setBookLogic(BookService bookLogic) {
-		this.bookLogic = bookLogic;
+	public void setBookService(BookService bookService) {
+		this.bookService = bookService;
 	}
 }

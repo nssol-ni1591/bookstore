@@ -53,7 +53,7 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 	}
 	@Override
 	protected EntityManager getManager() {
-		// emは更新TxのみLogic層で生成することにする
+		// emは更新TxのみService層で生成することにする
 		// よって、更新Tx以外ではemの値はnullとなるのでDAO層で生成される
 		return em;
 	}

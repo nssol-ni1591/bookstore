@@ -19,7 +19,7 @@
 
 	<!-- spring DI対象のパッケージを指定する -->
 	<context:component-scan base-package="bookstore.dao.hibernate.*" />
-	<context:component-scan base-package="bookstore.logic.spring.*" />
+	<context:component-scan base-package="bookstore.service.spring.*" />
 
 	<bean id="logger" class="bookstore.util.LogInjection" />
 
@@ -103,7 +103,7 @@
 
 
 	<!-- DAO Interface Layer -->
-	<!-- Logic層でトランザクションを開始しているのでDAOにトランザクション定義が必要か？ ⇒必要ない -->
+	<!-- Service層でトランザクションを開始しているのでDAOにトランザクション定義が必要か？ ⇒必要ない -->
 	<!-- targetの参照先はbean定義ファイル内で完結してしないといけない。ようだ -->
 	<bean id="BookDAOBId" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
@@ -157,7 +157,7 @@
 	</bean>
 
 	
-	<!-- Logicでトランザクションを開始するので、DAOでのトランザクションは無効にする
+	<!-- Serviceでトランザクションを開始するので、DAOでのトランザクションは無効にする
 	<bean id="BookDAOBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="target">
@@ -272,14 +272,14 @@
 	<bean id="OrderDetailDAOImplBId2" class="bookstore.dao.jdbctemplate.OrderDetailDAOImpl">
 	</bean>
 
-	<!-- Logic Interface Layer -->
-	<bean id="LogicBookBId"
+	<!-- Service Interface Layer -->
+	<bean id="ServiceBookBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
 			<ref local="transactionManager" />
 		</property>
 		<property name="target">
-			<ref local="LogicBookImplBId" />
+			<ref local="ServiceBookImplBId" />
 		</property>
 		<property name="transactionAttributes">
 			<props>
@@ -290,13 +290,13 @@
 		</property>
 	</bean>
 
-	<bean id="LogicCustomerBId"
+	<bean id="ServiceCustomerBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
 			<ref local="transactionManager" />
 		</property>
 		<property name="target">
-			<ref local="LogicCustomerImplBId" />
+			<ref local="ServiceCustomerImplBId" />
 		</property>
 		<property name="transactionAttributes">
 			<props>
@@ -307,19 +307,19 @@
 		</property>
 	</bean>
 
-	<!-- LogicOrderImplBIdのみ、@Transactionalを使うことにしてみた -->
-	<bean id="LogicOrderBId" class="org.springframework.aop.framework.ProxyFactoryBean">
+	<!-- ServiceOrderImplBIdのみ、@Transactionalを使うことにしてみた -->
+	<bean id="ServiceOrderBId" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
-			<ref local="LogicOrderImplBId" />
+			<ref local="ServiceOrderImplBId" />
 		</property>
 	</bean>
- 	<bean id="LogicOrderBId2" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+ 	<bean id="ServiceOrderBId2" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
  		<!-- id=transactionManager以外のtransactionManagerを使用したい場合は明示する -->
 		<property name="transactionManager">
 			<ref local="transactionManager2" />
 		</property>
 		<property name="target">
-			<ref local="LogicOrderImplBId2" />
+			<ref local="ServiceOrderImplBId2" />
 		</property>
 		<!-- TransactionProxyFactoryBeanを使用する場合は
 			transactionAttributesの定義が必須。これにより@Transactionalでの定義は無効
@@ -334,12 +334,12 @@
 	</bean>
 	<!-- JtaTransactionManagerに変更しただけ -->
 	<!-- 
-	<bean id="LogicOrderBId3" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="ServiceOrderBId3" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
 			<ref local="transactionManager3" />
 		</property>
 		<property name="target">
-			<ref local="LogicOrderImplBId3" />
+			<ref local="ServiceOrderImplBId3" />
 		</property>
 		<property name="transactionAttributes">
 			<props>
@@ -355,17 +355,17 @@
 			JtaTransactionManager => org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource
 			DataSourceTransactionManager => transactionmanager2の実装クラス
 	 -->
-	<bean id="LogicOrderBId3" class="org.springframework.aop.framework.ProxyFactoryBean">
+	<bean id="ServiceOrderBId3" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
-			<ref local="LogicOrderImplBId3" />
+			<ref local="ServiceOrderImplBId3" />
 		</property>
 	</bean>
  
-	<!-- Logic Implement Layer -->
+	<!-- Service Implement Layer -->
 	<!-- autowired設定によりコメントアウト化ができる部分：
 		クラスに@Autowiredが指定されているのでapplicationContext.xmlでの指定は不要
 	-->
-	<bean id="LogicCustomerImplBId" class="bookstore.logic.spring.CustomerLogicWrapper">
+	<bean id="ServiceCustomerImplBId" class="bookstore.service.spring.CustomerServiceWrapper">
 	<!-- 
 		<property name="customerdao">
 			<ref local="CustomerDAOBId" />
@@ -373,7 +373,7 @@
 	 -->
 	</bean>
 
-	<bean id="LogicBookImplBId" class="bookstore.logic.spring.BookLogicWrapper">
+	<bean id="ServiceBookImplBId" class="bookstore.service.spring.BookServiceWrapper">
 	<!-- 
 		<property name="bookdao">
 			<ref local="BookDAOBId" />
@@ -381,7 +381,7 @@
 	 -->
 	</bean>
 
-	<bean id="LogicOrderImplBId" class="bookstore.logic.spring.OrderLogicWrapper">
+	<bean id="ServiceOrderImplBId" class="bookstore.service.spring.OrderServiceWrapper">
 	<!-- 
 		<property name="bookdao">
 			<ref local="BookDAOBId" />
@@ -397,7 +397,7 @@
 		</property>
 	 -->
 	</bean>
-	<bean id="LogicOrderImplBId2" class="bookstore.logic.spring.dstx.OrderLogicWrapper">
+	<bean id="ServiceOrderImplBId2" class="bookstore.service.spring.dstx.OrderServiceWrapper">
 		<property name="bookdao">
 			<ref local="BookDAOBId2" />
 		</property>
@@ -414,67 +414,67 @@
 			<ref local="jdbcTemplate2" />
 		</property>
 	</bean>
-	<bean id="LogicOrderImplBId3" class="bookstore.logic.spring.jtatx.OrderLogicWrapper">
+	<bean id="ServiceOrderImplBId3" class="bookstore.service.spring.jtatx.OrderServiceWrapper">
 	</bean>
 
 	<!-- Struts Action Layer -->
 	<!-- この層ではDIをxmlファイルの定義で行う -->
 	<!-- DI先は、当然Interfaceのはず -->
 	<bean name="/CreateUser" class="bookstore.action.CreateUserAction">
-		<property name="customerLogic">
-			<ref local="LogicCustomerBId" />
+		<property name="customerService">
+			<ref local="ServiceCustomerBId" />
 		</property>
 	</bean>
 
 	<bean name="/Login" class="bookstore.action.LoginAction">
-		<property name="customerLogic">
-			<ref local="LogicCustomerBId" />
+		<property name="customerService">
+			<ref local="ServiceCustomerBId" />
 		</property>
-		<property name="bookLogic">
-			<ref local="LogicBookBId" />
+		<property name="bookService">
+			<ref local="ServiceBookBId" />
 		</property>
 	</bean>
 
 	<bean name="/AddToCartAction" class="bookstore.action.AddToCartAction">
-		<property name="bookLogic">
-			<ref local="LogicBookBId" />
+		<property name="bookService">
+			<ref local="ServiceBookBId" />
 		</property>
 	</bean>
 
 	<bean name="/CheckoutAction" class="bookstore.action.CheckoutAction">
-		<property name="bookLogic">
-			<ref local="LogicBookBId" />
+		<property name="bookService">
+			<ref local="ServiceBookBId" />
 		</property>
 	</bean>
 
 	<bean name="/OrderAction" class="bookstore.action.OrderAction">
-		<property name="orderLogic">
-			<ref local="LogicOrderBId" />
+		<property name="orderService">
+			<ref local="ServiceOrderBId" />
 		</property>
-		<property name="customerLogic">
-			<ref local="LogicCustomerBId" />
+		<property name="customerService">
+			<ref local="ServiceCustomerBId" />
 		</property>
 	</bean>
 	<bean name="/OrderAction2" class="bookstore.action.OrderAction">
-		<property name="orderLogic">
-			<ref local="LogicOrderBId2" />
+		<property name="orderService">
+			<ref local="ServiceOrderBId2" />
 		</property>
-		<property name="customerLogic">
-			<ref local="LogicCustomerBId" />
+		<property name="customerService">
+			<ref local="ServiceCustomerBId" />
 		</property>
 	</bean>
 	<bean name="/OrderAction3" class="bookstore.action.OrderAction">
-		<property name="orderLogic">
-			<ref local="LogicOrderBId3" />
+		<property name="orderService">
+			<ref local="ServiceOrderBId3" />
 		</property>
-		<property name="customerLogic">
-			<ref local="LogicCustomerBId" />
+		<property name="customerService">
+			<ref local="ServiceCustomerBId" />
 		</property>
 	</bean>
 
 	<bean name="/SearchAction" class="bookstore.action.SearchAction">
-		<property name="bookLogic">
-			<ref local="LogicBookBId" />
+		<property name="bookService">
+			<ref local="ServiceBookBId" />
 		</property>
 	</bean>
 
@@ -485,11 +485,11 @@
 	<!-- ServletはSpringで生成されないため、Servletにautowiredを使用するのは無理 -->
 	<!-- 
 	<bean name="/bookstore/LoginServlet" class="bookstore.servlet.LoginServlet">
-		<property name="customerLogic">
-			<ref local="LogicCustomerImplBId" />
+		<property name="customerService">
+			<ref local="ServiceCustomerImplBId" />
 		</property>
-		<property name="bookLogic">
-			<ref local="LogicBookImplBId" />
+		<property name="bookService">
+			<ref local="ServiceBookImplBId" />
 		</property>
 	</bean>
 	 -->

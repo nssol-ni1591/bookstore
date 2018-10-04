@@ -16,7 +16,7 @@ public class BookStoreBean2 extends AbstractBookStoreBean implements Serializabl
 
 	private static final long serialVersionUID = 1L;
 
-	@EJB private BookServiceWrapper bookLogic;
+	@EJB private BookServiceWrapper bookService;
 
 	public BookStoreBean2() {
 		super();
@@ -25,8 +25,8 @@ public class BookStoreBean2 extends AbstractBookStoreBean implements Serializabl
 	protected String getBookStorePage() {
 		return "BookStore2";
 	}
-	protected BookService getBookLogic() {
-		return bookLogic;
+	protected BookService getBookService() {
+		return bookService;
 	}
 
 }

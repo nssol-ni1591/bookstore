@@ -113,14 +113,14 @@
 	</bean>
 	
 	
-	<!-- Logic Layer -->
-	<bean id="LogicCustomerBId"
+	<!-- Service Layer -->
+	<bean id="ServiceCustomerBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
 			<ref local="transactionManager" />
 		</property>
 		<property name="target">
-			<ref local="LogicCustomerImplBId" />
+			<ref local="ServiceCustomerImplBId" />
 		</property>
 		<property name="transactionAttributes">
 			<props>
@@ -131,13 +131,13 @@
 		</property>
 	</bean>
 
-	<bean id="LogicBookBId"
+	<bean id="ServiceBookBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
 			<ref local="transactionManager" />
 		</property>
 		<property name="target">
-			<ref local="LogicBookImplBId" />
+			<ref local="ServiceBookImplBId" />
 		</property>
 		<property name="transactionAttributes">
 			<props>
@@ -148,13 +148,13 @@
 		</property>
 	</bean>
 
-	<bean id="LogicOrderBId"
+	<bean id="ServiceOrderBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
 			<ref local="transactionManager" />
 		</property>
 		<property name="target">
-			<ref local="LogicOrderImplBId" />
+			<ref local="ServiceOrderImplBId" />
 		</property>
 		<property name="transactionAttributes">
 			<props>
@@ -164,20 +164,20 @@
 	</bean>
 	
 
-	<!-- Logic Layer Implement -->
-	<bean id="LogicCustomerImplBId" class="bookstore.logic.CustomerLogicImpl">
+	<!-- Service Layer Implement -->
+	<bean id="ServiceCustomerImplBId" class="bookstore.service.CustomerServiceImpl">
 		<property name="customerdao">
 			<ref local="CustomerDAOBId" />
 		</property>
 	</bean>
 
-	<bean id="LogicBookImplBId" class="bookstore.logic.BookLogicImpl">
+	<bean id="ServiceBookImplBId" class="bookstore.service.BookServiceImpl">
 		<property name="bookdao">
 			<ref local="BookDAOBId" />
 		</property>
 	</bean>
 
-	<bean id="LogicOrderImplBId" class="bookstore.logic.OrderLogicImpl">
+	<bean id="ServiceOrderImplBId" class="bookstore.service.OrderServiceImpl">
 		<property name="bookdao">
 			<ref local="BookDAOBId" />
 		</property>
@@ -195,44 +195,44 @@
 
 	<!-- Struts Action -->
 	<bean name="/CreateUser" class="bookstore.action.CreateUserAction">
-		<property name="customerLogic">
-			<ref local="LogicCustomerImplBId" />
+		<property name="customerService">
+			<ref local="ServiceCustomerImplBId" />
 		</property>
 	</bean>
 
 	<bean name="/Login" class="bookstore.action.LoginAction">
-		<property name="customerLogic">
-			<ref local="LogicCustomerImplBId" />
+		<property name="customerService">
+			<ref local="ServiceCustomerImplBId" />
 		</property>
-		<property name="bookLogic">
-			<ref local="LogicBookImplBId" />
+		<property name="bookService">
+			<ref local="ServiceBookImplBId" />
 		</property>
 	</bean>
 
 	<bean name="/AddToCartAction" class="bookstore.action.AddToCartAction">
-		<property name="bookLogic">
-			<ref local="LogicBookImplBId" />
+		<property name="bookService">
+			<ref local="ServiceBookImplBId" />
 		</property>
 	</bean>
 
 	<bean name="/CheckoutAction" class="bookstore.action.CheckoutAction">
-		<property name="bookLogic">
-			<ref local="LogicBookImplBId" />
+		<property name="bookService">
+			<ref local="ServiceBookImplBId" />
 		</property>
 	</bean>
 
 	<bean name="/OrderAction" class="bookstore.action.OrderAction">
-		<property name="orderLogic">
-			<ref local="LogicOrderImplBId" />
+		<property name="orderService">
+			<ref local="ServiceOrderImplBId" />
 		</property>
-		<property name="customerLogic">
-			<ref local="LogicCustomerImplBId" />
+		<property name="customerService">
+			<ref local="ServiceCustomerImplBId" />
 		</property>
 	</bean>
 
 	<bean name="/SearchAction" class="bookstore.action.SearchAction">
-		<property name="bookLogic">
-			<ref local="LogicBookImplBId" />
+		<property name="bookService">
+			<ref local="ServiceBookImplBId" />
 		</property>
 	</bean>
 

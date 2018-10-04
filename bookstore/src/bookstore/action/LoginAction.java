@@ -21,8 +21,8 @@ import bookstore.vbean.VBook;
 
 public class LoginAction extends Action {
 
-	private CustomerService customerLogic;
-	private BookService bookLogic;
+	private CustomerService customerService;
+	private BookService bookService;
 
 	@Override
 	public ActionForward execute(ActionMapping mapping,
@@ -33,7 +33,7 @@ public class LoginAction extends Action {
 		LoginActionFormBean lafb = (LoginActionFormBean) form;
 
 		// check password
-		if (!customerLogic.isPasswordMatched(lafb.getAccount(), lafb.getPasswd())) {
+		if (!customerService.isPasswordMatched(lafb.getAccount(), lafb.getPasswd())) {
 			// Account Mismached
 			ActionMessages errors = new ActionMessages();
 			errors.add("illegallogin", new ActionMessage("error.login.pwmismatch"));
@@ -51,8 +51,8 @@ public class LoginAction extends Action {
 
 		httpSession.setAttribute("Login", lafb.getAccount());
 
-		List<String> productListAll = bookLogic.getAllBookISBNs();
-		List<VBook> vProductList = bookLogic.createVBookList(productListAll, null);
+		List<String> productListAll = bookService.getAllBookISBNs();
+		List<VBook> vProductList = bookService.createVBookList(productListAll, null);
 
 		httpSession.setAttribute("ProductList", productListAll);
 		httpSession.setAttribute("ProductListView", vProductList);
@@ -60,11 +60,11 @@ public class LoginAction extends Action {
 		return (mapping.findForward("LoginSuccess"));
 	}
 
-	public void setCustomerLogic(CustomerService customerLogic) {
-		this.customerLogic = customerLogic;
+	public void setCustomerService(CustomerService customerService) {
+		this.customerService = customerService;
 	}
 
-	public void setBookLogic(BookService bookLogic) {
-		this.bookLogic = bookLogic;
+	public void setBookService(BookService bookService) {
+		this.bookService = bookService;
 	}
 }

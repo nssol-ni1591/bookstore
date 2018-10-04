@@ -13,18 +13,18 @@ import bookstore.service.OrderService;
 @RequestScoped
 public class OrderBean4 extends AbstractOrderBean {
 
-	@EJB(mappedName="BookLogicBmtWrapper") private BookService bookLogic;
-	@EJB(mappedName="CustomerLogicBmtWrapper") private CustomerService customerLogic;
-	@EJB(mappedName="OrderLogicBmtWrapper") private OrderService orderLogic;
+	@EJB(mappedName="BookServiceBmtWrapper") private BookService bookService;
+	@EJB(mappedName="CustomerServiceBmtWrapper") private CustomerService customerService;
+	@EJB(mappedName="OrderServiceBmtWrapper") private OrderService orderService;
 
-	protected BookService getBookLogic() {
-		return bookLogic;
+	protected BookService getBookService() {
+		return bookService;
 	}
-	protected CustomerService getCustomerLogic() {
-		return customerLogic;
+	protected CustomerService getCustomerService() {
+		return customerService;
 	}
-	protected OrderService getOrderLogic() {
-		return orderLogic;
+	protected OrderService getOrderService() {
+		return orderService;
 	}
 
 	protected String getBookStorePage() {

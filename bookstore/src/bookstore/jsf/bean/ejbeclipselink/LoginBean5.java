@@ -11,15 +11,15 @@ import bookstore.service.CustomerService;
 @RequestScoped
 public class LoginBean5 extends AbstractLoginBean {
 
-	@EJB(mappedName="CustomerLogicEclipseLinkWrapper") private CustomerService customerLogic;
+	@EJB(mappedName="CustomerServiceEclipseLinkWrapper") private CustomerService customerService;
 
 	public LoginBean5() {
 		super();
 	}
 
 	@Override
-	protected CustomerService getCustomerLogic() {
-		return customerLogic;
+	protected CustomerService getCustomerService() {
+		return customerService;
 	}
 
 	protected String getLoginPage() {

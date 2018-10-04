@@ -16,7 +16,7 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-@Stateless(name="BookLogicCmtWrapper")
+@Stateless(name="BookServiceCmtWrapper")
 @LocalBean
 @Local(BookService.class)
 @TransactionManagement(TransactionManagementType.CONTAINER)

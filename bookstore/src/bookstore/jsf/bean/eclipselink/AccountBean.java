@@ -16,7 +16,7 @@ public class AccountBean {
 
 	private static final String CREATE_ACCOUNT = "CreateAccount";
 
-	@Inject @UsedWeld private CustomerService customerLogic;
+	@Inject @UsedWeld private CustomerService customerService;
 
 	private String account;
 	private String name;
@@ -83,7 +83,7 @@ public class AccountBean {
 			fc.addMessage(null, fm);
 			return CREATE_ACCOUNT;
 		}
-		if (customerLogic.isAlreadyExsited(account)) {
+		if (customerService.isAlreadyExsited(account)) {
 			// user has already exsited
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR
 					, Messages.getMessage("error.createuser.useralreadyexist")
@@ -92,7 +92,7 @@ public class AccountBean {
 			fc.addMessage(null, fm);
 			return CREATE_ACCOUNT;
 		}
-		if (!customerLogic.createCustomer(account, passwd, getName(), getEmail())) {
+		if (!customerService.createCustomer(account, passwd, getName(), getEmail())) {
 			// user was not created
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR
 					, Messages.getMessage("error.createuser.cannotcreate")
