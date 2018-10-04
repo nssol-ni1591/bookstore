@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
 import bookstore.annotation.Log;
@@ -44,7 +44,7 @@ public class BookDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport
 
 		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		@SuppressWarnings("unchecked")
-		List<TBook> booksList = ht
+		List<TBook> booksList = (List<TBook>) ht
 				.find("from TBook book where book.author like ?" + "or book.title like ? or book.publisher like ?",
 						keywords);
 		return booksList;

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
 import bookstore.annotation.Log;
@@ -43,7 +43,7 @@ public class OrderDAOImpl<T extends SessionFactory> /*extends HibernateDaoSuppor
 		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		if (orderIdList == null) {
 			@SuppressWarnings("unchecked")
-			List<TOrder> list = ht.find("from TOrder order");
+			List<TOrder> list = (List<TOrder>) ht.find("from TOrder order");
 			return list;
 		}
 		else {

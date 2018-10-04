@@ -66,7 +66,14 @@ public abstract class AbstractOrderDAOImpl<T extends EntityManager> implements O
 		order.setTCustomer(inCustomer);
 		em.persist(order);
 
-		Query q = em.createQuery("select o from TOrder o where o.id = (select max(o2.id) from TOrder o2 where o2.tCustomer = :CUSTID)");
+		String hql;
+		if (em.getClass().getName().contains("hibernate")) {
+			hql = "select o from TOrder o where o.id = (select max(o2.id) from TOrder o2 where o2.TCustomer = :CUSTID)";
+		}
+		else {
+			hql = "select o from TOrder o where o.id = (select max(o2.id) from TOrder o2 where o2.tCustomer = :CUSTID)";
+		}
+		Query q = em.createQuery(hql);
 		q.setParameter("CUSTID", inCustomer);
 		order = (TOrder) q.getSingleResult();
 

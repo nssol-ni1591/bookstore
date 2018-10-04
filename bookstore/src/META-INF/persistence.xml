@@ -43,9 +43,12 @@ DAOの実装はEntityManagerで隠蔽されるので、どの実装クラスを�
 		<!-- お好きなJPA実装クラスを選択する
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
-		<provider>org.hibernate.ejb.HibernatePersistence</provider>	<= NG
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		※Hibernateを使用するためにはv4.3系までアップデートする必要があり
+		=>hibernate-4.3系を使用するためにはspringも4系にアップデートする
+		=>Springで使用するいくつかのクラスもorg.spring...hibernate3からhibernate4に修正する
 		 -->
-		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 
 		<jta-data-source>jdbc/bookstoreDS</jta-data-source>
 		<non-jta-data-source>jdbc/bookstoreDSnonJTA</non-jta-data-source>
