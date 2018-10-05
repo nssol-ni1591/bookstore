@@ -1,13 +1,8 @@
 package bookstore.service.spring;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import bookstore.annotation.Log;
@@ -21,8 +16,8 @@ public class CustomerServiceWrapper extends AbstractCustomerService<SessionFacto
 
 	@Log private static Logger log;
 
-	@Autowired @Qualifier("CustomerDAOBId") CustomerDAO<SessionFactory> customerdao;
-	@Autowired @Qualifier("sessionFactory") SessionFactory sessionFactory;
+	private CustomerDAO<SessionFactory> customerdao;
+	//private SessionFactory sessionFactory
 
 	@Override
 	protected CustomerDAO<SessionFactory> getCustomerDAO() {
@@ -34,33 +29,32 @@ public class CustomerServiceWrapper extends AbstractCustomerService<SessionFacto
 	}
 	@Override
 	protected SessionFactory getManager() {
-		return sessionFactory;
+		// ここでnullを指定してDAO実装クラス側でDIしたsessionFactoryを使用しても
+		// Tx動作に違いはない。らしい
+		//return sessionFactory
+		return null;
 	}
 
+	// DIを実現するためのSetterメソッドs
+	public void setCustomerdao(CustomerDAO<SessionFactory> customerdao) {
+		this.customerdao = customerdao;
+	}
+
+	// コンテキスト.xmlにtransactionAttributesを定義しているので@Transactionalを省略できる
 	@Override
-	//@Transactional(propagation=Propagation.REQUIRED)
-	//-> applicationContext.xmlにtransactionAttributesを定義しているので@Transactionalを省略する
 	public boolean createCustomer(String inUid
 			, String inPassword
 			, String inName
 			, String inEmail) throws Exception {
-		// Non-managed environment idiom
-		log.log(Level.INFO, "sessionFactory={0}", sessionFactory);
-
-		Session sess = sessionFactory.openSession();
-		Transaction tx = sess.getTransaction();
+		//rollbackするための例外はRuntimeExceptionでないといけない
 		try {
-			tx.begin();
-			boolean rc = super.createCustomer(inUid, inPassword, inName, inEmail);
-			tx.commit();
-			return rc;
+			return super.createCustomer(inUid, inPassword, inName, inEmail);
 		}
-		catch (Exception e) {
-			tx.rollback();
+		catch (RuntimeException e) {
 			throw e;
 		}
-		finally {
-			sess.close();
+		catch (Exception e) {
+			throw new SpringRuntimeException(e);
 		}
 	}
 

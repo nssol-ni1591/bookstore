@@ -25,7 +25,7 @@ import bookstore.vbean.VOrder;
 /*
  * トランザクションマネージャにJtaTransactionManagerを使用する場合：
  *
- * このクラスでは敢えて@Autowairedを使用する
+ * 可能ならば実装でのTx制御を行いたいが、うまくロールバックしない。ので実装部分はコメントアウト
  */
 @UsedSpring
 @Component("ServiceOrderImplBId3")
@@ -64,7 +64,7 @@ public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 		return jdbcTemplate;
 		// nullの場合、jdbcTemplateとしては同じインスタンスが引き渡されるが、
 		// Connectionのleakが発生しているようだ
-		//return null;
+		//return null
 	}
 
 
@@ -84,6 +84,24 @@ public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 		catch (Exception e) {
 			throw new SpringRuntimeException(e);
 		}
+		/*
+		// Non-managed environment idiom
+		Session sess = sessionFactory.openSession();
+		Transaction tx = sess.getTransaction();
+		try {
+			tx.begin();
+			boolean rc = super.createCustomer(inUid, inPassword, inName, inEmail);
+			tx.commit();
+			return rc;
+		}
+		catch (Exception e) {
+			tx.rollback();
+			throw e;
+		}
+		finally {
+			sess.close();
+		}
+		 */
 	}
 
 	@Override

@@ -5,8 +5,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import bookstore.annotation.Log;
 import bookstore.annotation.UsedSpring;
@@ -20,8 +24,6 @@ import bookstore.vbean.VOrder;
 
 /*
  * トランザクションマネージャにDataSourceTransactionManagerを使用する場合：
- * 
- * このクラスでは敢えて@Autowairedを使用せず. DIするためのsetterを実装する
  */
 @UsedSpring
 @Component("ServiceOrderImplBId2")
@@ -29,11 +31,11 @@ public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 
 	@Log private static Logger log;
 
-	private BookDAO<JdbcTemplate> bookdao;
-	private CustomerDAO<JdbcTemplate> customerdao;
-	private OrderDAO<JdbcTemplate> orderdao;
-	private OrderDetailDAO<JdbcTemplate> odetaildao;
-	private JdbcTemplate jdbcTemplate;
+	@Autowired @Qualifier("BookDAOBId2") BookDAO<JdbcTemplate> bookdao;
+	@Autowired @Qualifier("CustomerDAOBId2") CustomerDAO<JdbcTemplate> customerdao;
+	@Autowired @Qualifier("OrderDAOBId2") OrderDAO<JdbcTemplate> orderdao;
+	@Autowired @Qualifier("OrderDetailDAOBId2") OrderDetailDAO<JdbcTemplate> odetaildao;
+	@Autowired @Qualifier("jdbcTemplate2") JdbcTemplate jdbcTemplate;
 
 	@Override
 	protected BookDAO<JdbcTemplate> getBookDAO() {
@@ -63,25 +65,9 @@ public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 		//return null
 	}
 
-	// DIを実現するためのSetterメソッドs
-	public void setBookdao(BookDAO<JdbcTemplate> bookdao) {
-		this.bookdao = bookdao;
-	}
-	public void setCustomerdao(CustomerDAO<JdbcTemplate> customerdao) {
-		this.customerdao = customerdao;
-	}
-	public void setOrderdao(OrderDAO<JdbcTemplate> orderdao) {
-		this.orderdao = orderdao;
-	}
-	public void setOrderdetaildao(OrderDetailDAO<JdbcTemplate> odetaildao) {
-		this.odetaildao = odetaildao;
-	}
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
 
 	@Override
-	//@Transactional(propagation=Propagation.REQUIRED)	//この指定は無効。applicationContext.xmlの設定が優先
+	@Transactional(value="dstx", propagation=Propagation.REQUIRED)	//コンテキスト.xmlでTx定義を行っていないので@Transactionalが必要
 	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
 		log.log(Level.INFO, "datasource={0}"
 				, jdbcTemplate == null ? "null" : jdbcTemplate.getDataSource().getClass().getName());
@@ -99,7 +85,7 @@ public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 	}
 
 	@Override
-	//@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
+	@Transactional(value="dstx", propagation=Propagation.REQUIRED, readOnly=true)
 	public List<VOrder> listOrders(List<String> orderIdList) throws SQLException {
 		return super.listOrders(orderIdList);
 	}

@@ -7,9 +7,9 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
 	<context:annotation-config />
 	<!-- TXモードにannotationを使用する場合
@@ -51,7 +51,7 @@
 	<!-- HibernateのSessionFactoryを使用してTXを制御する -->
 	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory">
-			<ref local="sessionFactory" />
+			<ref bean="sessionFactory" />
 		</property>
 		<qualifier value="default"/>
 	</bean>
@@ -82,7 +82,7 @@
 	</bean>
 	<bean id="transactionManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource">
-			<ref local="dataSource2"/>
+			<ref bean="dataSource2"/>
 		</property>
 		<qualifier value="dstx"/>
 	</bean>
@@ -108,6 +108,7 @@
 	<bean id="BookDAOBId" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
 		<!-- どうもlocalでもbeanでも違いはないようだ？
+			Spring4系からlocalは使用できなくなった
 			<ref local="BookDAOImplBId" />
 		 -->
 			<ref bean="BookDAOImplBId" />
@@ -116,19 +117,19 @@
 
 	<bean id="CustomerDAOBId" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
-			<ref local="CustomerDAOImplBId" />
+			<ref bean="CustomerDAOImplBId" />
 		</property>
 	</bean>
 
 	<bean id="OrderDAOBId" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
-			<ref local="OrderDAOImplBId" />
+			<ref bean="OrderDAOImplBId" />
 		</property>
 	</bean>
 
 	<bean id="OrderDetailDAOBId" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
-			<ref local="OrderDetailDAOImplBId" />
+			<ref bean="OrderDetailDAOImplBId" />
 		</property>
 	</bean>
 
@@ -140,19 +141,19 @@
 
 	<bean id="CustomerDAOBId2" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
-			<ref local="CustomerDAOImplBId2" />
+			<ref bean="CustomerDAOImplBId2" />
 		</property>
 	</bean>
 
 	<bean id="OrderDAOBId2" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
-			<ref local="OrderDAOImplBId2" />
+			<ref bean="OrderDAOImplBId2" />
 		</property>
 	</bean>
 
 	<bean id="OrderDetailDAOBId2" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
-			<ref local="OrderDetailDAOImplBId2" />
+			<ref bean="OrderDetailDAOImplBId2" />
 		</property>
 	</bean>
 
@@ -233,32 +234,36 @@
 
 	<!-- DAO Implement Layer -->
 
-	<!-- この定義を省略するとsessionFactoryをautowiredできなかった -->
-	<!-- HibernateDaoSupportがHibernateTemplateを生成するためにsessionFactoryはsuperクラスのDIが必要なだけ
-		ただ、HibernateDaoSupportクラスを使用しなくても、
-		HibernateTemplateをnewする際にsessionFactoryを引数にすればよいだけなので、
-		DAOImplクラスのHibernateDaoSupportのextendsをやめて、
-		DAOImplクラスでautowiredしたsessionFactoryからHibernateDaoSupportを生成するようにすることにした。
-		これにより、以下のsessionFactoryのDI定義は必要なくなった
+	<!-- HibernateTemplateを使用するパターン -->
+	<!-- 元々の実装はHibernateDaoSupportを使用しているため、HibernateDaoSupportにsessionFactoryをDIしていた -->
+	<!-- 調べたところ、HibernateDaoSupportクラスを使用しなくても、
+		HibernateTemplateをnewする際にsessionFactoryを引数にすればよいだけだった。
+		このため、DAOImplクラスのHibernateDaoSupportのextendsをやめて、
+		DAOImplクラスにsessionFactoryをDIして、HibernateTemplateを生成するようにすることにした。
 	 -->
+	<!-- 
+		ここでは、元々のxmlベースのDIをのこしてあるため以下の定義が必要になるが、
+		@Autowiredを使用すればsessionFactoryのDI定義は必要なくなる
+	 -->
+	<!-- この定義を省略するとsessionFactoryをautowiredできなかった -->
 	<bean id="BookDAOImplBId" class="bookstore.dao.hibernate.BookDAOImpl">
 		<property name="sessionFactory">
-			<ref local="sessionFactory" />
+			<ref bean="sessionFactory" />
 		</property>
 	</bean>
 	<bean id="CustomerDAOImplBId" class="bookstore.dao.hibernate.CustomerDAOImpl">
 		<property name="sessionFactory">
-			<ref local="sessionFactory" />
+			<ref bean="sessionFactory" />
 		</property>
 	</bean>
 	<bean id="OrderDAOImplBId" class="bookstore.dao.hibernate.OrderDAOImpl">
 		<property name="sessionFactory">
-			<ref local="sessionFactory" />
+			<ref bean="sessionFactory" />
 		</property>
 	</bean>
 	<bean id="OrderDetailDAOImplBId" class="bookstore.dao.hibernate.OrderDetailDAOImpl">
 		<property name="sessionFactory">
-			<ref local="sessionFactory" />
+			<ref bean="sessionFactory" />
 		</property>
 	</bean>
 
@@ -276,10 +281,10 @@
 	<bean id="ServiceBookBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
-			<ref local="transactionManager" />
+			<ref bean="transactionManager" />
 		</property>
 		<property name="target">
-			<ref local="ServiceBookImplBId" />
+			<ref bean="ServiceBookImplBId" />
 		</property>
 		<property name="transactionAttributes">
 			<props>
@@ -293,10 +298,10 @@
 	<bean id="ServiceCustomerBId"
 			class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
-			<ref local="transactionManager" />
+			<ref bean="transactionManager" />
 		</property>
 		<property name="target">
-			<ref local="ServiceCustomerImplBId" />
+			<ref bean="ServiceCustomerImplBId" />
 		</property>
 		<property name="transactionAttributes">
 			<props>
@@ -307,22 +312,16 @@
 		</property>
 	</bean>
 
-	<!-- ServiceOrderImplBIdのみ、@Transactionalを使うことにしてみた -->
-	<bean id="ServiceOrderBId" class="org.springframework.aop.framework.ProxyFactoryBean">
-		<property name="target">
-			<ref local="ServiceOrderImplBId" />
-		</property>
-	</bean>
- 	<bean id="ServiceOrderBId2" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+ 	<bean id="ServiceOrderBId" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
  		<!-- id=transactionManager以外のtransactionManagerを使用したい場合は明示する -->
 		<property name="transactionManager">
-			<ref local="transactionManager2" />
+			<ref bean="transactionManager" />
 		</property>
 		<property name="target">
-			<ref local="ServiceOrderImplBId2" />
+			<ref bean="ServiceOrderImplBId" />
 		</property>
-		<!-- TransactionProxyFactoryBeanを使用する場合は
-			transactionAttributesの定義が必須。これにより@Transactionalでの定義は無効
+		<!-- TransactionProxyFactoryBeanを使用する場合はtransactionAttributesの定義が必須
+			これにより実装クラスの@Transactionalでの定義は無効
 		 -->
 		<property name="transactionAttributes">
 			<props>
@@ -332,32 +331,23 @@
 			</props>
 		</property>
 	</bean>
-	<!-- JtaTransactionManagerに変更しただけ -->
-	<!-- 
-	<bean id="ServiceOrderBId3" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager">
-			<ref local="transactionManager3" />
-		</property>
+
+	<!-- ServiceOrderImplBId2および3は、@Transactionalを使うことにしてみた -->
+	<bean id="ServiceOrderBId2" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
-			<ref local="ServiceOrderImplBId3" />
-		</property>
-		<property name="transactionAttributes">
-			<props>
-				<prop key="orderBooks">PROPAGATION_REQUIRED</prop>
-				<prop key="list*">PROPAGATION_REQUIRED,readOnly</prop>
-			</props>
+			<ref bean="ServiceOrderImplBId2" />
 		</property>
 	</bean>
-	 -->
 	<!-- transactionManagerにデフォルト(id=transactionManager)以外を指定したい場合はどうすればいいの
 		これは、複数のtransactionManagerを使い分けたい場合などに応用できる
 		※実際にどのtxManagerが使用されているかはDataSourceの実装クラスで確認できると思う
 			JtaTransactionManager => org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource
 			DataSourceTransactionManager => transactionmanager2の実装クラス
+		DIするSessionFactoryやJdbcTemplateが参照するdataSourceに依存する。としかいえない
 	 -->
 	<bean id="ServiceOrderBId3" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
-			<ref local="ServiceOrderImplBId3" />
+			<ref bean="ServiceOrderImplBId3" />
 		</property>
 	</bean>
  
@@ -366,53 +356,33 @@
 		クラスに@Autowiredが指定されているのでapplicationContext.xmlでの指定は不要
 	-->
 	<bean id="ServiceCustomerImplBId" class="bookstore.service.spring.CustomerServiceWrapper">
-	<!-- 
 		<property name="customerdao">
-			<ref local="CustomerDAOBId" />
+			<ref bean="CustomerDAOBId" />
 		</property>
-	 -->
 	</bean>
 
 	<bean id="ServiceBookImplBId" class="bookstore.service.spring.BookServiceWrapper">
-	<!-- 
 		<property name="bookdao">
-			<ref local="BookDAOBId" />
+			<ref bean="BookDAOBId" />
 		</property>
-	 -->
 	</bean>
 
 	<bean id="ServiceOrderImplBId" class="bookstore.service.spring.OrderServiceWrapper">
-	<!-- 
 		<property name="bookdao">
-			<ref local="BookDAOBId" />
+			<ref bean="BookDAOBId" />
 		</property>
 		<property name="customerdao">
-			<ref local="CustomerDAOBId" />
+			<ref bean="CustomerDAOBId" />
 		</property>
 		<property name="orderdao">
-			<ref local="OrderDAOBId" />
+			<ref bean="OrderDAOBId" />
 		</property>
 		<property name="orderdetaildao">
-			<ref local="OrderDetailDAOBId" />
+			<ref bean="OrderDetailDAOBId" />
 		</property>
-	 -->
 	</bean>
+	<!-- 以下では@Autowiredを使用する -->
 	<bean id="ServiceOrderImplBId2" class="bookstore.service.spring.dstx.OrderServiceWrapper">
-		<property name="bookdao">
-			<ref local="BookDAOBId2" />
-		</property>
-		<property name="customerdao">
-			<ref local="CustomerDAOBId2" />
-		</property>
-		<property name="orderdao">
-			<ref local="OrderDAOBId2" />
-		</property>
-		<property name="orderdetaildao">
-			<ref local="OrderDetailDAOBId2" />
-		</property>
-		<property name="jdbcTemplate">
-			<ref local="jdbcTemplate2" />
-		</property>
 	</bean>
 	<bean id="ServiceOrderImplBId3" class="bookstore.service.spring.jtatx.OrderServiceWrapper">
 	</bean>
@@ -422,59 +392,59 @@
 	<!-- DI先は、当然Interfaceのはず -->
 	<bean name="/CreateUser" class="bookstore.action.CreateUserAction">
 		<property name="customerService">
-			<ref local="ServiceCustomerBId" />
+			<ref bean="ServiceCustomerBId" />
 		</property>
 	</bean>
 
 	<bean name="/Login" class="bookstore.action.LoginAction">
 		<property name="customerService">
-			<ref local="ServiceCustomerBId" />
+			<ref bean="ServiceCustomerBId" />
 		</property>
 		<property name="bookService">
-			<ref local="ServiceBookBId" />
+			<ref bean="ServiceBookBId" />
 		</property>
 	</bean>
 
 	<bean name="/AddToCartAction" class="bookstore.action.AddToCartAction">
 		<property name="bookService">
-			<ref local="ServiceBookBId" />
+			<ref bean="ServiceBookBId" />
 		</property>
 	</bean>
 
 	<bean name="/CheckoutAction" class="bookstore.action.CheckoutAction">
 		<property name="bookService">
-			<ref local="ServiceBookBId" />
+			<ref bean="ServiceBookBId" />
 		</property>
 	</bean>
 
 	<bean name="/OrderAction" class="bookstore.action.OrderAction">
 		<property name="orderService">
-			<ref local="ServiceOrderBId" />
+			<ref bean="ServiceOrderBId" />
 		</property>
 		<property name="customerService">
-			<ref local="ServiceCustomerBId" />
+			<ref bean="ServiceCustomerBId" />
 		</property>
 	</bean>
 	<bean name="/OrderAction2" class="bookstore.action.OrderAction">
 		<property name="orderService">
-			<ref local="ServiceOrderBId2" />
+			<ref bean="ServiceOrderBId2" />
 		</property>
 		<property name="customerService">
-			<ref local="ServiceCustomerBId" />
+			<ref bean="ServiceCustomerBId" />
 		</property>
 	</bean>
 	<bean name="/OrderAction3" class="bookstore.action.OrderAction">
 		<property name="orderService">
-			<ref local="ServiceOrderBId3" />
+			<ref bean="ServiceOrderBId3" />
 		</property>
 		<property name="customerService">
-			<ref local="ServiceCustomerBId" />
+			<ref bean="ServiceCustomerBId" />
 		</property>
 	</bean>
 
 	<bean name="/SearchAction" class="bookstore.action.SearchAction">
 		<property name="bookService">
-			<ref local="ServiceBookBId" />
+			<ref bean="ServiceBookBId" />
 		</property>
 	</bean>
 

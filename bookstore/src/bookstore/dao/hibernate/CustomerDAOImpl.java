@@ -15,7 +15,7 @@ import bookstore.pbean.TCustomer;
 @Repository("CustomerDAOImplBId")
 public class CustomerDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport*/ implements CustomerDAO<T> {
 
-	// @Autowiredでもコンテキストxmlでも、少なくとも一連の処理では同じインスタンスが設定されていた
+	// @Autowiredでもコンテキストxmlでも、少なくとも一連の処理では同じインスタンスが設定される
 	private SessionFactory sessionFactory3;
 	//@Autowired SessionFactory sessionFactory3
 	@Log private static Logger log;
