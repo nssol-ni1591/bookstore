@@ -44,7 +44,8 @@ public abstract class AbstractOrderDetailDAOImpl<T extends EntityManager> implem
 				, new Object[] { inOrder.getId(), inBook.getId() });
 
 		if ("0-0000-0000-0".equals(inBook.getIsbn())) {
-			throw new SQLException("isdn: 0-0000-0000-0");
+			//throw new SQLException("isdn: 0-0000-0000-0");
+			inOrder.setId(0);
 		}
 
 		TOrderDetail orderDetail = new TOrderDetail();
