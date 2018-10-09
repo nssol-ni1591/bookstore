@@ -30,7 +30,7 @@ public class OrderDAOImpl<T extends EntityManager> extends AbstractOrderDAOImpl<
 	 * （注意：最初のインスタンスを破棄しない限り、2つ目のインスタンスを作成しないでください）
 	 */
 
-	//RESOURCE_LOCALでは@PersistenceContextを使用する
+	//RESOURCE_LOCALでは@PersistenceUnitを使用する
 	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
 
 	@Override

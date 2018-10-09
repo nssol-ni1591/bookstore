@@ -44,11 +44,11 @@ DAOの実装はEntityManagerで隠蔽されるので、どの実装クラスを�
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		※Hibernateを使用するためにはv4.3系までアップデートする必要があり
+		※HibernateでJPAを使用するためには依存モジュールとの関連でv4.3系までアップデートする必要があり
 		=>hibernate-4.3系を使用するためにはspringも4系にアップデートする
-		=>Springで使用するいくつかのクラスもorg.spring...hibernate3からhibernate4に修正する
+		=>Springで使用するいくつかのクラスもパッケージに依存するのでorg.spring...hibernate3からhibernate4に修正する
 		 -->
-		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
 		<jta-data-source>jdbc/bookstoreDS</jta-data-source>
 		<non-jta-data-source>jdbc/bookstoreDSnonJTA</non-jta-data-source>
@@ -158,6 +158,93 @@ DAOの実装はEntityManagerで隠蔽されるので、どの実装クラスを�
 			<property name="hibernate.format_sql" value="true"/>
 			<property name="hibernate.use_sql_comments" value="true"/>
 
+		</properties>
+	</persistence-unit>
+
+	<persistence-unit name="BookStore-Hibernate-Resource_Local" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+
+		<jta-data-source>jdbc/bookstoreDS</jta-data-source>
+		<non-jta-data-source>jdbc/bookstoreDSnonJTA</non-jta-data-source>
+
+		<class>bookstore.pbean.TBook</class>
+		<class>bookstore.pbean.TCustomer</class>
+		<class>bookstore.pbean.TOrder</class>
+		<class>bookstore.pbean.TOrderDetail</class>
+
+		<properties>
+		</properties>
+	</persistence-unit>
+	<persistence-unit name="BookStore-Hibernate-JTA" transaction-type="JTA">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+
+		<jta-data-source>jdbc/bookstoreDS</jta-data-source>
+		<non-jta-data-source>jdbc/bookstoreDSnonJTA</non-jta-data-source>
+
+		<class>bookstore.pbean.TBook</class>
+		<class>bookstore.pbean.TCustomer</class>
+		<class>bookstore.pbean.TOrder</class>
+		<class>bookstore.pbean.TOrderDetail</class>
+
+		<properties>
+		</properties>
+	</persistence-unit>
+
+	<persistence-unit name="BookStore-Eclipselink-Resource_Local" transaction-type="RESOURCE_LOCAL">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+		<jta-data-source>jdbc/bookstoreDS</jta-data-source>
+		<non-jta-data-source>jdbc/bookstoreDSnonJTA</non-jta-data-source>
+
+		<class>bookstore.pbean.TBook</class>
+		<class>bookstore.pbean.TCustomer</class>
+		<class>bookstore.pbean.TOrder</class>
+		<class>bookstore.pbean.TOrderDetail</class>
+
+		<properties>
+		</properties>
+	</persistence-unit>
+	<persistence-unit name="BookStore-Eclipselink-JTA" transaction-type="JTA">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+		<jta-data-source>jdbc/bookstoreDS</jta-data-source>
+		<non-jta-data-source>jdbc/bookstoreDSnonJTA</non-jta-data-source>
+
+		<class>bookstore.pbean.TBook</class>
+		<class>bookstore.pbean.TCustomer</class>
+		<class>bookstore.pbean.TOrder</class>
+		<class>bookstore.pbean.TOrderDetail</class>
+
+		<properties>
+		</properties>
+	</persistence-unit>
+
+	<persistence-unit name="BookStore-OpenJPA-Resource_Local" transaction-type="RESOURCE_LOCAL">
+		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+
+		<jta-data-source>jdbc/bookstoreDS</jta-data-source>
+		<non-jta-data-source>jdbc/bookstoreDSnonJTA</non-jta-data-source>
+
+		<class>bookstore.pbean.TBook</class>
+		<class>bookstore.pbean.TCustomer</class>
+		<class>bookstore.pbean.TOrder</class>
+		<class>bookstore.pbean.TOrderDetail</class>
+
+		<properties>
+		</properties>
+	</persistence-unit>
+	<persistence-unit name="BookStore-OpenJPA-JTA" transaction-type="JTA">
+		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+
+		<jta-data-source>jdbc/bookstoreDS</jta-data-source>
+		<non-jta-data-source>jdbc/bookstoreDSnonJTA</non-jta-data-source>
+
+		<class>bookstore.pbean.TBook</class>
+		<class>bookstore.pbean.TCustomer</class>
+		<class>bookstore.pbean.TOrder</class>
+		<class>bookstore.pbean.TOrderDetail</class>
+
+		<properties>
 		</properties>
 	</persistence-unit>
 

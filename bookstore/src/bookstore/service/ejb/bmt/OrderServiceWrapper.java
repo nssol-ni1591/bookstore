@@ -1,13 +1,5 @@
 package bookstore.service.ejb.bmt;
 
-import bookstore.annotation.UsedJpaLocal;
-import bookstore.dao.BookDAO;
-import bookstore.dao.CustomerDAO;
-import bookstore.dao.OrderDAO;
-import bookstore.dao.OrderDetailDAO;
-import bookstore.service.AbstractOrderService;
-import bookstore.service.OrderService;
-
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +13,14 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
+
+import bookstore.annotation.UsedJpaLocal;
+import bookstore.dao.BookDAO;
+import bookstore.dao.CustomerDAO;
+import bookstore.dao.OrderDAO;
+import bookstore.dao.OrderDetailDAO;
+import bookstore.service.AbstractOrderService;
+import bookstore.service.OrderService;
 
 @Stateless(name="OrderServiceBmtWrapper")
 @LocalBean
