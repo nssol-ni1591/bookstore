@@ -1,4 +1,4 @@
-package bookstore.jsf.bean.ejb;
+package bookstore.jsf.bean.ejblocal;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
