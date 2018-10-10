@@ -15,7 +15,7 @@ public class BookStoreBean3 extends AbstractBookStoreBean implements Serializabl
 
 	private static final long serialVersionUID = 1L;
 
-	@EJB(mappedName="BookServiceCmtWrapper") private BookService bookService;
+	@EJB(mappedName="BookServiceCmtWrapper") private transient BookService bookService;
 
 	public BookStoreBean3() {
 		super();

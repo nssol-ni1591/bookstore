@@ -13,9 +13,9 @@ import bookstore.service.OrderService;
 @RequestScoped
 public class OrderBean5 extends AbstractOrderBean {
 
-	@EJB(mappedName="BookServiceEclipseLinkWrapper") private BookService bookService;
-	@EJB(mappedName="CustomerServiceEclipseLinkWrapper") private CustomerService customerService;
-	@EJB(mappedName="OrderServiceEclipseLinkWrapper") private OrderService orderService;
+	@EJB(mappedName="BookServiceEjbWrapper") private BookService bookService;
+	@EJB(mappedName="CustomerServiceEjbWrapper") private CustomerService customerService;
+	@EJB(mappedName="OrderServiceEjbWrapper") private OrderService orderService;
 
 	protected BookService getBookService() {
 		return bookService;

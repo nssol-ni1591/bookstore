@@ -12,7 +12,7 @@ public class CommonJSFBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	protected String jpaModule;
-	protected String jpaType;
+	protected String txType;
 
 	public String getJpaModule() {
 		return jpaModule;
@@ -20,14 +20,14 @@ public class CommonJSFBean implements Serializable {
 	public void setJpaModule(String jpaModule) {
 		this.jpaModule = jpaModule;
 	}
-	public String getJpaType() {
-		return jpaType;
+	public String getTxType() {
+		return txType;
 	}
-	public void setJpaType(String jpaType) {
-		this.jpaType = jpaType;
+	public void setTxType(String txType) {
+		this.txType = txType;
 	}
 
 	protected String createRequestURL(String baseURL) {
-		return String.format("%s?jpaModule=%s&jpaType=%s", baseURL, jpaModule, jpaType);
+		return String.format("%s?jpaModule=%s&txType=%s", baseURL, jpaModule, txType);
 	}
 }

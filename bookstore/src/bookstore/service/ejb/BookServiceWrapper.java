@@ -1,35 +1,31 @@
-package bookstore.service.weld;
+package bookstore.service.ejb;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.enterprise.context.Dependent;
+import javax.ejb.Local;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
 
-import bookstore.annotation.UsedWeld;
-import bookstore.annotation.UsedJpaJta;
+import bookstore.annotation.UsedJpa;
 import bookstore.dao.BookDAO;
 import bookstore.service.AbstractBookService;
+import bookstore.service.BookService;
 
-@UsedWeld
-@Dependent
-public class BookServiceWrapper extends AbstractBookService<EntityManager> implements Serializable {
+@Stateless(name="BookServiceEjbWrapper")
+@LocalBean
+@Local(BookService.class)
+@TransactionManagement(TransactionManagementType.CONTAINER)
+public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 
-	/*
-	 * bookstore.jsf.bean.BookStoreBeanのスコープが@SessionScopeのためSerializedが必要
-	 */
-	private static final long serialVersionUID = 1L;
+	@Inject @UsedJpa private BookDAO<EntityManager> bookdao;
 
-	@Inject @UsedJpaJta private transient BookDAO<EntityManager> bookdao;
+	@Inject private EntityManager em;
 	@Inject private Logger log;
-
-	@PersistenceUnit(name = "BookStore") private transient EntityManagerFactory emf;
-
-	private transient EntityManager em = null;
 
 	@Override
 	protected BookDAO<EntityManager> getBookDAO() {
@@ -41,6 +37,7 @@ public class BookServiceWrapper extends AbstractBookService<EntityManager> imple
 	}
 	@Override
 	protected EntityManager getManager() {
+		// DAO層で使用するEntityManagerを固定化するため
 		return em;
 	}
 

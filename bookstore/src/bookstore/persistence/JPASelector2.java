@@ -1,11 +1,15 @@
-package bookstore.util;
+package bookstore.persistence;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 
-public class JPASelector {
+public class JPASelector2 {
 
 	//JTAでは@PersistenceContextを使用する
 	//RESOURCE_LOCALでは@PersistenceUnitを使用する
@@ -16,29 +20,38 @@ public class JPASelector {
 	public static final String OPENJPA = "OpenJPA";
 
 	public static final String JTA = "JTA";
-	public static final String RESOURCE_LOCAL = "RESOURCE_LOCAL";
+	public static final String RESOURCE_LOCAL = "Resource_Local";
 
-	public static EntityManager getEntityManager(String type) {
-		return getEntityManager(null, type);
+	@Inject private Logger log;
+
+	public static EntityManager getEntityManager(String jpaType) {
+		return getEntityManager(null, jpaType);
 	}
-	public static EntityManager getEntityManager(String jpaModule, String type) {
-		if (!JTA.equals(type) && !RESOURCE_LOCAL.equals(type)) {
-			throw new IllegalArgumentException(type + " is unknown type");
+	public static EntityManager getEntityManager(String jpaModule, String jpaType) {
+		if (!JTA.equals(jpaType) && !RESOURCE_LOCAL.equals(jpaType)) {
+			throw new IllegalArgumentException(jpaType + " is unknown type");
 		}
 		if (jpaModule == null) {
-			return new JPASelector().defaultJPA(type);
+			return new JPASelector2().defaultJPA(jpaType);
 		}
 
+		EntityManager em;
 		switch (jpaModule) {
 		case HIBERNATE:
-			return new JPASelector().hibernate(type);
+			em = new JPASelector2().hibernate(jpaType);
+			break;
 		case ECLIPSELINK:
-			return new JPASelector().eclipselink(type);
+			em = new JPASelector2().eclipselink(jpaType);
+			break;
 		case OPENJPA:
-			return new JPASelector().openjpa(type);
+			em = new JPASelector2().openjpa(jpaType);
+			break;
 		default:
 			throw new IllegalArgumentException(jpaModule + " is unknown module");
 		}
+		Logger.getLogger(JPASelector2.class.getName())
+			.log(Level.INFO, "persistence={0}-{1}-{2}, entity={3}", new Object[] { "BookStore", jpaModule, jpaType, em });
+		return em;
 	}
 
 	private EntityManager defaultJPA(String type) {
@@ -70,47 +83,49 @@ public class JPASelector {
 	private class DefaultJTA {
 		@PersistenceContext(unitName = "BookStore2") private EntityManager em;
 		public EntityManager getEntityManager() {
+			log.log(Level.INFO, "entityManager=BookStore2");
 			return em;
 		}
 	}
 	private class DefaultResourceLocal {
 		@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
 		public EntityManager getEntityManager() {
+			log.log(Level.INFO, "entityManager=BookStore");
 			return emf.createEntityManager();
 		}
 	}
 
-	private class HibernateJTA {
+	public static class HibernateJTA {
 		@PersistenceContext(unitName = "BookStore-Hibernate-JTA") private EntityManager em;
 		public EntityManager getEntityManager() {
 			return em;
 		}
 	}
-	private class HibernateResourceLocal {
+	public static class HibernateResourceLocal {
 		@PersistenceUnit(name = "BookStore-Hibernate-Resource_Local") private EntityManagerFactory emf;
 		public EntityManager getEntityManager() {
 			return emf.createEntityManager();
 		}
 	}
-	private class EclipselinkJTA {
+	public static class EclipselinkJTA {
 		@PersistenceContext(unitName = "BookStore-Eclipselink-JTA") private EntityManager em;
 		public EntityManager getEntityManager() {
 			return em;
 		}
 	}
-	private class EclipselinkResourceLocal {
+	public static class EclipselinkResourceLocal {
 		@PersistenceUnit(name = "BookStore-Eclipselink-Resource_Local") private EntityManagerFactory emf;
 		public EntityManager getEntityManager() {
 			return emf.createEntityManager();
 		}
 	}
-	private class OpenJPAJTA {
+	public static class OpenJPAJTA {
 		@PersistenceContext(unitName = "BookStore-OpenJPA-JTA") private EntityManager em;
 		public EntityManager getEntityManager() {
 			return em;
 		}
 	}
-	private class OpenJPAResourceLocal {
+	public static class OpenJPAResourceLocal {
 		@PersistenceUnit(name = "BookStore-OpenJPA-Resource_Local") private EntityManagerFactory emf;
 		public EntityManager getEntityManager() {
 			return emf.createEntityManager();

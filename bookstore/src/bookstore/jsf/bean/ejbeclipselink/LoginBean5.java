@@ -11,7 +11,7 @@ import bookstore.service.CustomerService;
 @RequestScoped
 public class LoginBean5 extends AbstractLoginBean {
 
-	@EJB(mappedName="CustomerServiceEclipseLinkWrapper") private CustomerService customerService;
+	@EJB(mappedName="CustomerServiceEjbWrapper") private CustomerService customerService;
 
 	public LoginBean5() {
 		super();

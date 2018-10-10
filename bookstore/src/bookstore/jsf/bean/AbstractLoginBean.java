@@ -41,7 +41,7 @@ public abstract class AbstractLoginBean /*extends CommonJSFBean*/ {
 
 	public String login() throws SQLException {
 		log.log(Level.INFO, "uid={0}, pw={1}, this={2}" , new Object[] { uid, passwd, this });
-		log.log(Level.INFO, "jpaModule={0}, jpaType={1}", new Object[] { common.getJpaModule(), common.getJpaType() });
+		log.log(Level.INFO, "jpaModule={0}, txType={1}", new Object[] { common.getJpaModule(), common.getTxType() });
 
 		// getSession()
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
