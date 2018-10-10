@@ -1,6 +1,5 @@
 package bookstore.service.weld;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -17,14 +16,9 @@ import bookstore.service.AbstractBookService;
 
 @UsedWeld
 @Dependent
-public class BookServiceWrapper extends AbstractBookService<EntityManager> implements Serializable {
+public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 
-	/*
-	 * bookstore.jsf.bean.BookStoreBeanのスコープが@SessionScopeのためSerializedが必要
-	 */
-	private static final long serialVersionUID = 1L;
-
-	@Inject @UsedJpaJta private transient BookDAO<EntityManager> bookdao;
+	@Inject @UsedJpaJta private BookDAO<EntityManager> bookdao;
 	@Inject private Logger log;
 
 	@PersistenceUnit(name = "BookStore") private transient EntityManagerFactory emf;
