@@ -5,7 +5,6 @@ import bookstore.pbean.TCustomer;
 import bookstore.vbean.VCustomer;
 
 import java.sql.SQLException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -20,7 +19,6 @@ public abstract class AbstractCustomerService<T> implements CustomerService {
 		T em = getManager();
 		CustomerDAO<T> customerdao = getCustomerDAO();
 		int count = customerdao.getCustomerNumberByUid(em, inUid);
-		getLogger().log(Level.INFO, "count={0}", count);
 		return count != 0;
 	}
 
@@ -44,7 +42,6 @@ public abstract class AbstractCustomerService<T> implements CustomerService {
 		T em = getManager();
 		CustomerDAO<T> customerdao = getCustomerDAO();
 		TCustomer customer = customerdao.findCustomerByUid(em, inUid);
-		getLogger().log(Level.INFO, "customer={0}", customer);
 		return customer.getPasswordmd5().equals(getStringDigest(inPassword));
 	}
 
