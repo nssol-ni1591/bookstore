@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
 <meta http-equiv="Content-Type" content="text/html; utf-8" />
 <title><ui:insert name="title">template title</ui:insert></title>
@@ -20,8 +21,13 @@
 		</ui:insert>
 	</div>
 
+	<div id="common">
+		<!-- ここでの<f:metadata >commonJSFBeanの記述は無効 -->
+	</div>
 
 	<div id="content">
+		<!-- ここでの<f:metadata >commonJSFBeanの記述は無効 -->
+
 		<ui:insert name="content">
     	Content area.  See comments below this line in the source.
     	<!--  include your content file or uncomment the include below and create content.xhtml in this directory -->
