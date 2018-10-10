@@ -1,4 +1,4 @@
-package bookstore.jsf.bean.ejbeclipselink;
+package bookstore.jsf.bean.ejb;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
