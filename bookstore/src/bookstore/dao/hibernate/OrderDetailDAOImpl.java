@@ -22,24 +22,24 @@ public class OrderDetailDAOImpl<T extends SessionFactory> /*extends HibernateDao
 	//@Autowired SessionFactory sessionFactory3
 	@Log private static Logger log;
 
-	public void createOrderDetail(final T sessionFactory2, TOrder inOrder, TBook inBook) throws SQLException {
+	public void createOrderDetail(final T sessionFactory2, TOrder order, TBook book) throws SQLException {
 		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
 
 		log.log(Level.INFO, "sessionFactory={0}", sessionFactory);
 		log.log(Level.INFO, "order_id={0}, book_id={1}"
 				, new Object[] {
-						 inOrder == null ? "null" : inOrder.getId()
-						, inBook == null ? "null" : inBook.getId()
+						order == null ? "null" : order.getId()
+						, book == null ? "null" : book.getId()
 		});
 
-		if (inBook == null || "0-0000-0000-0".equals(inBook.getIsbn())) {
+		if (book == null || "0-0000-0000-0".equals(book.getIsbn())) {
 			//throw new SQLException("isdn: 0-0000-0000-0");
-			inOrder.setId(0);
+			order.setId(0);
 		}
 
 		TOrderDetail saveOrderDetail = new TOrderDetail();
-		saveOrderDetail.setTOrder(inOrder);
-		saveOrderDetail.setTBook(inBook);
+		saveOrderDetail.setTOrder(order);
+		saveOrderDetail.setTBook(book);
 		new HibernateTemplate(sessionFactory).save(saveOrderDetail);
 	}
 

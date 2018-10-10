@@ -31,10 +31,10 @@ public abstract class AbstractBookService<T> implements BookService {
 		return isbns;
 	}
 
-	public List<String> retrieveBookISBNsByKeyword(String inKeyword) throws SQLException {
+	public List<String> retrieveBookISBNsByKeyword(String keyword) throws SQLException {
 		T em = getManager();
 		BookDAO<T> bookdao = getBookDAO();
-		Iterator<TBook> iter = bookdao.retrieveBooksByKeyword(em, inKeyword).iterator();
+		Iterator<TBook> iter = bookdao.retrieveBooksByKeyword(em, keyword).iterator();
 		List<String> isbns = new ArrayList<>();
 
 		while (iter.hasNext()) {
@@ -44,11 +44,11 @@ public abstract class AbstractBookService<T> implements BookService {
 		return isbns;
 	}
 
-	public List<VBook> createVBookList(List<String> inProductList, List<String> inSelectedList) throws SQLException {
+	public List<VBook> createVBookList(List<String> productList, List<String> selectedList) throws SQLException {
 		T em = getManager();
 		BookDAO<T> bookdao = getBookDAO();
 		List<VBook> vArrayList = new ArrayList<>();
-		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(em, inProductList).iterator();
+		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(em, productList).iterator();
 
 		while (iter.hasNext()) {
 			TBook currentBook = iter.next();
@@ -56,7 +56,7 @@ public abstract class AbstractBookService<T> implements BookService {
 
 			currentVBook.setSelected(false);
 
-			if (inSelectedList != null && !inSelectedList.isEmpty() && inSelectedList.contains(currentBook.getIsbn())) {
+			if (selectedList != null && !selectedList.isEmpty() && selectedList.contains(currentBook.getIsbn())) {
 				currentVBook.setSelected(true);
 			}
 
@@ -65,15 +65,15 @@ public abstract class AbstractBookService<T> implements BookService {
 		return vArrayList;
 	}
 
-	public VCheckout createVCheckout(List<String> inSelectedList) throws SQLException {
+	public VCheckout createVCheckout(List<String> selectedList) throws SQLException {
 		T em = getManager();
 		BookDAO<T> bookdao = getBookDAO();
 		VCheckout vc = new VCheckout();
-		vc.setTotal(bookdao.getPriceByISBNs(em, inSelectedList));
+		vc.setTotal(bookdao.getPriceByISBNs(em, selectedList));
 
 		List<VBook> viewList = new ArrayList<>();
 
-		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(em, inSelectedList).iterator();
+		Iterator<TBook> iter = bookdao.retrieveBooksByISBNs(em, selectedList).iterator();
 
 		while (iter.hasNext()) {
 			TBook currentBook = iter.next();
@@ -86,13 +86,13 @@ public abstract class AbstractBookService<T> implements BookService {
 		return (vc);
 	}
 
-	public List<String> createCart(List<String> inProductList, List<String> inSelectedList, List<String> inCart) {
+	public List<String> createCart(List<String> productList, List<String> selectedList, List<String> cart) {
 
-		inCart.removeAll(inProductList);
-		if (inSelectedList != null && !inSelectedList.isEmpty()) {
-			inCart.addAll(inSelectedList);
+		cart.removeAll(productList);
+		if (selectedList != null && !selectedList.isEmpty()) {
+			cart.addAll(selectedList);
 		}
-		return (inCart);
+		return (cart);
 	}
 
 }

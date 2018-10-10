@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface OrderDAO<T> {
 
-	public TOrder createOrder(final T em, final TCustomer inCustomer) throws SQLException;
+	public TOrder createOrder(final T em, final TCustomer customer) throws SQLException;
 
 	// add by gohdo
 	public List<TOrder> retrieveOrders(final T em, final List<String> orderIdList) throws SQLException;

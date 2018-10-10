@@ -7,10 +7,10 @@ import bookstore.pbean.TBook;
 
 public interface BookDAO<T> {
 
-	public int getPriceByISBNs(final T em, List<String> inISBNList) throws SQLException;
+	public int getPriceByISBNs(final T em, List<String> isbnList) throws SQLException;
 
-	public List<TBook> retrieveBooksByKeyword(final T em, String inKeyword) throws SQLException;
+	public List<TBook> retrieveBooksByKeyword(final T em, String keyword) throws SQLException;
 
-	public List<TBook> retrieveBooksByISBNs(final T em, List<String> inISBNList) throws SQLException;
+	public List<TBook> retrieveBooksByISBNs(final T em, List<String> isbnList) throws SQLException;
 
 }

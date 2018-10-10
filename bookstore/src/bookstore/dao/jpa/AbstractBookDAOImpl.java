@@ -30,41 +30,41 @@ public abstract class AbstractBookDAOImpl<T extends EntityManager> implements Bo
 	protected abstract EntityManager getEntityManager();
 
 	@Override
-	public int getPriceByISBNs(final T em2, List<String> inISBNList) {
+	public int getPriceByISBNs(final T em2, List<String> isbnList) {
 		EntityManager em = em2 != null ? em2 : getEntityManager();
 
 		Query q = em
 				.createQuery("select sum( book.price ) from TBook book where book.isbn in :SELECTED_ITEMS");
-		q.setParameter("SELECTED_ITEMS", inISBNList);
+		q.setParameter("SELECTED_ITEMS", isbnList);
 		return ((Long) q.getSingleResult()).intValue();
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByKeyword(final T em2, String inKeyword) {
+	public List<TBook> retrieveBooksByKeyword(final T em2, String keyword) {
 		EntityManager em = em2 != null ? em2 : getEntityManager();
 
 		Query q = em
 				.createQuery("select b from TBook b where "
 						+ "b.author like :keyword or b.title like :keyword or b.publisher like :keyword");
-		q.setParameter("keyword", "%" + inKeyword + "%");
+		q.setParameter("keyword", "%" + keyword + "%");
 		@SuppressWarnings("unchecked")
 		List<TBook> list = q.getResultList();
 		return list;
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByISBNs(final T em2, List<String> inISBNList) {
+	public List<TBook> retrieveBooksByISBNs(final T em2, List<String> isbnList) {
 		EntityManager em = em2 != null ? em2 : getEntityManager();
 
 		Query q;
-		if (inISBNList == null) {
+		if (isbnList == null) {
 			q = em.createQuery("select b from TBook b");
 			@SuppressWarnings("unchecked")
 			List<TBook> resultList = q.getResultList();
 			return resultList;
 		}
-		q = em.createQuery("select b from TBook b where b.isbn in :inISBNList");
-		q.setParameter("inISBNList", inISBNList);
+		q = em.createQuery("select b from TBook b where b.isbn in :isbnList");
+		q.setParameter("isbnList", isbnList);
 		@SuppressWarnings("unchecked")
 		List<TBook> resultList = q.getResultList();
 		return resultList;

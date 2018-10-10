@@ -73,10 +73,10 @@ public class OrderServiceWrapper extends AbstractOrderService<SessionFactory> {
 
 	// コンテキスト.xmlにtransactionAttributesを定義しているので@Transactionalを省略できる
 	@Override
-	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
+	public void orderBooks(String uid, List<String> inISBNs) throws Exception {
 		//rollbackするための例外はRuntimeExceptionでないといけない
 		try {
-			super.orderBooks(inUid, inISBNs);
+			super.orderBooks(uid, inISBNs);
 		}
 		catch (RuntimeException e) {
 			throw e;

@@ -47,11 +47,11 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 	@Override
 	//@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	// => The @TransactionAttribute annotation applies only to beans using Container-Managed Transactions.  
-	public boolean createCustomer(String inUid, String inPassword, String inName, String inEmail) throws Exception {
+	public boolean createCustomer(String uid, String password, String name, String email) throws Exception {
 		log.log(Level.INFO, "this={0}", this);
 		try {
 			tx.begin();
-			boolean rc = super.createCustomer(inUid, inPassword, inName, inEmail);
+			boolean rc = super.createCustomer(uid, password, name, email);
 			log.log(Level.INFO, "rc={0}", rc);
 			tx.commit();
 			return rc;

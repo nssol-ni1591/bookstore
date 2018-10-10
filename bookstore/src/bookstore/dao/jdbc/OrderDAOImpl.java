@@ -21,7 +21,7 @@ public class OrderDAOImpl<T extends Connection> implements OrderDAO<T> {
 
 	private static final Logger log = Logger.getLogger(OrderDAOImpl.class.getName());
 
-	public TOrder createOrder(final T con2, TCustomer inCustomer) throws SQLException {
+	public TOrder createOrder(final T con2, TCustomer customer) throws SQLException {
 		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
 		PreparedStatement pst2 = null;
@@ -31,7 +31,7 @@ public class OrderDAOImpl<T extends Connection> implements OrderDAO<T> {
 			Timestamp now = Timestamp.valueOf(LocalDateTime.now());
 			pst = con.prepareStatement("insert into T_Order (customer_id_fk, orderday) values (?,?)"
 					, Statement.RETURN_GENERATED_KEYS);
-			pst.setInt(1, inCustomer.getId());
+			pst.setInt(1, customer.getId());
 			pst.setTimestamp(2, now);
 			if (pst.executeUpdate() <= 0) {
 				log.log(Level.SEVERE, "failed sql: {0}", pst);
@@ -50,7 +50,7 @@ public class OrderDAOImpl<T extends Connection> implements OrderDAO<T> {
 			*/
 			if (rs2.next()) {
 				TOrder saveOrder = new TOrder();
-				saveOrder.setTCustomer(inCustomer);
+				saveOrder.setTCustomer(customer);
 				saveOrder.setOrderday(now);
 				saveOrder.setId(rs2.getInt(1));
 
@@ -58,7 +58,7 @@ public class OrderDAOImpl<T extends Connection> implements OrderDAO<T> {
 					con.commit();
 				}
 				log.log(Level.INFO, "customer_id={0}, order_id={1}"
-						, new Object[] { inCustomer.getId(), saveOrder.getId() });
+						, new Object[] { customer.getId(), saveOrder.getId() });
 				return saveOrder;
 			}
 			else {

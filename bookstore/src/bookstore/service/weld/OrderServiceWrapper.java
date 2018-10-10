@@ -59,14 +59,14 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 	}
 
 	@Override
-	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
+	public void orderBooks(String uid, List<String> inISBNs) throws Exception {
 		em = emf.createEntityManager();
 		EntityTransaction tx = null;
 		try {
 			tx = em.getTransaction();
 			tx.begin();
 	
-			super.orderBooks(inUid, inISBNs);
+			super.orderBooks(uid, inISBNs);
 
 			tx.commit();
 		}

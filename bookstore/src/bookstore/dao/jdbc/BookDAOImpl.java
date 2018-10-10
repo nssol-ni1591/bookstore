@@ -13,13 +13,13 @@ import bookstore.pbean.TBook;
 public class BookDAOImpl<T extends Connection> implements BookDAO<T> {
 
 	@Override
-	public int getPriceByISBNs(final T con2, final List<String> inISBNList) throws SQLException {
+	public int getPriceByISBNs(final T con2, final List<String> isbnList) throws SQLException {
 		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
 			pst = con.prepareStatement("select sum(price) from T_Book where isbn in ('" 
-					+ String.join("','", inISBNList.toArray(new String[0]))
+					+ String.join("','", isbnList.toArray(new String[0]))
 					+ "')");
 			rs = pst.executeQuery();
 			if (rs.next()) {
@@ -33,17 +33,17 @@ public class BookDAOImpl<T extends Connection> implements BookDAO<T> {
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByKeyword(final T con2, String inKeyword) throws SQLException {
+	public List<TBook> retrieveBooksByKeyword(final T con2, String keyword) throws SQLException {
 		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		List<TBook> booksList = new ArrayList<>();
 		try {
 			pst = con.prepareStatement("select id, isbn, title, author, publisher, price from T_Book where author like ? or title like ? or publisher like ?");
-			String keyword = "%" + inKeyword + "%";
-			pst.setString(1, keyword);
-			pst.setString(2, keyword);
-			pst.setString(3, keyword);
+			String keyword2 = "%" + keyword + "%";
+			pst.setString(1, keyword2);
+			pst.setString(2, keyword2);
+			pst.setString(3, keyword2);
 			rs = pst.executeQuery();
 			while (rs.next()) {
 				int id = rs.getInt(1);
@@ -70,18 +70,18 @@ public class BookDAOImpl<T extends Connection> implements BookDAO<T> {
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByISBNs(final T con2, final List<String> inISBNList) throws SQLException {
+	public List<TBook> retrieveBooksByISBNs(final T con2, final List<String> isbnList) throws SQLException {
 		Connection con = con2 != null ? con2 : DB.createConnection();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		List<TBook> booksList = new ArrayList<>();
 		try {
-			if (inISBNList == null || inISBNList.isEmpty()) {
+			if (isbnList == null || isbnList.isEmpty()) {
 				pst = con.prepareStatement("select id, isbn, title, author, publisher, price from T_Book");
 			}
 			else {
 				pst = con.prepareStatement("select id, isbn, title, author, publisher, price from T_Book where isbn in ('"
-						+ String.join("','", inISBNList.toArray(new String[0]))
+						+ String.join("','", isbnList.toArray(new String[0]))
 						+ "')");
 			}
 			rs = pst.executeQuery();

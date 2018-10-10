@@ -21,15 +21,15 @@ public class BookDAOImpl<T extends JdbcTemplate> implements BookDAO<T> {
 	@Autowired JdbcTemplate jdbcTemplate3;
 
 	@Override
-	public int getPriceByISBNs(final T jdbcTemplate2, final List<String> inISBNList) throws SQLException {
+	public int getPriceByISBNs(final T jdbcTemplate2, final List<String> isbnList) throws SQLException {
 		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 		return jdbcTemplate.queryForObject("select sum(price) from T_Book where isbn in (?)"
 				, Integer.class
-				, String.join("','", inISBNList.toArray(new String[0])));
+				, String.join("','", isbnList.toArray(new String[0])));
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByKeyword(final T jdbcTemplate2, String inKeyword) throws SQLException {
+	public List<TBook> retrieveBooksByKeyword(final T jdbcTemplate2, String keyword) throws SQLException {
 		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 		return jdbcTemplate.query(
 				new PreparedStatementCreator() {
@@ -38,10 +38,10 @@ public class BookDAOImpl<T extends JdbcTemplate> implements BookDAO<T> {
 					public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
 						PreparedStatement pst = con.prepareStatement(
 								"select id, isbn, title, author, publisher, price from T_Book where author like ? or title like ? or publisher like ?");
-						String keyword = "%" + inKeyword + "%";
-						pst.setString(1, keyword);
-						pst.setString(2, keyword);
-						pst.setString(3, keyword);
+						String keyword2 = "%" + keyword + "%";
+						pst.setString(1, keyword2);
+						pst.setString(2, keyword2);
+						pst.setString(3, keyword2);
 						return pst;
 					}
 				}
@@ -69,7 +69,7 @@ public class BookDAOImpl<T extends JdbcTemplate> implements BookDAO<T> {
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByISBNs(final T jdbcTemplate2, final List<String> inISBNList) throws SQLException {
+	public List<TBook> retrieveBooksByISBNs(final T jdbcTemplate2, final List<String> isbnList) throws SQLException {
 		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 		return jdbcTemplate.query(
 				new PreparedStatementCreator() {
@@ -77,12 +77,12 @@ public class BookDAOImpl<T extends JdbcTemplate> implements BookDAO<T> {
 					@Override
 					public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
 						PreparedStatement pst;
-						if (inISBNList == null || inISBNList.isEmpty()) {
+						if (isbnList == null || isbnList.isEmpty()) {
 							pst = con.prepareStatement("select id, isbn, title, author, publisher, price from T_Book");
 						}
 						else {
 							pst = con.prepareStatement("select id, isbn, title, author, publisher, price from T_Book where isbn in ('"
-									+ String.join("','", inISBNList.toArray(new String[0]))
+									+ String.join("','", isbnList.toArray(new String[0]))
 									+ "')");
 						}
 						return pst;

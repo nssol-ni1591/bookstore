@@ -34,36 +34,36 @@ public abstract class AbstractCustomerDAOImpl<T extends EntityManager> implement
 	@Inject private Logger log;
 
 	@Override
-	public int getCustomerNumberByUid(final T em2, String inUid) {
+	public int getCustomerNumberByUid(final T em2, String uid) {
 		EntityManager em = em2 != null ? em2 : getEntityManager();
 
 		Query q = em
 				.createQuery("select c from TCustomer c where c.username=:username");
-		q.setParameter("username", inUid);
+		q.setParameter("username", uid);
 		return q.getResultList().size();
 	}
 
 	@Override
-	public TCustomer findCustomerByUid(final T em2, String inUid) {
+	public TCustomer findCustomerByUid(final T em2, String uid) {
 		EntityManager em = em2 != null ? em2 : getEntityManager();
 
 		Query q = em
 				.createQuery("select c from TCustomer c where c.username=:username");
-		q.setParameter("username", inUid);
+		q.setParameter("username", uid);
 		return (TCustomer) q.getSingleResult();
 	}
 
 	@Override
-	public void saveCustomer(final T em2, String inUsername, String inPasswordMD5, String inName, String inEmail) {
+	public void saveCustomer(final T em2, String username, String passwordMD5, String name, String email) {
 		EntityManager em = em2 != null ? em2 : getEntityManager();
 		log.log(Level.INFO, "entityManager={0}", em);
 
 		em.getTransaction().begin();
 		TCustomer customer = new TCustomer();
-		customer.setUsername(inUsername);
-		customer.setPasswordmd5(inPasswordMD5);
-		customer.setName(inName);
-		customer.setEmail(inEmail);
+		customer.setUsername(username);
+		customer.setPasswordmd5(passwordMD5);
+		customer.setName(name);
+		customer.setEmail(email);
 		em.persist(customer);
 
 		em.getTransaction().commit();

@@ -12,10 +12,10 @@ public interface BookService {
 
 	public List<String> retrieveBookISBNsByKeyword(String inKeyword) throws SQLException;
 
-	public List<VBook> createVBookList(List<String> inProductList, List<String> inSelectedList) throws SQLException;
+	public List<VBook> createVBookList(List<String> productList, List<String> selectedList) throws SQLException;
 
-	public VCheckout createVCheckout(List<String> inSelectedList) throws SQLException;
+	public VCheckout createVCheckout(List<String> selectedList) throws SQLException;
 
-	public List<String> createCart(List<String> inProductList, List<String> inSelectedList, List<String> inCart);
+	public List<String> createCart(List<String> productList, List<String> selectedList, List<String> cart);
 
 }

@@ -57,13 +57,13 @@ public abstract class AbstractOrderDAOImpl<T extends EntityManager> implements O
 	}
 
 	@Override
-	public TOrder createOrder(T em2, TCustomer inCustomer) {
+	public TOrder createOrder(T em2, TCustomer customer) {
 		EntityManager em = em2 != null ? em2 : getEntityManager();
 		log.log(Level.INFO, "entityManager={0}", em);
 
 		TOrder order = new TOrder();
 		order.setOrderday(Timestamp.valueOf(LocalDateTime.now()));
-		order.setTCustomer(inCustomer);
+		order.setTCustomer(customer);
 		em.persist(order);
 
 		String hql;
@@ -74,11 +74,11 @@ public abstract class AbstractOrderDAOImpl<T extends EntityManager> implements O
 			hql = "select o from TOrder o where o.id = (select max(o2.id) from TOrder o2 where o2.tCustomer = :CUSTID)";
 		}
 		Query q = em.createQuery(hql);
-		q.setParameter("CUSTID", inCustomer);
+		q.setParameter("CUSTID", customer);
 		order = (TOrder) q.getSingleResult();
 
 		log.log(Level.INFO, "customer_id={0}, order_id={1}"
-				, new Object[] { inCustomer.getId(), order.getId() });
+				, new Object[] { customer.getId(), order.getId() });
 		return order;
 	}
 

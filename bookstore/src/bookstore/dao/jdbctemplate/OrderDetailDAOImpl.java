@@ -25,14 +25,14 @@ public class OrderDetailDAOImpl<T extends JdbcTemplate> implements OrderDetailDA
 	@Autowired JdbcTemplate jdbcTemplate3;
 	@Log private static Logger log;
 
-	public void createOrderDetail(final T jdbcTemplate2, TOrder inOrder, TBook inBook) throws SQLException {
+	public void createOrderDetail(final T jdbcTemplate2, TOrder order, TBook book) throws SQLException {
 		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 
 		log.log(Level.INFO, "jdbcTemplate={0}", jdbcTemplate);
-		log.log(Level.INFO, "order_id={0}, book_id={1}", new Object[] { inOrder.getId(), inBook.getId() });
-		if ("0-0000-0000-0".equals(inBook.getIsbn())) {
+		log.log(Level.INFO, "order_id={0}, book_id={1}", new Object[] { order.getId(), book.getId() });
+		if ("0-0000-0000-0".equals(book.getIsbn())) {
 			//throw new SQLException("isdn: 0-0000-0000-0");
-			inOrder.setId(0);
+			order.setId(0);
 		}
 
 		PreparedStatementCreator psc = new PreparedStatementCreator() {
@@ -41,10 +41,10 @@ public class OrderDetailDAOImpl<T extends JdbcTemplate> implements OrderDetailDA
 				PreparedStatement pst = con.prepareStatement(
 						"insert into T_Order_Detail (order_id_fk, book_id_fk) values (?,?)"
 						, Statement.RETURN_GENERATED_KEYS);
-				pst.setInt(1, inOrder.getId());
-				pst.setInt(2, inBook.getId());
+				pst.setInt(1, order.getId());
+				pst.setInt(2, book.getId());
 				log.log(Level.INFO, "execute sql: {0}, order_id={1}, book_id={2}"
-						, new Object[] { pst, inOrder.getId(), inBook.getId() });
+						, new Object[] { pst, order.getId(), book.getId() });
 				return pst;
 			}
 		};
@@ -55,7 +55,7 @@ public class OrderDetailDAOImpl<T extends JdbcTemplate> implements OrderDetailDA
 			throw new SQLException("failed insert");
 		}
 		log.log(Level.INFO, "detail_id={0}, order_id={1}, book_id={2}"
-				, new Object[] { holder.getKey().intValue(), inOrder.getId(), inBook.getId() });
+				, new Object[] { holder.getKey().intValue(), order.getId(), book.getId() });
 	}
 
 }

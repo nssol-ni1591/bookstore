@@ -23,14 +23,14 @@ public class CustomerDAOImpl<T extends JdbcTemplate> implements CustomerDAO<T> {
 	@Autowired JdbcTemplate jdbcTemplate3;
 	@Log private static Logger log;
 
-	public int getCustomerNumberByUid(final T jdbcTemplate2, final String inUid) throws SQLException {
+	public int getCustomerNumberByUid(final T jdbcTemplate2, final String uid) throws SQLException {
 		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 		return jdbcTemplate.queryForObject("select count(*) from T_Customer where username = ?"
-				, new Object[] { inUid }
+				, new Object[] { uid }
 				, Integer.class);
 	}
 
-	public TCustomer findCustomerByUid(final T jdbcTemplate2, final String inUid) throws SQLException {
+	public TCustomer findCustomerByUid(final T jdbcTemplate2, final String uid) throws SQLException {
 		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 		return jdbcTemplate.query(
 				new PreparedStatementCreator() {
@@ -39,7 +39,7 @@ public class CustomerDAOImpl<T extends JdbcTemplate> implements CustomerDAO<T> {
 					public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
 						PreparedStatement pst = con.prepareStatement(
 								"select id, username, passwordmd5, name, email from T_Customer where username = ?");
-						pst.setString(1, inUid);
+						pst.setString(1, uid);
 						return pst;
 					}
 				}
@@ -68,10 +68,10 @@ public class CustomerDAOImpl<T extends JdbcTemplate> implements CustomerDAO<T> {
 	}
 
 	public void saveCustomer(final T jdbcTemplate2, 
-			String inUid,
-			String inPasswordMD5,
-			String inName,
-			String inEmail) throws SQLException {
+			String uid,
+			String passwordMD5,
+			String name,
+			String email) throws SQLException {
 		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 		PreparedStatementCreator psc = new PreparedStatementCreator() {
 
@@ -79,15 +79,15 @@ public class CustomerDAOImpl<T extends JdbcTemplate> implements CustomerDAO<T> {
 			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
 				PreparedStatement pst = con.prepareStatement(
 						"insert into T_Customer (username, passwordmd5, name, email) values (?,?,?,?)");
-				pst.setString(1, inUid);
-				pst.setString(2, inPasswordMD5);
-				pst.setString(3, inName);
-				pst.setString(4, inEmail);
+				pst.setString(1, uid);
+				pst.setString(2, passwordMD5);
+				pst.setString(3, name);
+				pst.setString(4, email);
 				return pst;
 			}
 		};
 
-		log.log(Level.INFO, "execute sql: {0}, uid={1}", new Object[] { psc, inUid });
+		log.log(Level.INFO, "execute sql: {0}, uid={1}", new Object[] { psc, uid });
 		if (jdbcTemplate.update(psc) <= 0) {
 			log.log(Level.SEVERE, "failed psc={0}", psc);
 			throw new SQLException("failed insert");

@@ -68,13 +68,13 @@ public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 
 	@Override
 	@Transactional(value="dstx", propagation=Propagation.REQUIRED)	//コンテキスト.xmlでTx定義を行っていないので@Transactionalが必要
-	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
+	public void orderBooks(String uid, List<String> inISBNs) throws Exception {
 		log.log(Level.INFO, "datasource={0}"
 				, jdbcTemplate == null ? "null" : jdbcTemplate.getDataSource().getClass().getName());
 
 		//rollbackするための例外はRuntimeExceptionでないといけない
 		try {
-			super.orderBooks(inUid, inISBNs);
+			super.orderBooks(uid, inISBNs);
 		}
 		catch (RuntimeException e) {
 			throw e;

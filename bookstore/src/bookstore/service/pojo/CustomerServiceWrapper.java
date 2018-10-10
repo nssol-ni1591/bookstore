@@ -31,14 +31,14 @@ public class CustomerServiceWrapper extends AbstractCustomerService<Connection> 
 	}
 
 	@Override
-	public boolean createCustomer(String inUid
-			, String inPassword
-			, String inName
-			, String inEmail) throws Exception {
+	public boolean createCustomer(String uid
+			, String password
+			, String name
+			, String email) throws Exception {
 		boolean rc = false;
 		con = DB.createConnection();
 		try {
-			rc = super.createCustomer(inUid, inPassword, inName, inEmail);
+			rc = super.createCustomer(uid, password, name, email);
 			con.commit();
 			return rc;
 		}

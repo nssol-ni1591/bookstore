@@ -20,40 +20,40 @@ public class CustomerDAOImpl<T extends SessionFactory> /*extends HibernateDaoSup
 	//@Autowired SessionFactory sessionFactory3
 	@Log private static Logger log;
 
-	public int getCustomerNumberByUid(final T sessionFactory2, final String inUid) {
+	public int getCustomerNumberByUid(final T sessionFactory2, final String uid) {
 		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
 
-		log.log(Level.INFO, "inUid={0}", new Object[] { inUid });
+		log.log(Level.INFO, "uid={0}", new Object[] { uid });
 
 		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		return ht.execute(session -> {
 			Query numQuery = session
 					.createQuery("select count(*) from TCustomer customer where customer.username like :USERNAME");
-			numQuery.setString("USERNAME", inUid);
+			numQuery.setString("USERNAME", uid);
 			return (Long)numQuery.uniqueResult();
 		}).intValue();
 	}
 
-	public TCustomer findCustomerByUid(final T sessionFactory2, final String inUid) {
+	public TCustomer findCustomerByUid(final T sessionFactory2, final String uid) {
 		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
 
 		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		return ht.execute(session -> {
 			Query priceQuery = session
 					.createQuery("from TCustomer customer where customer.username like :USERNAME");
-			priceQuery.setString("USERNAME", inUid);
+			priceQuery.setString("USERNAME", uid);
 			return (TCustomer)priceQuery.uniqueResult();
 		});
 	}
 
-	public void saveCustomer(final T sessionFactory2, String inUid, String inPasswordMD5, String inName, String inEmail) {
+	public void saveCustomer(final T sessionFactory2, String uid, String passwordMD5, String name, String email) {
 		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
 
 		TCustomer saveCustomer = new TCustomer();
-		saveCustomer.setUsername(inUid);
-		saveCustomer.setPasswordmd5(inPasswordMD5);
-		saveCustomer.setName(inName);
-		saveCustomer.setEmail(inEmail);
+		saveCustomer.setUsername(uid);
+		saveCustomer.setPasswordmd5(passwordMD5);
+		saveCustomer.setName(name);
+		saveCustomer.setEmail(email);
 		new HibernateTemplate(sessionFactory).save(saveCustomer);
 	}
 

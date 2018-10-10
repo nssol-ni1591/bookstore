@@ -45,14 +45,14 @@ public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 	 * @see bookstore.service.impl.BookServiceImpl#createCart(java.util.List, java.util.List, java.util.List)
 	 */
 	@Override
-	public List<String> createCart(List<String> inProductList, List<String> inSelectedList, List<String> inCart) {
-		if (inSelectedList != null && !inSelectedList.isEmpty()) {
-			inSelectedList.stream()
-				.filter(p -> !inCart.contains(p))
-				.filter(inProductList::contains)
-				.forEach(inCart::add);
+	public List<String> createCart(List<String> productList, List<String> selectedList, List<String> cart) {
+		if (selectedList != null && !selectedList.isEmpty()) {
+			selectedList.stream()
+				.filter(p -> !cart.contains(p))
+				.filter(productList::contains)
+				.forEach(cart::add);
 		}
-		return inCart;
+		return cart;
 	}
 
 }

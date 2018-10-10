@@ -42,13 +42,13 @@ public class CustomerServiceWrapper extends AbstractCustomerService<SessionFacto
 
 	// コンテキスト.xmlにtransactionAttributesを定義しているので@Transactionalを省略できる
 	@Override
-	public boolean createCustomer(String inUid
-			, String inPassword
-			, String inName
-			, String inEmail) throws Exception {
+	public boolean createCustomer(String uid
+			, String password
+			, String name
+			, String email) throws Exception {
 		//rollbackするための例外はRuntimeExceptionでないといけない
 		try {
-			return super.createCustomer(inUid, inPassword, inName, inEmail);
+			return super.createCustomer(uid, password, name, email);
 		}
 		catch (RuntimeException e) {
 			throw e;

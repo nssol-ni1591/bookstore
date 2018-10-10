@@ -6,14 +6,14 @@ import bookstore.pbean.TCustomer;
 
 public interface CustomerDAO<T> {
 
-	public int getCustomerNumberByUid(final T em, String inUid) throws SQLException;
+	public int getCustomerNumberByUid(final T em, String uid) throws SQLException;
 
-	public TCustomer findCustomerByUid(final T em, String inUid) throws SQLException;
+	public TCustomer findCustomerByUid(final T em, String uid) throws SQLException;
 
 	public void saveCustomer(final T em, 
-			String inUid,
-			String inPasswordMD5,
-			String inName,
-			String inEmail) throws SQLException;
+			String uid,
+			String passwordMD5,
+			String name,
+			String email) throws SQLException;
 
 }

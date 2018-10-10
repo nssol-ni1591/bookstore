@@ -35,7 +35,7 @@ public class OrderDAOImpl<T extends JdbcTemplate> implements OrderDAO<T> {
 	@Autowired JdbcTemplate jdbcTemplate3;
 	@Log private static Logger log;
 
-	public TOrder createOrder(final T jdbcTemplate2, TCustomer inCustomer) throws SQLException {
+	public TOrder createOrder(final T jdbcTemplate2, TCustomer customer) throws SQLException {
 		JdbcTemplate jdbcTemplate = jdbcTemplate2 != null ? jdbcTemplate2 : jdbcTemplate3;
 
 		log.log(Level.INFO, "jdbcTemplate={0}", jdbcTemplate);
@@ -47,7 +47,7 @@ public class OrderDAOImpl<T extends JdbcTemplate> implements OrderDAO<T> {
 				pst = con.prepareStatement(
 						"insert into T_Order (customer_id_fk, orderday) values (?,?)"
 						, Statement.RETURN_GENERATED_KEYS);
-				pst.setInt(1, inCustomer.getId());
+				pst.setInt(1, customer.getId());
 				pst.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
 				return pst;
 			}
@@ -58,7 +58,7 @@ public class OrderDAOImpl<T extends JdbcTemplate> implements OrderDAO<T> {
 			}
 		};
 
-		log.log(Level.INFO, "execute psc={0}, customer_id={1}", new Object[] { psc, inCustomer.getId() });
+		log.log(Level.INFO, "execute psc={0}, customer_id={1}", new Object[] { psc, customer.getId() });
 		final KeyHolder holder = new GeneratedKeyHolder();
 		if (jdbcTemplate.update(psc, holder) <= 0) {
 			log.log(Level.SEVERE, "failed psc={0}", psc);
@@ -66,7 +66,7 @@ public class OrderDAOImpl<T extends JdbcTemplate> implements OrderDAO<T> {
 		}
 
 		TOrder order = new TOrder();
-		order.setTCustomer(inCustomer);
+		order.setTCustomer(customer);
 		order.setOrderday(Timestamp.valueOf(LocalDateTime.now()));
 		order.setId(holder.getKey().intValue());
 

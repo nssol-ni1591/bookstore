@@ -50,9 +50,9 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public boolean createCustomer(String inUid, String inPassword, String inName, String inEmail) throws Exception {
+	public boolean createCustomer(String uid, String password, String name, String email) throws Exception {
 		try {
-			boolean rc = super.createCustomer(inUid, inPassword, inName, inEmail);
+			boolean rc = super.createCustomer(uid, password, name, email);
 			log.log(Level.INFO, "rc={0}", rc);
 			return rc;
 		}

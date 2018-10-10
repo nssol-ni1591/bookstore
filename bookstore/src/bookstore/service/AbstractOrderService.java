@@ -28,7 +28,7 @@ public abstract class AbstractOrderService<T> implements OrderService {
 	protected abstract T getManager();
 
 	@Override
-	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
+	public void orderBooks(String uid, List<String> isbnList) throws Exception {
 		Logger log = getLogger();
 		T em = getManager();
 		BookDAO<T> bookdao = getBookDAO();
@@ -36,12 +36,12 @@ public abstract class AbstractOrderService<T> implements OrderService {
 		OrderDAO<T> orderdao = getOrderDAO();
 		OrderDetailDAO<T> odetaildao = getOrderDetailDAO();
 
-		TCustomer customer = customerdao.findCustomerByUid(em, inUid);
+		TCustomer customer = customerdao.findCustomerByUid(em, uid);
 		TOrder order = orderdao.createOrder(em, customer);
 		log.log(Level.INFO, "uid={0}, customer_id={1}, order_id={2}"
-				, new Object[] { inUid, customer.getId(), order.getId() });
+				, new Object[] { uid, customer.getId(), order.getId() });
 
-		Iterator<String> iter = inISBNs.iterator();
+		Iterator<String> iter = isbnList.iterator();
 		while (iter.hasNext()) {
 			String isbn = iter.next();
 			List<String> isbns = new ArrayList<>();

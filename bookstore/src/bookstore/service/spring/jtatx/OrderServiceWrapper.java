@@ -70,13 +70,13 @@ public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 
 	@Override
 	@Transactional(value="jtatx", propagation=Propagation.REQUIRED)
-	public void orderBooks(String inUid, List<String> inISBNs) throws Exception {
+	public void orderBooks(String uid, List<String> inISBNs) throws Exception {
 		log.log(Level.INFO, "datasource={0}"
 				, jdbcTemplate == null ? "null" : jdbcTemplate.getDataSource().getClass().getName());
 
 		//rollback‚·‚é‚½‚ß‚Ì—áŠO‚ÍRuntimeException‚Å‚È‚¢‚Æ‚¢‚¯‚È‚¢
 		try {
-			super.orderBooks(inUid, inISBNs);
+			super.orderBooks(uid, inISBNs);
 		}
 		catch (RuntimeException e) {
 			throw e;
@@ -90,7 +90,7 @@ public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 		Transaction tx = sess.getTransaction();
 		try {
 			tx.begin();
-			boolean rc = super.createCustomer(inUid, inPassword, inName, inEmail);
+			boolean rc = super.createCustomer(uid, password, name, email);
 			tx.commit();
 			return rc;
 		}

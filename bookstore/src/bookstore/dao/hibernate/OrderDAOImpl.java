@@ -24,16 +24,16 @@ public class OrderDAOImpl<T extends SessionFactory> /*extends HibernateDaoSuppor
 	//@Autowired SessionFactory sessionFactory3
 	@Log private static Logger log;
 
-	public TOrder createOrder(final T sessionFactory2, TCustomer inCustomer) {
+	public TOrder createOrder(final T sessionFactory2, TCustomer customer) {
 		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
 
 		log.log(Level.INFO, "sessionFactory={0}", sessionFactory);
 		TOrder saveOrder = new TOrder();
-		saveOrder.setTCustomer(inCustomer);
+		saveOrder.setTCustomer(customer);
 		saveOrder.setOrderday(Timestamp.valueOf(LocalDateTime.now()));
 		new HibernateTemplate(sessionFactory).save(saveOrder);
 		log.log(Level.INFO, "customer_id={0}, order_id={1}"
-				, new Object[] { inCustomer.getId(), saveOrder.getId() });
+				, new Object[] { customer.getId(), saveOrder.getId() });
 		return (saveOrder);
 	}
 

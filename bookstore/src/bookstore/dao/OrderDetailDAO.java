@@ -10,7 +10,7 @@ import bookstore.pbean.TOrderDetail;
 
 public interface OrderDetailDAO<T> {
 
-	void createOrderDetail(final T em, TOrder inOrder, TBook inBook) throws SQLException;
+	void createOrderDetail(final T em, TOrder order, TBook book) throws SQLException;
 
 	default List<TOrderDetail> listOrderDetails(final T em, List<String> orders) throws SQLException {
 		return new ArrayList<>();

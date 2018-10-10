@@ -23,23 +23,23 @@ public class BookDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport
 	@Log private static Logger log;
 
 	@Override
-	public int getPriceByISBNs(final T sessionFactory2, final List<String> inISBNList) {
+	public int getPriceByISBNs(final T sessionFactory2, final List<String> isbnList) {
 		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
 
 		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		return ht.execute(session -> {
 			Query priceQuery = 
 					session.createQuery("select sum( book.price ) from TBook book where book.isbn in ( :SELECTED_ITEMS )");
-			priceQuery.setParameterList("SELECTED_ITEMS", inISBNList);
+			priceQuery.setParameterList("SELECTED_ITEMS", isbnList);
 			return (Long)priceQuery.uniqueResult();
 		}).intValue();
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByKeyword(final T sessionFactory2, String inKeyword) {
+	public List<TBook> retrieveBooksByKeyword(final T sessionFactory2, String keyword) {
 		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
 
-		String escapedKeyword = Pattern.compile("([%_])").matcher(inKeyword).replaceAll("\\\\$1");
+		String escapedKeyword = Pattern.compile("([%_])").matcher(keyword).replaceAll("\\\\$1");
 		Object[] keywords = { "%" + escapedKeyword + "%", "%" + escapedKeyword + "%", "%" + escapedKeyword + "%" };
 
 		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
@@ -51,12 +51,12 @@ public class BookDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport
 	}
 
 	@Override
-	public List<TBook> retrieveBooksByISBNs(final T sessionFactory2, final List<String> inISBNList) {
+	public List<TBook> retrieveBooksByISBNs(final T sessionFactory2, final List<String> isbnList) {
 		SessionFactory sessionFactory = sessionFactory2 != null ? sessionFactory2 : sessionFactory3;
 
 		HibernateTemplate ht = new HibernateTemplate(sessionFactory);
 		List<TBook> list = null;
-		if (inISBNList == null) {
+		if (isbnList == null) {
 			@SuppressWarnings("unchecked")
 			List<TBook> list2 = (List<TBook>) ht.find("from TBook book");
 			list = list2;	// list2ÇÃâEï”Çíºê⁄listÇ…ë„ì¸Ç∑ÇÈÇ∆ÉGÉâÅ[Ç»ÇÈ WHY?
@@ -64,9 +64,9 @@ public class BookDAOImpl<T extends SessionFactory> /*extends HibernateDaoSupport
 		else {
 			list = ht.execute(session -> {
 				Query retrieveQuery = session.createQuery("from TBook book where book.isbn in ( :ISBNS )");
-				retrieveQuery.setParameterList("ISBNS", inISBNList);
+				retrieveQuery.setParameterList("ISBNS", isbnList);
 
-				log.log(Level.INFO, "inISBNList={0}", retrieveQuery);
+				log.log(Level.INFO, "isbnList={0}", retrieveQuery);
 				log.log(Level.INFO, "retrieveQuery={0}", retrieveQuery);
 
 				@SuppressWarnings("unchecked")

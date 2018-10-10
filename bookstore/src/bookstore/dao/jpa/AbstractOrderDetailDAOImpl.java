@@ -38,19 +38,19 @@ public abstract class AbstractOrderDetailDAOImpl<T extends EntityManager> implem
 	@Inject private Logger log;
 
 	@Override
-	public void createOrderDetail(final T em2, TOrder inOrder, TBook inBook) throws SQLException {
+	public void createOrderDetail(final T em2, TOrder order, TBook book) throws SQLException {
 		EntityManager em = em2 != null ? em2 : getEntityManager();
 		log.log(Level.INFO, "order_id={0}, book_id={1}"
-				, new Object[] { inOrder.getId(), inBook.getId() });
+				, new Object[] { order.getId(), book.getId() });
 
-		if ("0-0000-0000-0".equals(inBook.getIsbn())) {
+		if ("0-0000-0000-0".equals(book.getIsbn())) {
 			//throw new SQLException("isdn: 0-0000-0000-0");
-			inOrder.setId(0);
+			order.setId(0);
 		}
 
 		TOrderDetail orderDetail = new TOrderDetail();
-		orderDetail.setTOrder(inOrder);
-		orderDetail.setTBook(inBook);
+		orderDetail.setTOrder(order);
+		orderDetail.setTBook(book);
 		em.persist(orderDetail);
 	}
 
