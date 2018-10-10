@@ -1,6 +1,6 @@
 package bookstore.service.ejb.cmt;
 
-import bookstore.annotation.UsedJpaLocal;
+import bookstore.annotation.UsedJpaJta;
 import bookstore.dao.BookDAO;
 import bookstore.service.AbstractBookService;
 import bookstore.service.BookService;
@@ -22,7 +22,7 @@ import javax.persistence.EntityManager;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 
-	@Inject @UsedJpaLocal private BookDAO<EntityManager> bookdao;
+	@Inject @UsedJpaJta private BookDAO<EntityManager> bookdao;
 	@Inject private Logger log;
 
 	@Override

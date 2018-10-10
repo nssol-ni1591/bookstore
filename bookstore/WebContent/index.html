@@ -14,16 +14,17 @@ and open the template in the editor.
 		<h4><a href="Login.jsp">servlet + JSP + jdbc</a></h4>
 		<h4><a href="Login.vm">springframework + struts + hibernate/jdbctemplate</a></h4>
 		<h4><a href="faces/Login.xhtml">weld + JSF + JTA:RESOURCE_LOCAL</a></h4>
-		<h4><a href="faces/Login2.xhtml">EJB (Local) + JSF + JTA:RESOURCE_LOCAL</a></h4>
+		<h4><a href="faces/Login2.xhtml">EJB (Local CMT) + JSF + JTA:JTA</a></h4>
 		<h4><a href="faces/Login3.xhtml">EJB (remote CMT) + JSF + JPA:JTA</a></h4>
-		<h4><a href="faces/Login4.xhtml">EJB (remote BMT) + JSF + JPA:JTA</a></h4>
+		<h4><a href="faces/Login4.xhtml">EJB (remote BMT) + JSF + JPA:RESOURCE_LOCAL</a></h4>
 		<h4>--------------------</h4>
-		<h4><a href="faces/Login5.xhtml?jpaModule=Hibernate&txType=JTA">EJB + JSF + Hibernate:JTA</a></h4>
-		<h4><a href="faces/Login5.xhtml?jpaModule=Hibernate&txType=Resource_Local">EJB + JSF + Hibernate:Resource_Local</a></h4>
-		<h4><a href="faces/Login5.xhtml?jpaModule=Eclipselink&txType=JTA">EJB + JSF + Eclipselink:JTA</a></h4>
-		<h4><a href="faces/Login5.xhtml?jpaModule=Eclipselink&txType=Resource_Local">EJB + JSF + Eclipselink:Resource_Local</a></h4>
-		<h4><a href="faces/Login5.xhtml?jpaModule=OpenJPA&txType=JTA">EJB + JSF + OpenJPA:JTA</a></h4>
-		<h4><a href="faces/Login5.xhtml?jpaModule=OpenJPA&txType=Resource_Local">EJB + JSF + OpenJPA:Resource_Local</a></h4>
+		<h4><a href="faces/Login5.xhtml?jpaModule=Hibernate&txType=JTA">EJB (CMT) + JSF + Hibernate:JTA</a></h4>
+		<h4><a href="faces/Login5.xhtml?jpaModule=Hibernate&txType=Resource_Local">EJB (CMT) + JSF + Hibernate:Resource_Local</a></h4>
+		<h4><a href="faces/Login5.xhtml?jpaModule=Eclipselink&txType=JTA">EJB (CMT) + JSF + Eclipselink:JTA</a></h4>
+		<h4><a href="faces/Login5.xhtml?jpaModule=Eclipselink&txType=Resource_Local">EJB (CMT) + JSF + Eclipselink:Resource_Local</a></h4>
+		<h4><a href="faces/Login5.xhtml?jpaModule=OpenJPA&txType=JTA">EJB (CMT) + JSF + OpenJPA:JTA</a></h4>
+		<h4><a href="faces/Login5.xhtml?jpaModule=OpenJPA&txType=Resource_Local">EJB (CMT) + JSF + OpenJPA:Resource_Local</a></h4>
+		<h4>CMTとRESOURCE_LOCALの組み合わせではトランザクションが正常に動作しない</h4>
 		</div>
 	</body>
 </html>

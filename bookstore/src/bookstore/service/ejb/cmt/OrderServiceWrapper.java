@@ -16,7 +16,7 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import bookstore.annotation.UsedJpaLocal;
+import bookstore.annotation.UsedJpaJta;
 import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
 import bookstore.dao.OrderDAO;
@@ -30,10 +30,10 @@ import bookstore.service.OrderService;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 
-	@Inject @UsedJpaLocal private BookDAO<EntityManager> bookdao;
-	@Inject @UsedJpaLocal private CustomerDAO<EntityManager> customerdao;
-	@Inject @UsedJpaLocal private OrderDAO<EntityManager> orderdao;
-	@Inject @UsedJpaLocal private OrderDetailDAO<EntityManager> orderdetaildao;
+	@Inject @UsedJpaJta private BookDAO<EntityManager> bookdao;
+	@Inject @UsedJpaJta private CustomerDAO<EntityManager> customerdao;
+	@Inject @UsedJpaJta private OrderDAO<EntityManager> orderdao;
+	@Inject @UsedJpaJta private OrderDetailDAO<EntityManager> orderdetaildao;
 	@Inject private Logger log;
 
 	@Override
