@@ -6,24 +6,28 @@ import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceUnit;
 
 import bookstore.annotation.UsedWeld;
-import bookstore.annotation.UsedJpaJta;
+import bookstore.annotation.UsedJpa;
 import bookstore.dao.CustomerDAO;
+import bookstore.persistence.JPASelector;
 import bookstore.service.AbstractCustomerService;
 
 @UsedWeld
 @Dependent
 public class CustomerServiceWrapper extends AbstractCustomerService<EntityManager> {
 
-	@Inject @UsedJpaJta private CustomerDAO<EntityManager> customerdao;
+	// JTAでもRESOURCE_LOCALでも正常に動作する（EntityTransactionを使用しているの当然）
+	//@Inject @UsedJpaJta private CustomerDAO<EntityManager> customerdao
+	//@Inject @UsedJpaLocal private CustomerDAO<EntityManager> customerdao
+	@Inject @UsedJpa private CustomerDAO<EntityManager> customerdao;
 	@Inject private Logger log;
 
-	@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
-	private EntityManager em = null;
+	//@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
+	//private EntityManager em = null;
+	@Inject private JPASelector selector;
+
 
 	@Override
 	protected CustomerDAO<EntityManager> getCustomerDAO() {
@@ -37,12 +41,16 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 	protected EntityManager getManager() {
 		// emは更新TxのみService層で生成することにする
 		// よって、更新Tx以外ではemの値はnullとなるのでDAO層で生成される
+		//return em
+		EntityManager em = selector.getEntityManager();
+		log.log(Level.INFO, "this={0}, em={1}", new Object[] { this, em });
 		return em;
 	}
 
 	@Override
 	public boolean createCustomer(String uid, String password, String name, String email) throws Exception {
-		em = emf.createEntityManager();
+		//em = emf.createEntityManager()
+		EntityManager em = getManager();
 		EntityTransaction tx = null;
 		try {
 			tx = em.getTransaction();
@@ -61,8 +69,8 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 			throw e;
 		}
 		finally {
-			em.close();
-			em = null;
+			//em.close()
+			//em = null
 		}
 	}
 

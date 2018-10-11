@@ -30,8 +30,9 @@ public class CustomerServiceWrapper6 extends AbstractCustomerService<EntityManag
 	@Inject private Logger log;
 	@Inject private JPASelector selector;
 
-	// UserTransactionはBMTに対するものでCMTには利用できない
+	// BMTなのでトランザクションをUserTransactionで制御する
 	@Resource private UserTransaction tx;
+
 
 	@Override
 	protected CustomerDAO<EntityManager> getCustomerDAO() {

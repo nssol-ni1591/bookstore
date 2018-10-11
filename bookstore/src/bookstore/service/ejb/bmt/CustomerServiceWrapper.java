@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
-import bookstore.annotation.UsedJpaLocal;
+import bookstore.annotation.UsedJpaJta;
 import bookstore.dao.CustomerDAO;
 import bookstore.service.AbstractCustomerService;
 import bookstore.service.CustomerService;
@@ -24,10 +24,12 @@ import bookstore.service.CustomerService;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class CustomerServiceWrapper extends AbstractCustomerService<EntityManager> {
 
-	@Inject @UsedJpaLocal CustomerDAO<EntityManager> customerdao;
+	// RESOURCE_LOCALでは正常に動作しない
+	//@Inject @UsedJpaLocal CustomerDAO<EntityManager> customerdao
+	@Inject @UsedJpaJta CustomerDAO<EntityManager> customerdao;
 	@Inject private Logger log;
 
-	// UserTransactionはBMTに対するものでCMTには利用できない
+	// BMTなのでトランザクションをUserTransactionで制御する
 	@Resource private UserTransaction tx;
 
 	@Override

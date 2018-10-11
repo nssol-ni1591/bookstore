@@ -1,29 +1,33 @@
 package bookstore.service.weld;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
 
 import bookstore.annotation.UsedWeld;
-import bookstore.annotation.UsedJpaJta;
+import bookstore.annotation.UsedJpa;
 import bookstore.dao.BookDAO;
+import bookstore.persistence.JPASelector;
 import bookstore.service.AbstractBookService;
 
 @UsedWeld
 @Dependent
 public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 
-	@Inject @UsedJpaJta private BookDAO<EntityManager> bookdao;
+	// JTAでもRESOURCE_LOCALでも正常に動作する（EntityTransactionを使用しているの当然）
+	//@Inject @UsedJpaJta private BookDAO<EntityManager> bookdao
+	//@Inject @UsedJpaLocal private BookDAO<EntityManager> bookdao
+	@Inject @UsedJpa private BookDAO<EntityManager> bookdao;
 	@Inject private Logger log;
 
-	@PersistenceUnit(name = "BookStore") private transient EntityManagerFactory emf;
+	//@PersistenceUnit(name = "BookStore") private transient EntityManagerFactory emf
+	//private EntityManager em = null
+	@Inject private JPASelector selector;
 
-	private transient EntityManager em = null;
 
 	@Override
 	protected BookDAO<EntityManager> getBookDAO() {
@@ -35,6 +39,11 @@ public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 	}
 	@Override
 	protected EntityManager getManager() {
+		// emは更新TxのみService層で生成することにする
+		// よって、更新Tx以外ではemの値はnullとなるのでDAO層で生成される
+		//return em
+		EntityManager em = selector.getEntityManager();
+		log.log(Level.INFO, "this={0}, em={1}", new Object[] { this, em });
 		return em;
 	}
 
