@@ -1,3 +1,4 @@
+20181011:Springframework + JSF‚Ì‰Â”\«‚ð’T‚é
 20181005:‘g‚Ý‡‚í‚¹‚ª”ÏŽG‚É‚È‚Á‚½‚Ì‚Å‚Ç‚¤‚É‚©‚µ‚½‚¢
 	Spring, Weld, EJB
 	RESOURCE_LOCAL, JTA
