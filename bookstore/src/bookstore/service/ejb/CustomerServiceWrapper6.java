@@ -3,16 +3,15 @@ package bookstore.service.ejb;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ejb.EJBException;
+import javax.annotation.Resource;
 import javax.ejb.Local;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.transaction.UserTransaction;
 
 import bookstore.annotation.UsedJpa;
 import bookstore.dao.CustomerDAO;
@@ -20,17 +19,19 @@ import bookstore.persistence.JPASelector;
 import bookstore.service.AbstractCustomerService;
 import bookstore.service.CustomerService;
 
-@Stateless(name="CustomerServiceEjbWrapper")
+@Stateless(name="CustomerServiceEjbBmtWrapper")
 @LocalBean
 @Local(CustomerService.class)
-@TransactionManagement(TransactionManagementType.CONTAINER)
-public class CustomerServiceWrapper extends AbstractCustomerService<EntityManager> {
+@TransactionManagement(TransactionManagementType.BEAN)
+public class CustomerServiceWrapper6 extends AbstractCustomerService<EntityManager> {
 
 	@Inject @UsedJpa private CustomerDAO<EntityManager> customerdao;
 
 	@Inject private Logger log;
 	@Inject private JPASelector selector;
 
+	// UserTransactionはBMTに対するものでCMTには利用できない
+	@Resource private UserTransaction tx;
 
 	@Override
 	protected CustomerDAO<EntityManager> getCustomerDAO() {
@@ -47,23 +48,19 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 		return em;
 	}
 
-	/*
-	 * Container-Managed Transactionsがロールバックするのは2つの場合がある
-	 * (1)システム例外が投げられた場合、コンテナは自動的にトランザクションをロールバックします
-	 * (2)EJBContextインターフェイスのsetRollbackOnlyメソッドが呼び出された場合
-	 * ※システム例外：java.lang.RuntimeExceptionまたはjava.rmi.RemoteException を拡張する例外
-	 */
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public boolean createCustomer(String uid, String password, String name, String email) throws Exception {
+		log.log(Level.INFO, "this={0}", this);
 		try {
+			tx.begin();
 			boolean rc = super.createCustomer(uid, password, name, email);
 			log.log(Level.INFO, "rc={0}", rc);
+			tx.commit();
 			return rc;
 		}
 		catch (Exception e) {
-			// EJBExceptionはシステム例外
-			throw new EJBException(e);
+			tx.rollback();
+			throw e;
 		}
 	}
 

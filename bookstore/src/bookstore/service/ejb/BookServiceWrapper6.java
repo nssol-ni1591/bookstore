@@ -1,6 +1,7 @@
-package bookstore.service.ejb.cmt;
+package bookstore.service.ejb;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ejb.Local;
@@ -11,19 +12,26 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import bookstore.annotation.UsedJpaJta;
+import bookstore.annotation.UsedJpa;
 import bookstore.dao.BookDAO;
+import bookstore.persistence.JPASelector;
 import bookstore.service.AbstractBookService;
 import bookstore.service.BookService;
 
-@Stateless(name="BookServiceCmtWrapper")
+@Stateless(name="BookServiceEjbBmtWrapper")
 @LocalBean
 @Local(BookService.class)
-@TransactionManagement(TransactionManagementType.CONTAINER)
-public class BookServiceWrapper extends AbstractBookService<EntityManager> {
+@TransactionManagement(TransactionManagementType.BEAN)
+public class BookServiceWrapper6 extends AbstractBookService<EntityManager> {
 
-	@Inject @UsedJpaJta private BookDAO<EntityManager> bookdao;
+	@Inject @UsedJpa private BookDAO<EntityManager> bookdao;
+
 	@Inject private Logger log;
+	@Inject private JPASelector selector;
+	
+	// UserTransactionはBMTに対するものでCMTには利用できない
+	//@Resource private UserTransaction tx
+
 
 	@Override
 	protected BookDAO<EntityManager> getBookDAO() {
@@ -35,8 +43,9 @@ public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 	}
 	@Override
 	protected EntityManager getManager() {
-		return null;
-		// BMTではUserTransactionで管理されるため、emを引き継ぐ必要はなし
+		EntityManager em = selector.getEntityManager();
+		log.log(Level.INFO, "this={0}, em={1}", new Object[] { this, em });
+		return em;
 	}
 
 	/*

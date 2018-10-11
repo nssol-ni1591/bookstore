@@ -1,10 +1,14 @@
 package bookstore.persistence;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Disposes;
-import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
@@ -14,7 +18,7 @@ import bookstore.jsf.bean.CommonJSFBean;
 
 @Named
 @Dependent
-public class JPASelector {
+public class JPASelector4 {
 
 	//JTAでは@PersistenceContextを使用する
 	//RESOURCE_LOCALでは@PersistenceUnitを使用する
@@ -38,54 +42,53 @@ public class JPASelector {
 	public static final String RESOURCE_LOCAL = "Resource_Local";
 
 	@Inject private CommonJSFBean common;
-	//@Inject private Logger log
+	@Inject private Logger log;
 
-	@Produces
-	public EntityManager getEntityManager() {
-		return getEntityManager(common.getJpaModule(), common.getTxType());
-	}
-	public EntityManager getEntityManager(String txType) {
-		return getEntityManager(null, txType);
-	}
-	public EntityManager getEntityManager(String jpaModule, String txType) {
-		if (!JTA.equals(txType) && !RESOURCE_LOCAL.equals(txType)) {
-			throw new IllegalArgumentException("unknown resource type: " + txType);
-		}
-
+	private String persistenceName(String jpaModule, String txType) throws NamingException {
 		if (jpaModule == null) {
 			jpaModule = DEFAULT;
 		}
 
-		EntityManager em;
 		switch (jpaModule) {
 		case DEFAULT:
-			em = JTA.equals(txType) ? defaultEM : defaultEMF.createEntityManager();
-			break;
 		case HIBERNATE:
-			em = JTA.equals(txType) ? hibernateEM : hibernateEMF.createEntityManager();
-			break;
 		case ECLIPSELINK:
-			em = JTA.equals(txType) ? eclipselinkEM : eclipselinkEMF.createEntityManager();
-			break;
 		case OPENJPA:
-			em = JTA.equals(txType) ? openjpaEM : openjpaEMF.createEntityManager();
 			break;
 		default:
-			throw new IllegalArgumentException("unknown jpa module: " + jpaModule);
+			throw new NamingException("unknown jpa module: " + jpaModule);
 		}
 
-		//log.log(Level.INFO, "persistence={0}-{1}-{2}, em={3}", new Object[] { "BookStore", jpaModule, txType, em })
+		if (!JTA.equals(txType) && !RESOURCE_LOCAL.equals(txType)) {
+			throw new NamingException("unknown transaction type: " + txType);
+		}
+
+		String name = String.join("-", "BookStore", jpaModule, txType);
+		log.log(Level.INFO, "persistence={0}", new Object[] { name });
+		return name;
+	}
+
+	//@Produces
+	public EntityManager getEntityManager() throws NamingException {
+		return getEntityManager(common.getJpaModule(), common.getTxType());
+	}
+	public EntityManager getEntityManager(String txType) throws NamingException {
+		return getEntityManager(null, txType);
+	}
+	public EntityManager getEntityManager(String jpaModule, String txType) throws NamingException {
+		String name = persistenceName(jpaModule, txType);
+
+		InitialContext iContext = new InitialContext();
+		Context context = (Context) iContext.lookup("java:comp/env");
+		EntityManager em = (EntityManager) context.lookup(name);
+		log.log(Level.INFO, "entityManager={0}", new Object[] { em });
 		return em;
 	}
 
-	public void closeEntityManager(@Disposes EntityManager entityManager) {
+	public void closeEntityManager(/*@Disposes*/ EntityManager entityManager) {
 		if (entityManager.isOpen()) {
 			entityManager.close();
 		}
-	}
-
-	public boolean isHibernate() {
-		return HIBERNATE.equals(common.getJpaModule());
 	}
 
 }

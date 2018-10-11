@@ -1,4 +1,4 @@
-package bookstore.service.ejb.bmt;
+package bookstore.service.ejb;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -14,28 +14,32 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
-import bookstore.annotation.UsedJpaLocal;
+import bookstore.annotation.UsedJpa;
 import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
 import bookstore.dao.OrderDAO;
 import bookstore.dao.OrderDetailDAO;
+import bookstore.persistence.JPASelector;
 import bookstore.service.AbstractOrderService;
 import bookstore.service.OrderService;
 
-@Stateless(name="OrderServiceBmtWrapper")
+@Stateless(name="OrderServiceEjbBmtWrapper")
 @LocalBean
 @Local(OrderService.class)
 @TransactionManagement(TransactionManagementType.BEAN)
-public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
+public class OrderServiceWrapper6 extends AbstractOrderService<EntityManager> {
 
-	@Inject @UsedJpaLocal private BookDAO<EntityManager> bookdao;
-	@Inject @UsedJpaLocal private CustomerDAO<EntityManager> customerdao;
-	@Inject @UsedJpaLocal private OrderDAO<EntityManager> orderdao;
-	@Inject @UsedJpaLocal private OrderDetailDAO<EntityManager> orderdetaildao;
+	@Inject @UsedJpa private BookDAO<EntityManager> bookdao;
+	@Inject @UsedJpa private CustomerDAO<EntityManager> customerdao;
+	@Inject @UsedJpa private OrderDAO<EntityManager> orderdao;
+	@Inject @UsedJpa private OrderDetailDAO<EntityManager> orderdetaildao;
+
 	@Inject private Logger log;
+	@Inject private JPASelector selector;
 
 	// UserTransactionはBMTに対するものでCMTには利用できない
 	@Resource private UserTransaction tx;
+
 
 	@Override
 	protected BookDAO<EntityManager> getBookDAO() {
@@ -59,15 +63,15 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 	}
 	@Override
 	protected EntityManager getManager() {
-		return null;
-		// BMTではUserTransactionで管理されるため、emを引き継ぐ必要はなし
+		EntityManager em = selector.getEntityManager();
+		log.log(Level.INFO, "this={0}, em={1}", new Object[] { this, em });
+		return em;
 	}
 
 	@Override
 	public void orderBooks(String uid, List<String> inISBNs) throws Exception {
-		log.log(Level.INFO, "this={0}", this);
-		tx.begin();
 		try {
+			tx.begin();
 			super.orderBooks(uid, inISBNs);
 			tx.commit();
 		}

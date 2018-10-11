@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; utf-8" />
+<title><ui:insert name="title">template title</ui:insert></title>
+</h:head>
+
+<ui:param name="header_style" value="width:100%;background-color:steelblue;color:white;font-size:36px;line-height:48px"/>
+<ui:param name="footer_style" value="width:100%;background-color:steelblue;color:white"/>
+
+<h:body>
+
+	<div id="header">
+		<ui:insert name="header">
+		<!--  include your header file or uncomment the include below and create header.xhtml in this directory -->
+			<ui:include src="header.xhtml"/>
+		</ui:insert>
+	</div>
+
+
+	<div id="content">
+		<ui:insert name="content">
+    	Content area.  See comments below this line in the source.
+    	<!--  include your content file or uncomment the include below and create content.xhtml in this directory -->
+			<!-- <div> -->
+			<!-- <ui:include src="content.xhtml"/> -->
+			<!-- </div> -->
+		</ui:insert>
+	</div>
+
+	<div id="footer">
+		<ui:insert name="footer">
+		<!--  include your header file or uncomment the include below and create footer.xhtml in this directory -->
+		<ui:include src="footer.xhtml"/>
+		</ui:insert>
+	</div>
+
+</h:body>
+
+</html>

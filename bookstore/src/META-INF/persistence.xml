@@ -107,59 +107,6 @@ DAOの実装はEntityManagerで隠蔽されるので、どの実装クラスを�
 		</properties>
 	</persistence-unit>
 
-	<persistence-unit name="BookStore3" transaction-type="RESOURCE_LOCAL">
-
-		<!-- お好きなJPA実装クラスを選択する
-		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
-		<provider>org.hibernate.ejb.HibernatePersistence</provider>	<= NG
-		 -->
-		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-
-		<jta-data-source>jdbc/bookstoreDS</jta-data-source>
-		<non-jta-data-source>jdbc/bookstoreDSnonJTA</non-jta-data-source>
-
-		<class>bookstore.pbean.TBook</class>
-		<class>bookstore.pbean.TCustomer</class>
-		<class>bookstore.pbean.TOrder</class>
-		<class>bookstore.pbean.TOrderDetail</class>
-
-		<properties>
-			<!-- <property name="eclipselink.ddl-generation" value="create-tables" /> -->
-			<!-- <property name="eclipselink.ddl-generation.output-mode" value="database" /> -->
-			<!-- 
-				<property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/bookstore" />
-				<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver" />
-				<property name="javax.persistence.jdbc.name" value="bookstore" />
-				<property name="javax.persistence.jdbc.password" value="bookstore" />
-				<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
-			 -->
-			<!-- 
-			<property name="eclipselink.logging.parameters" value="true"/>
-			<property name="eclipselink.logging.level.sql" value="FINE"/>
-			<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect" />
-			 -->
-			<!-- 
-			<property name="hibernate.cglib.use_reflection_optimizer" value="true"/>
-			<property name="hibernate.hbm2ddl.auto" value="create-drop"/>
-			 -->
-			<!-- 
-			<property name="hibernate.transaction.manager_lookup_class" value="org.apache.openejb.hibernate.TransactionManagerLookup"/>
-			<property name="hibernate.connection.datasource" value="java:comp/env/jdbc/bookstoreDS"/>
-			 -->
-			<!-- 
-			<property name="hibernate.connection.driver_class" value="org.apache.derby.jdbc.ClientDriver"/>
-			<property name="hibernate.connection.url" value="jdbc:derby://localhost:1527/bookstore"/>
-			<property name="hibernate.connection.username" value="bookstore"/>
-			<property name="hibernate.connection.password" value="bookstore"/>
-			 -->
-
-			<property name="hibernate.show_sql" value="true"/>
-			<property name="hibernate.format_sql" value="true"/>
-			<property name="hibernate.use_sql_comments" value="true"/>
-
-		</properties>
-	</persistence-unit>
 
 	<persistence-unit name="BookStore-Hibernate-Resource_Local" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>

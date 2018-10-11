@@ -21,6 +21,7 @@ import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
 import bookstore.dao.OrderDAO;
 import bookstore.dao.OrderDetailDAO;
+import bookstore.persistence.JPASelector;
 import bookstore.service.AbstractOrderService;
 import bookstore.service.OrderService;
 
@@ -35,8 +36,9 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 	@Inject @UsedJpa private OrderDAO<EntityManager> orderdao;
 	@Inject @UsedJpa private OrderDetailDAO<EntityManager> orderdetaildao;
 
-	@Inject private EntityManager em;
 	@Inject private Logger log;
+	@Inject private JPASelector selector;
+
 
 	@Override
 	protected BookDAO<EntityManager> getBookDAO() {
@@ -60,7 +62,8 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 	}
 	@Override
 	protected EntityManager getManager() {
-		// DAO‘w‚ÅŽg—p‚·‚éEntityManager‚ðŒÅ’è‰»‚·‚é‚½‚ß
+		EntityManager em = selector.getEntityManager();
+		log.log(Level.INFO, "this={0}, em={1}", new Object[] { this, em });
 		return em;
 	}
 

@@ -1,6 +1,7 @@
 package bookstore.service.ejb;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ejb.Local;
@@ -13,6 +14,7 @@ import javax.persistence.EntityManager;
 
 import bookstore.annotation.UsedJpa;
 import bookstore.dao.BookDAO;
+import bookstore.persistence.JPASelector;
 import bookstore.service.AbstractBookService;
 import bookstore.service.BookService;
 
@@ -24,8 +26,9 @@ public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 
 	@Inject @UsedJpa private BookDAO<EntityManager> bookdao;
 
-	@Inject private EntityManager em;
 	@Inject private Logger log;
+	@Inject private JPASelector selector;
+
 
 	@Override
 	protected BookDAO<EntityManager> getBookDAO() {
@@ -37,7 +40,8 @@ public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 	}
 	@Override
 	protected EntityManager getManager() {
-		// DAO‘w‚ÅŽg—p‚·‚éEntityManager‚ðŒÅ’è‰»‚·‚é‚½‚ß
+		EntityManager em = selector.getEntityManager();
+		log.log(Level.INFO, "this={0}, em={1}", new Object[] { this, em });
 		return em;
 	}
 

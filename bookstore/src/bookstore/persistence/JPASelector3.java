@@ -1,8 +1,9 @@
 package bookstore.persistence;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Disposes;
-import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -14,7 +15,7 @@ import bookstore.jsf.bean.CommonJSFBean;
 
 @Named
 @Dependent
-public class JPASelector {
+public class JPASelector3 {
 
 	//JTAでは@PersistenceContextを使用する
 	//RESOURCE_LOCALでは@PersistenceUnitを使用する
@@ -38,9 +39,9 @@ public class JPASelector {
 	public static final String RESOURCE_LOCAL = "Resource_Local";
 
 	@Inject private CommonJSFBean common;
-	//@Inject private Logger log
+	@Inject private Logger log;
 
-	@Produces
+	//@Produces
 	public EntityManager getEntityManager() {
 		return getEntityManager(common.getJpaModule(), common.getTxType());
 	}
@@ -74,18 +75,14 @@ public class JPASelector {
 			throw new IllegalArgumentException("unknown jpa module: " + jpaModule);
 		}
 
-		//log.log(Level.INFO, "persistence={0}-{1}-{2}, em={3}", new Object[] { "BookStore", jpaModule, txType, em })
+		log.log(Level.INFO, "persistence={0}-{1}-{2}, entity={3}", new Object[] { "BookStore", jpaModule, txType, em });
 		return em;
 	}
 
-	public void closeEntityManager(@Disposes EntityManager entityManager) {
+	public void closeEntityManager(/*@Disposes*/ EntityManager entityManager) {
 		if (entityManager.isOpen()) {
 			entityManager.close();
 		}
-	}
-
-	public boolean isHibernate() {
-		return HIBERNATE.equals(common.getJpaModule());
 	}
 
 }

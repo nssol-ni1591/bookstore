@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import bookstore.dao.OrderDAO;
 import bookstore.pbean.TCustomer;
 import bookstore.pbean.TOrder;
+import bookstore.persistence.JPASelector;
 
 public abstract class AbstractOrderDAOImpl<T extends EntityManager> implements OrderDAO<T> {
 	/*
@@ -36,6 +37,7 @@ public abstract class AbstractOrderDAOImpl<T extends EntityManager> implements O
 	protected abstract EntityManager getEntityManager();
 
 	@Inject private Logger log;
+	@Inject JPASelector selector;
 
 	@Override
 	public List<TOrder> retrieveOrders(T em2, List<String> orderIdList) {
@@ -67,7 +69,7 @@ public abstract class AbstractOrderDAOImpl<T extends EntityManager> implements O
 		em.persist(order);
 
 		String hql;
-		if (em.getClass().getName().contains("hibernate")) {
+		if (selector.isHibernate()) {
 			hql = "select o from TOrder o where o.id = (select max(o2.id) from TOrder o2 where o2.TCustomer = :CUSTID)";
 		}
 		else {
