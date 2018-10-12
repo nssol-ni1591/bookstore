@@ -46,7 +46,9 @@ public class CustomerServiceWrapper extends AbstractCustomerService<SessionFacto
 	public boolean createCustomer(String uid
 			, String password
 			, String name
-			, String email) throws SQLException {
+			, String email
+			) throws SQLException
+	{
 		//rollback‚·‚é‚½‚ß‚Ì—áŠO‚ÍRuntimeException‚Å‚È‚¢‚Æ‚¢‚¯‚È‚¢
 		try {
 			return super.createCustomer(uid, password, name, email);
