@@ -18,8 +18,12 @@
 	<tx:annotation-driven proxy-target-class="true" />
 
 	<!-- spring DI対象のパッケージを指定する -->
-	<context:component-scan base-package="bookstore.dao.hibernate.*" />
 	<context:component-scan base-package="bookstore.service.spring.*" />
+	<!-- bookstore.service.spring.*は以下にbean定義がないのでscanが必要
+		それ以外は<bean>定義が行われているのでscanは不要
+	<context:component-scan base-package="bookstore.dao.jdbctemplate.*" />
+	<context:component-scan base-package="bookstore.dao.hibernate.*" />
+	 -->
 
 	<bean id="logger" class="bookstore.util.LogInjection" />
 
@@ -101,6 +105,9 @@
 		<qualifier value="jtatx"/>
 	</bean>
 
+	<!-- JPASelectorを定義すると@PersistenceUnitなどの定義も参照するため収拾がつかなくなる
+	<bean id="JPASelector" class="bookstore.persistence.JPASelector"/>
+	 -->
 
 	<!-- DAO Interface Layer -->
 	<!-- Service層でトランザクションを開始しているのでDAOにトランザクション定義が必要か？ ⇒必要ない -->
