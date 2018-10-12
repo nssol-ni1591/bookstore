@@ -398,7 +398,7 @@
 	</bean>
 	<bean id="ServiceOrderImplBId3" class="bookstore.service.spring.jtatx.OrderServiceWrapper">
 	</bean>
-	<bean id="ServiceOrderImplBId_Self" class="bookstore.service.spring.self.OrderServiceWrapper">
+	<bean id="ServiceOrderImplBId_Self" class="bookstore.service.spring.selftx.OrderServiceWrapper">
 	</bean>
 
 	<!-- Struts Action Layer -->

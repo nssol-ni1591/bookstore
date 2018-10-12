@@ -11,34 +11,43 @@ and open the template in the editor.
 	<body>
 		<div>
 		<h1>Select BookStore's implements</h1>
+
 		<h4>(1)個別モジュールの組み合わせ</h4>
 		<h5><a href="Login.jsp">servlet + JSP + jdbc</a></h5>
 		<h5><a href="Login.vm">springframework + struts + hibernate/jdbctemplate</a></h5>
-		<h5><a href="faces/Login.xhtml">weld + JSF + JTA:RESOURCE_LOCAL</a></h5>
-		<h5><a href="faces/Login2.xhtml">EJB (Local CMT) + JSF + JTA:JTA</a></h5>
-		<h5><a href="faces/Login3.xhtml">EJB (remote CMT) + JSF + JPA:JTA</a></h5>
-		<h5><a href="faces/Login4.xhtml">EJB (remote BMT) + JSF + JPA:JTA</a></h5>
-		<h4>(2)CMTとRESOURCE_LOCALの組み合わせではトランザクションが正常に動作しない</h4>
+		<h5><a href="faces/Login2.xhtml">EJB (Local CMT) + JSF + JPA:JTA</a>&nbsp;(JPAモジュールはpersistence.xmlの[BookStore2]定義に依存)</h5>
+		<h5><a href="faces/Login3.xhtml">EJB (Remote CMT) + JSF + JPA:JTA</a>&nbsp;(JPAモジュールはpersistence.xmlの[BookStore2]定義に依存)</h5>
+		<h5><a href="faces/Login4.xhtml">EJB (Remote BMT) + JSF + JPA:JTA</a>&nbsp;(JPAモジュールはpersistence.xmlの[BookStore2]定義に依存)</h5>
+
+		<h4>(2)CMT<br>
+		<small>RESOURCE_LOCALとの組み合わせではトランザクションが正常に動作しない</small>
+		</h4>
 		<h5><a href="faces/Login5.xhtml?jpaModule=Hibernate&txType=JTA">EJB (CMT) + JSF + Hibernate:JTA</a></h5>
 		<h5><a href="faces/Login5.xhtml?jpaModule=Hibernate&txType=Resource_Local">EJB (CMT) + JSF + Hibernate:Resource_Local</a></h5>
 		<h5><a href="faces/Login5.xhtml?jpaModule=Eclipselink&txType=JTA">EJB (CMT) + JSF + Eclipselink:JTA</a></h5>
 		<h5><a href="faces/Login5.xhtml?jpaModule=Eclipselink&txType=Resource_Local">EJB (CMT) + JSF + Eclipselink:Resource_Local</a></h5>
 		<h5><a href="faces/Login5.xhtml?jpaModule=OpenJPA&txType=JTA">EJB (CMT) + JSF + OpenJPA:JTA</a></h5>
 		<h5><a href="faces/Login5.xhtml?jpaModule=OpenJPA&txType=Resource_Local">EJB (CMT) + JSF + OpenJPA:Resource_Local</a></h5>
-		<h4>(3)BMTとRESOURCE_LOCALの組み合わせではトランザクションが正常に動作しない</h4>
+
+		<h4>(3)BMT<br/>
+		<small>RESOURCE_LOCALとの組み合わせではトランザクションが正常に動作しない</small>
+		</h4>
 		<h5><a href="faces/Login6.xhtml?jpaModule=Hibernate&txType=JTA">EJB (BMT) + JSF + Hibernate:JTA</a></h5>
 		<h5><a href="faces/Login6.xhtml?jpaModule=Hibernate&txType=Resource_Local">EJB (BMT) + JSF + Hibernate:Resource_Local</a></h5>
 		<h5><a href="faces/Login6.xhtml?jpaModule=Eclipselink&txType=JTA">EJB (BMT) + JSF + Eclipselink:JTA</a></h5>
 		<h5><a href="faces/Login6.xhtml?jpaModule=Eclipselink&txType=Resource_Local">EJB (BMT) + JSF + Eclipselink:Resource_Local</a></h5>
 		<h5><a href="faces/Login6.xhtml?jpaModule=OpenJPA&txType=JTA">EJB (BMT) + JSF + OpenJPA:JTA</a></h5>
 		<h5><a href="faces/Login6.xhtml?jpaModule=OpenJPA&txType=Resource_Local">EJB (BMT) + JSF + OpenJPA:Resource_Local</a></h5>
-		<h4>(4)EntityTransactionはJTAとRESOURCE_LOCALの両方でトランザクションが正常に動作する</h4>
-		<h5><a href="faces/Login2.xhtml?jpaModule=Hibernate&txType=JTA">Weld + JSF + Hibernate:JTA</a></h5>
-		<h5><a href="faces/Login2.xhtml?jpaModule=Hibernate&txType=Resource_Local">Weld + JSF + Hibernate:Resource_Local</a></h5>
-		<h5><a href="faces/Login2.xhtml?jpaModule=Eclipselink&txType=JTA">Weld + JSF + Eclipselink:JTA</a></h5>
-		<h5><a href="faces/Login2.xhtml?jpaModule=Eclipselink&txType=Resource_Local">Weld + JSF + Eclipselink:Resource_Local</a></h5>
-		<h5><a href="faces/Login2.xhtml?jpaModule=OpenJPA&txType=JTA">Weld + JSF + OpenJPA:JTA</a></h5>
-		<h5><a href="faces/Login2.xhtml?jpaModule=OpenJPA&txType=Resource_Local">Weld + JSF + OpenJPA:Resource_Local</a></h5>
+
+		<h4>(4)EntityTransaction<br/>
+		<small>JTA:IllegalStateException: A JTA EntityManager can not use the EntityTransaction API.  See JPA 1.0 section 5.5</small>
+		</h4>
+		<h5><a href="faces/Login.xhtml?jpaModule=Hibernate&txType=JTA">Weld + JSF + Hibernate:JTA</a></h5>
+		<h5><a href="faces/Login.xhtml?jpaModule=Hibernate&txType=Resource_Local">Weld + JSF + Hibernate:Resource_Local</a></h5>
+		<h5><a href="faces/Login.xhtml?jpaModule=Eclipselink&txType=JTA">Weld + JSF + Eclipselink:JTA</a></h5>
+		<h5><a href="faces/Login.xhtml?jpaModule=Eclipselink&txType=Resource_Local">Weld + JSF + Eclipselink:Resource_Local</a></h5>
+		<h5><a href="faces/Login.xhtml?jpaModule=OpenJPA&txType=JTA">Weld + JSF + OpenJPA:JTA</a></h5>
+		<h5><a href="faces/Login.xhtml?jpaModule=OpenJPA&txType=Resource_Local">Weld + JSF + OpenJPA:Resource_Local</a></h5>
 		</div>
 	</body>
 </html>
