@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -26,9 +27,15 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 	@Inject private Logger log;
 
 	//@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf
-	//private EntityManager em = null
 	@Inject private JPASelector selector;
+	private EntityManager em = null;
 
+
+	@PostConstruct
+	public void init() {
+		em = selector.getEntityManager();
+		log.log(Level.INFO, "this={0}, em={1}", new Object[] { this, em });
+	}
 
 	@Override
 	protected CustomerDAO<EntityManager> getCustomerDAO() {
@@ -42,16 +49,11 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 	protected EntityManager getManager() {
 		// emは更新TxのみService層で生成することにする
 		// よって、更新Tx以外ではemの値はnullとなるのでDAO層で生成される
-		//return em
-		EntityManager em = selector.getEntityManager();
-		log.log(Level.INFO, "this={0}, em={1}", new Object[] { this, em });
 		return em;
 	}
 
 	@Override
 	public boolean createCustomer(String uid, String password, String name, String email) throws SQLException {
-		//em = emf.createEntityManager()
-		EntityManager em = getManager();
 		EntityTransaction tx = null;
 		try {
 			tx = em.getTransaction();

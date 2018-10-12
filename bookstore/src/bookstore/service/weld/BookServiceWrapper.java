@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -25,9 +26,15 @@ public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 	@Inject private Logger log;
 
 	//@PersistenceUnit(name = "BookStore") private transient EntityManagerFactory emf
-	//private EntityManager em = null
 	@Inject private JPASelector selector;
+	private EntityManager em = null;
 
+
+	@PostConstruct
+	public void init() {
+		em = selector.getEntityManager();
+		log.log(Level.INFO, "this={0}, em={1}", new Object[] { this, em });
+	}
 
 	@Override
 	protected BookDAO<EntityManager> getBookDAO() {
@@ -41,9 +48,6 @@ public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 	protected EntityManager getManager() {
 		// emは更新TxのみService層で生成することにする
 		// よって、更新Tx以外ではemの値はnullとなるのでDAO層で生成される
-		//return em
-		EntityManager em = selector.getEntityManager();
-		log.log(Level.INFO, "this={0}, em={1}", new Object[] { this, em });
 		return em;
 	}
 
