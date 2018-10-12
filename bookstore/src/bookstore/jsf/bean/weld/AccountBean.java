@@ -1,4 +1,4 @@
-package bookstore.jsf.bean.eclipselink;
+package bookstore.jsf.bean.weld;
 
 import java.sql.SQLException;
 

@@ -1,4 +1,4 @@
-package bookstore.jsf.bean.eclipselink;
+package bookstore.jsf.bean.weld;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
