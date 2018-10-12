@@ -47,7 +47,7 @@
 				scope="request" >
 			<forward name="Continue" path="/BookStore.vm" />
 		</action>		
-		
+
 		<action	path="/CheckoutAction"
 				type="org.springframework.web.struts.DelegatingActionProxy"
 				name="CheckoutActionName"
@@ -72,6 +72,13 @@
 			<forward name="OrderFailed" path="/Check.vm" />
 		</action>
 		<action	path="/OrderAction3"
+				type="org.springframework.web.struts.DelegatingActionProxy"
+				name="OrderActionName"
+				scope="request" >
+			<forward name="OrderSuccess" path="/Order.vm" />
+			<forward name="OrderFailed" path="/Check.vm" />
+		</action>
+		<action	path="/OrderAction4"
 				type="org.springframework.web.struts.DelegatingActionProxy"
 				name="OrderActionName"
 				scope="request" >

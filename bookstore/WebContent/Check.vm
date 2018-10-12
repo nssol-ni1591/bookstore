@@ -63,6 +63,10 @@
 		action="$link.setAction( "/OrderAction3" )">
 		<input type="submit" value="’•¶‚·‚é(JtaTransactionManager)" />
 	</form>
+	<form method="post"
+		action="$link.setAction( "/OrderAction4" )">
+		<input type="submit" value="’•¶‚·‚é(Impl-TransactionControl)" />
+	</form>
 
 	<form method="post" action="$link.setAction( "/SearchAction" )">
 		<input type="hidden" name="keyword"/>

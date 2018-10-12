@@ -357,6 +357,11 @@
 			<ref bean="ServiceOrderImplBId3" />
 		</property>
 	</bean>
+	<bean id="ServiceOrderBId_Self" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<ref bean="ServiceOrderImplBId_Self" />
+		</property>
+	</bean>
  
 	<!-- Service Implement Layer -->
 	<!-- autowired設定によりコメントアウト化ができる部分：
@@ -392,6 +397,8 @@
 	<bean id="ServiceOrderImplBId2" class="bookstore.service.spring.dstx.OrderServiceWrapper">
 	</bean>
 	<bean id="ServiceOrderImplBId3" class="bookstore.service.spring.jtatx.OrderServiceWrapper">
+	</bean>
+	<bean id="ServiceOrderImplBId_Self" class="bookstore.service.spring.self.OrderServiceWrapper">
 	</bean>
 
 	<!-- Struts Action Layer -->
@@ -443,6 +450,14 @@
 	<bean name="/OrderAction3" class="bookstore.action.OrderAction">
 		<property name="orderService">
 			<ref bean="ServiceOrderBId3" />
+		</property>
+		<property name="customerService">
+			<ref bean="ServiceCustomerBId" />
+		</property>
+	</bean>
+	<bean name="/OrderAction4" class="bookstore.action.OrderAction">
+		<property name="orderService">
+			<ref bean="ServiceOrderBId_Self" />
 		</property>
 		<property name="customerService">
 			<ref bean="ServiceCustomerBId" />
