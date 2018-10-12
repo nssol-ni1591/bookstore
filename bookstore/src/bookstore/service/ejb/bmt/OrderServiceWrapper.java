@@ -71,11 +71,11 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 	}
 
 	@Override
-	public void orderBooks(String uid, List<String> inISBNs) throws SQLException {
+	public void orderBooks(String uid, List<String> isbns) throws SQLException {
 		log.log(Level.INFO, "this={0}", this);
 		try {
 			tx.begin();
-			super.orderBooks(uid, inISBNs);
+			super.orderBooks(uid, isbns);
 			tx.commit();
 		}
 		catch (Exception e) {

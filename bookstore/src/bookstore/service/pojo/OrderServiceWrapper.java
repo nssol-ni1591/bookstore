@@ -55,10 +55,10 @@ public class OrderServiceWrapper extends AbstractOrderService<Connection> {
 	}
 
 	@Override
-	public void orderBooks(String uid, List<String> inISBNs) throws SQLException {
+	public void orderBooks(String uid, List<String> isbns) throws SQLException {
 		con = DB.createConnection();
 		try {
-			super.orderBooks(uid, inISBNs);
+			super.orderBooks(uid, isbns);
 			con.commit();
 		}
 		catch (Exception e) {

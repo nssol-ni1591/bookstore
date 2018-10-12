@@ -73,10 +73,10 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void orderBooks(String uid, List<String> inISBNs) throws SQLException {
+	public void orderBooks(String uid, List<String> isbns) throws SQLException {
 		log.log(Level.INFO, "this={0}", this);
 		try {
-			super.orderBooks(uid, inISBNs);
+			super.orderBooks(uid, isbns);
 		}
 		catch (RuntimeException /*| RemoteException*/ e) {
 			throw e;

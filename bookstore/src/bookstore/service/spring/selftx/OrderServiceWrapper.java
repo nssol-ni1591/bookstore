@@ -68,7 +68,7 @@ public class OrderServiceWrapper extends AbstractOrderService<SessionFactory> {
 
 	// é¿ëïÇ≈Txêßå‰ÇçsÇ§
 	@Override
-	public void orderBooks(String uid, List<String> inISBNs) throws SQLException {
+	public void orderBooks(String uid, List<String> isbns) throws SQLException {
 		// Non-managed environment idiom
 
 		Session sess = sessionFactory.openSession();
@@ -79,7 +79,7 @@ public class OrderServiceWrapper extends AbstractOrderService<SessionFactory> {
 		Transaction tx = sess.beginTransaction();
 		try {
 			tx.begin();
-			super.orderBooks(uid, inISBNs);
+			super.orderBooks(uid, isbns);
 			tx.commit();
 		}
 		catch (Exception e) {

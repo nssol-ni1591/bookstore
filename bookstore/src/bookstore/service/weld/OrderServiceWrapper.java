@@ -78,7 +78,7 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 	}
 
 	@Override
-	public void orderBooks(String uid, List<String> inISBNs) throws SQLException {
+	public void orderBooks(String uid, List<String> isbns) throws SQLException {
 		//em = emf.createEntityManager()
 		EntityManager em = getManager();
 		EntityTransaction tx = null;
@@ -86,7 +86,7 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 			tx = em.getTransaction();
 			tx.begin();
 	
-			super.orderBooks(uid, inISBNs);
+			super.orderBooks(uid, isbns);
 
 			tx.commit();
 		}
