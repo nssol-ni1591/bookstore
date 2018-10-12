@@ -24,22 +24,12 @@ import bookstore.service.AbstractOrderService;
 @Dependent
 public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 
-	// JTAでもRESOURCE_LOCALでも正常に動作する（EntityTransactionを使用しているの当然）
-	//@Inject @UsedJpaJta private BookDAO<EntityManager> bookdao
-	//@Inject @UsedJpaJta private CustomerDAO<EntityManager> customerdao
-	//@Inject @UsedJpaJta private OrderDAO<EntityManager> orderdao
-	//@Inject @UsedJpaJta private OrderDetailDAO<EntityManager> orderdetaildao
-	//@Inject @UsedJpaLocal private BookDAO<EntityManager> bookdao
-	//@Inject @UsedJpaLocal private CustomerDAO<EntityManager> customerdao
-	//@Inject @UsedJpaLocal private OrderDAO<EntityManager> orderdao
-	//@Inject @UsedJpaLocal private OrderDetailDAO<EntityManager> orderdetaildao
 	@Inject @UsedJpa private BookDAO<EntityManager> bookdao;
 	@Inject @UsedJpa private CustomerDAO<EntityManager> customerdao;
 	@Inject @UsedJpa private OrderDAO<EntityManager> orderdao;
 	@Inject @UsedJpa private OrderDetailDAO<EntityManager> orderdetaildao;
 	@Inject private Logger log;
 
-	//@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf
 	private EntityManager em = null;
 	@Inject private JPASelector selector;
 
@@ -72,15 +62,14 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 	}
 	@Override
 	protected EntityManager getManager() {
-		// emは更新TxのみService層で生成することにする
-		// よって、更新Tx以外ではemの値はnullとなるのでDAO層で生成される
+		// EntityTransactionのTx制御の都合で、1Tx内のemは同じインスタンスを使用しないといけない
+		// ここでは、このクラスのインスタンスで使用するemは同じインスタンスを参照することで対応する
 		return em;
+		// 万が一、同時に複数のスレッドでこのインスタンスが使用されると都合が悪い
 	}
 
 	@Override
 	public void orderBooks(String uid, List<String> isbns) throws SQLException {
-		//em = emf.createEntityManager()
-		EntityManager em = getManager();
 		EntityTransaction tx = null;
 		try {
 			tx = em.getTransaction();
@@ -97,8 +86,7 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 			throw e;
 		}
 		finally {
-			//em.close()
-			//em = null
+			// Do nothing.
 		}
 	}
 

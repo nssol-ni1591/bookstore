@@ -20,13 +20,9 @@ import bookstore.service.AbstractCustomerService;
 @Dependent
 public class CustomerServiceWrapper extends AbstractCustomerService<EntityManager> {
 
-	// JTAでもRESOURCE_LOCALでも正常に動作する（EntityTransactionを使用しているの当然）
-	//@Inject @UsedJpaJta private CustomerDAO<EntityManager> customerdao
-	//@Inject @UsedJpaLocal private CustomerDAO<EntityManager> customerdao
 	@Inject @UsedJpa private CustomerDAO<EntityManager> customerdao;
 	@Inject private Logger log;
 
-	//@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf
 	@Inject private JPASelector selector;
 	private EntityManager em = null;
 
@@ -47,9 +43,10 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 	}
 	@Override
 	protected EntityManager getManager() {
-		// emは更新TxのみService層で生成することにする
-		// よって、更新Tx以外ではemの値はnullとなるのでDAO層で生成される
+		// EntityTransactionのTx制御の都合で、1Tx内のemは同じインスタンスを使用しないといけない
+		// ここでは、このクラスのインスタンスで使用するemは同じインスタンスを参照することで対応する
 		return em;
+		// 万が一、同時に複数のスレッドでこのインスタンスが使用されると都合が悪い
 	}
 
 	@Override
@@ -72,8 +69,7 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 			throw e;
 		}
 		finally {
-			//em.close()
-			//em = null
+			// Do nothing.
 		}
 	}
 

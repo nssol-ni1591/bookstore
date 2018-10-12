@@ -19,13 +19,9 @@ import bookstore.service.AbstractBookService;
 @Dependent
 public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 
-	// JTAでもRESOURCE_LOCALでも正常に動作する（EntityTransactionを使用しているの当然）
-	//@Inject @UsedJpaJta private BookDAO<EntityManager> bookdao
-	//@Inject @UsedJpaLocal private BookDAO<EntityManager> bookdao
 	@Inject @UsedJpa private BookDAO<EntityManager> bookdao;
 	@Inject private Logger log;
 
-	//@PersistenceUnit(name = "BookStore") private transient EntityManagerFactory emf
 	@Inject private JPASelector selector;
 	private EntityManager em = null;
 
@@ -46,9 +42,10 @@ public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 	}
 	@Override
 	protected EntityManager getManager() {
-		// emは更新TxのみService層で生成することにする
-		// よって、更新Tx以外ではemの値はnullとなるのでDAO層で生成される
+		// EntityTransactionのTx制御の都合で、1Tx内のemは同じインスタンスを使用しないといけない
+		// ここでは、このクラスのインスタンスで使用するemは同じインスタンスを参照することで対応する
 		return em;
+		// 万が一、同時に複数のスレッドでこのインスタンスが使用されると都合が悪い
 	}
 
 	/*
