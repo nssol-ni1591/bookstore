@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bookstore.service.CustomerService;
-import bookstore.service.pojo.CustomerServiceWrapper;
+import bookstore.service.classic.CustomerServiceWrapper;
 import bookstore.util.Messages;
 
 /*

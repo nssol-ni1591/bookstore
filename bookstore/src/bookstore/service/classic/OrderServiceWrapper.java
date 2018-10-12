@@ -1,11 +1,11 @@
-package bookstore.service.pojo;
+package bookstore.service.classic;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 
-import bookstore.annotation.UsedPojo;
+import bookstore.annotation.UsedClassic;
 import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
 import bookstore.dao.OrderDAO;
@@ -17,7 +17,7 @@ import bookstore.dao.jdbc.OrderDAOImpl;
 import bookstore.dao.jdbc.OrderDetailDAOImpl;
 import bookstore.service.AbstractOrderService;
 
-@UsedPojo
+@UsedClassic
 public class OrderServiceWrapper extends AbstractOrderService<Connection> {
 
 	private final BookDAO<Connection> bookdao = new BookDAOImpl<>();

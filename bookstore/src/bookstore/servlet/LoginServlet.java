@@ -15,8 +15,8 @@ import javax.servlet.http.HttpSession;
 
 import bookstore.service.BookService;
 import bookstore.service.CustomerService;
-import bookstore.service.pojo.BookServiceWrapper;
-import bookstore.service.pojo.CustomerServiceWrapper;
+import bookstore.service.classic.BookServiceWrapper;
+import bookstore.service.classic.CustomerServiceWrapper;
 import bookstore.util.Messages;
 import bookstore.vbean.VBook;
 

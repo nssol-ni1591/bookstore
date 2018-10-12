@@ -1,14 +1,14 @@
-package bookstore.service.pojo;
+package bookstore.service.classic;
 
 import java.sql.Connection;
 import java.util.logging.Logger;
 
-import bookstore.annotation.UsedPojo;
+import bookstore.annotation.UsedClassic;
 import bookstore.dao.BookDAO;
 import bookstore.dao.jdbc.BookDAOImpl;
 import bookstore.service.AbstractBookService;
 
-@UsedPojo
+@UsedClassic
 public class BookServiceWrapper extends AbstractBookService<Connection> {
 
 	private final BookDAO<Connection> bookdao = new BookDAOImpl<>();
