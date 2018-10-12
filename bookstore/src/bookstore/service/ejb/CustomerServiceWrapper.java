@@ -1,5 +1,6 @@
 package bookstore.service.ejb;
 
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,7 +56,12 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public boolean createCustomer(String uid, String password, String name, String email) throws Exception {
+	public boolean createCustomer(String uid
+			, String password
+			, String name
+			, String email
+			) throws SQLException
+	{
 		try {
 			boolean rc = super.createCustomer(uid, password, name, email);
 			log.log(Level.INFO, "rc={0}", rc);

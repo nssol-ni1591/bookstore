@@ -1,5 +1,7 @@
 package bookstore.jsf.bean.ejblocal;
 
+import java.sql.SQLException;
+
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -58,7 +60,7 @@ public class AccountBean2 {
 		this.passwd2 = passwd2;
 	}
 
-	public String create() throws Exception {
+	public String create() throws SQLException {
 		if (account == null || account.isEmpty()
 				|| passwd == null || passwd.isEmpty()
 				|| passwd2 == null || passwd2.isEmpty()

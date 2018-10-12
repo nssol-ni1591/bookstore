@@ -26,6 +26,7 @@ import bookstore.vbean.VOrder;
  * トランザクションマネージャにJtaTransactionManagerを使用する場合：
  *
  * 可能ならば実装でのTx制御を行いたいが、うまくロールバックしない。ので実装部分はコメントアウト
+ * ⇒JTAトランザクションなので、実装側でのTX制御ができないのは当然。なのでは？
  */
 @UsedSpring
 @Component("ServiceOrderImplBId3")
@@ -70,7 +71,7 @@ public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 
 	@Override
 	@Transactional(value="jtatx", propagation=Propagation.REQUIRED)
-	public void orderBooks(String uid, List<String> inISBNs) throws Exception {
+	public void orderBooks(String uid, List<String> inISBNs) throws SQLException {
 		log.log(Level.INFO, "datasource={0}"
 				, jdbcTemplate == null ? "null" : jdbcTemplate.getDataSource().getClass().getName());
 
@@ -84,24 +85,6 @@ public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 		catch (Exception e) {
 			throw new SpringRuntimeException(e);
 		}
-		/*
-		// Non-managed environment idiom
-		Session sess = sessionFactory.openSession();
-		Transaction tx = sess.getTransaction();
-		try {
-			tx.begin();
-			boolean rc = super.createCustomer(uid, password, name, email);
-			tx.commit();
-			return rc;
-		}
-		catch (Exception e) {
-			tx.rollback();
-			throw e;
-		}
-		finally {
-			sess.close();
-		}
-		 */
 	}
 
 	@Override

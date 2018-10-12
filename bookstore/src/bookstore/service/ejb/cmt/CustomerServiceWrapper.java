@@ -1,6 +1,6 @@
 package bookstore.service.ejb.cmt;
 
-import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,13 +54,18 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public boolean createCustomer(String uid, String password, String name, String email) throws Exception {
+	public boolean createCustomer(String uid
+			, String password
+			, String name
+			, String email
+			) throws SQLException
+	{
 		try {
 			boolean rc = super.createCustomer(uid, password, name, email);
 			log.log(Level.INFO, "rc={0}", rc);
 			return rc;
 		}
-		catch (RuntimeException | RemoteException e) {
+		catch (RuntimeException /*| RemoteException*/ e) {
 			throw e;
 		}
 		catch (Exception e) {

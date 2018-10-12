@@ -1,5 +1,6 @@
 package bookstore.service.weld;
 
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,8 +25,8 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 	@Inject @UsedJpa private CustomerDAO<EntityManager> customerdao;
 	@Inject private Logger log;
 
-	//@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf;
-	//private EntityManager em = null;
+	//@PersistenceUnit(name = "BookStore") private EntityManagerFactory emf
+	//private EntityManager em = null
 	@Inject private JPASelector selector;
 
 
@@ -48,7 +49,7 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 	}
 
 	@Override
-	public boolean createCustomer(String uid, String password, String name, String email) throws Exception {
+	public boolean createCustomer(String uid, String password, String name, String email) throws SQLException {
 		//em = emf.createEntityManager()
 		EntityManager em = getManager();
 		EntityTransaction tx = null;

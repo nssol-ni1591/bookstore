@@ -44,9 +44,9 @@ public class OrderDAOImpl<T extends Connection> implements OrderDAO<T> {
 			pst2 = con.prepareStatement("select max(id)"
 					+ " from t_order"
 					+ " where customer_id_fk = ?"
-					);
-			pst2.setInt(1, inCustomer.getId());
-			rs2 = pst2.executeQuery();
+					)
+			pst2.setInt(1, inCustomer.getId())
+			rs2 = pst2.executeQuery()
 			*/
 			if (rs2.next()) {
 				TOrder saveOrder = new TOrder();

@@ -1,10 +1,12 @@
 package bookstore.service.ejb.bmt;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
+import javax.ejb.EJBException;
 import javax.ejb.Local;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -69,16 +71,21 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 	}
 
 	@Override
-	public void orderBooks(String uid, List<String> inISBNs) throws Exception {
+	public void orderBooks(String uid, List<String> inISBNs) throws SQLException {
 		log.log(Level.INFO, "this={0}", this);
-		tx.begin();
 		try {
+			tx.begin();
 			super.orderBooks(uid, inISBNs);
 			tx.commit();
 		}
 		catch (Exception e) {
-			tx.rollback();
-			throw e;
+			try {
+				tx.rollback();
+			}
+			catch (Exception e2) {
+				log.log(Level.SEVERE, "in rollback", e2);
+			}
+			throw new EJBException(e);
 		}
 	}
 

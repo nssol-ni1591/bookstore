@@ -1,5 +1,6 @@
 package bookstore.service.weld;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,7 +74,7 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 	}
 
 	@Override
-	public void orderBooks(String uid, List<String> inISBNs) throws Exception {
+	public void orderBooks(String uid, List<String> inISBNs) throws SQLException {
 		//em = emf.createEntityManager()
 		EntityManager em = getManager();
 		EntityTransaction tx = null;

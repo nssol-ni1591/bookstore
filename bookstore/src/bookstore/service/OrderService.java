@@ -9,7 +9,7 @@ import bookstore.vbean.VOrderDetail;
 
 public interface OrderService {
 
-	public void orderBooks(String uid, List<String> isbnList) throws Exception;
+	public void orderBooks(String uid, List<String> isbnList) throws SQLException;
 
 	// add by gohdo.
 	public List<VOrder> listOrders(List<String> orderIdList) throws SQLException;

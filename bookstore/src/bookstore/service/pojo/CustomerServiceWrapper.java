@@ -1,6 +1,7 @@
 package bookstore.service.pojo;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import bookstore.annotation.UsedPojo;
@@ -34,7 +35,9 @@ public class CustomerServiceWrapper extends AbstractCustomerService<Connection> 
 	public boolean createCustomer(String uid
 			, String password
 			, String name
-			, String email) throws Exception {
+			, String email
+			) throws SQLException
+	{
 		boolean rc = false;
 		con = DB.createConnection();
 		try {

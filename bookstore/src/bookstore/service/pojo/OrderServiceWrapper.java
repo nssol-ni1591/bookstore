@@ -1,6 +1,7 @@
 package bookstore.service.pojo;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -54,7 +55,7 @@ public class OrderServiceWrapper extends AbstractOrderService<Connection> {
 	}
 
 	@Override
-	public void orderBooks(String uid, List<String> inISBNs) throws Exception {
+	public void orderBooks(String uid, List<String> inISBNs) throws SQLException {
 		con = DB.createConnection();
 		try {
 			super.orderBooks(uid, inISBNs);

@@ -22,7 +22,7 @@ public abstract class AbstractCustomerService<T> implements CustomerService {
 		return count != 0;
 	}
 
-	public boolean createCustomer(String uid, String password, String name, String email) throws Exception {
+	public boolean createCustomer(String uid, String password, String name, String email) throws SQLException {
 		if (isAlreadyExsited(uid)) {
 			return false;
 		}

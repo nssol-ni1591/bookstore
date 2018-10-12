@@ -1,6 +1,6 @@
 package bookstore.service.ejb.cmt;
 
-import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,12 +73,12 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 	 */
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void orderBooks(String uid, List<String> inISBNs) throws Exception {
+	public void orderBooks(String uid, List<String> inISBNs) throws SQLException {
 		log.log(Level.INFO, "this={0}", this);
 		try {
 			super.orderBooks(uid, inISBNs);
 		}
-		catch (RuntimeException | RemoteException e) {
+		catch (RuntimeException /*| RemoteException*/ e) {
 			throw e;
 		}
 		catch (Exception e) {

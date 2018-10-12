@@ -1,4 +1,4 @@
-package bookstore.dao.jpa.local;
+package bookstore.util;
 
 import javax.enterprise.inject.Disposes;
 import javax.persistence.EntityManager;

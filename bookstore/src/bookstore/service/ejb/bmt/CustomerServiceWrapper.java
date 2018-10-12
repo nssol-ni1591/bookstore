@@ -1,9 +1,11 @@
 package bookstore.service.ejb.bmt;
 
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
+import javax.ejb.EJBException;
 import javax.ejb.Local;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -49,7 +51,12 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 	@Override
 	//@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	// => The @TransactionAttribute annotation applies only to beans using Container-Managed Transactions.  
-	public boolean createCustomer(String uid, String password, String name, String email) throws Exception {
+	public boolean createCustomer(String uid
+			, String password
+			, String name
+			, String email
+			) throws SQLException
+	{
 		log.log(Level.INFO, "this={0}", this);
 		try {
 			tx.begin();
@@ -59,8 +66,13 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 			return rc;
 		}
 		catch (Exception e) {
-			tx.rollback();
-			throw e;
+			try {
+				tx.rollback();
+			}
+			catch (Exception e2) {
+				log.log(Level.SEVERE, "in rollback", e2);
+			}
+			throw new EJBException(e);
 		}
 	}
 

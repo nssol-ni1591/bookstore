@@ -1,5 +1,6 @@
 package bookstore.service.spring;
 
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import org.hibernate.SessionFactory;
@@ -45,7 +46,7 @@ public class CustomerServiceWrapper extends AbstractCustomerService<SessionFacto
 	public boolean createCustomer(String uid
 			, String password
 			, String name
-			, String email) throws Exception {
+			, String email) throws SQLException {
 		//rollback‚·‚é‚½‚ß‚Ì—áŠO‚ÍRuntimeException‚Å‚È‚¢‚Æ‚¢‚¯‚È‚¢
 		try {
 			return super.createCustomer(uid, password, name, email);

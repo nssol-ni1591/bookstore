@@ -28,7 +28,7 @@ public abstract class AbstractOrderService<T> implements OrderService {
 	protected abstract T getManager();
 
 	@Override
-	public void orderBooks(String uid, List<String> isbnList) throws Exception {
+	public void orderBooks(String uid, List<String> isbnList) throws SQLException {
 		Logger log = getLogger();
 		T em = getManager();
 		BookDAO<T> bookdao = getBookDAO();
