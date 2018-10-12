@@ -19,15 +19,15 @@ public class JPASelector {
 	//JTAでは@PersistenceContextを使用する
 	//RESOURCE_LOCALでは@PersistenceUnitを使用する
 
-	@PersistenceContext(unitName = "BookStore2") private EntityManager defaultEM;
-	@PersistenceContext(unitName = "BookStore-Hibernate-JTA") private EntityManager hibernateEM;
-	@PersistenceContext(unitName = "BookStore-Eclipselink-JTA") private EntityManager eclipselinkEM;
-	@PersistenceContext(unitName = "BookStore-OpenJPA-JTA") private EntityManager openjpaEM;
+	@PersistenceContext(unitName="BookStore2") private EntityManager defaultEM;
+	@PersistenceContext(unitName="BookStore-Hibernate-JTA") private EntityManager hibernateEM;
+	@PersistenceContext(unitName="BookStore-Eclipselink-JTA") private EntityManager eclipselinkEM;
+	@PersistenceContext(unitName="BookStore-OpenJPA-JTA") private EntityManager openjpaEM;
 
-	@PersistenceUnit(name = "BookStore") private EntityManagerFactory defaultEMF;
-	@PersistenceUnit(name = "BookStore-Hibernate-Resource_Local") private EntityManagerFactory hibernateEMF;
-	@PersistenceUnit(name = "BookStore-Eclipselink-Resource_Local") private EntityManagerFactory eclipselinkEMF;
-	@PersistenceUnit(name = "BookStore-OpenJPA-Resource_Local") private EntityManagerFactory openjpaEMF;
+	@PersistenceUnit(name="BookStore") private EntityManagerFactory defaultEMF;
+	@PersistenceUnit(name="BookStore-Hibernate-Resource_Local") private EntityManagerFactory hibernateEMF;
+	@PersistenceUnit(name="BookStore-Eclipselink-Resource_Local") private EntityManagerFactory eclipselinkEMF;
+	@PersistenceUnit(name="BookStore-OpenJPA-Resource_Local") private EntityManagerFactory openjpaEMF;
 
 	public static final String DEFAULT = "Default";
 	public static final String HIBERNATE = "Hibernate";

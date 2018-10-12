@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ejb.EJBException;
+import javax.annotation.Resource;
 import javax.ejb.Local;
 import javax.ejb.LocalBean;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -35,6 +36,8 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 	@Inject @UsedJpaJta private OrderDAO<EntityManager> orderdao;
 	@Inject @UsedJpaJta private OrderDetailDAO<EntityManager> orderdetaildao;
 	@Inject private Logger log;
+
+	@Resource SessionContext ctx;
 
 	@Override
 	protected BookDAO<EntityManager> getBookDAO() {
@@ -71,8 +74,8 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void orderBooks(String uid, List<String> inISBNs) throws Exception {
+		log.log(Level.INFO, "this={0}", this);
 		try {
-			log.log(Level.INFO, "this={0}", this);
 			super.orderBooks(uid, inISBNs);
 		}
 		catch (RuntimeException | RemoteException e) {
@@ -80,7 +83,9 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 		}
 		catch (Exception e) {
 			// EJBExceptionはシステム例外
-			throw new EJBException(e);
+			//throw new EJBException(e)
+			ctx.setRollbackOnly();
+			throw e;
 		}
 	}
 

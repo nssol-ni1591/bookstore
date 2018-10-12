@@ -4,9 +4,10 @@ import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ejb.EJBException;
+import javax.annotation.Resource;
 import javax.ejb.Local;
 import javax.ejb.LocalBean;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -28,6 +29,8 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 
 	@Inject @UsedJpaJta CustomerDAO<EntityManager> customerdao;
 	@Inject private Logger log;
+
+	@Resource SessionContext ctx;
 
 	@Override
 	protected CustomerDAO<EntityManager> getCustomerDAO() {
@@ -62,7 +65,9 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 		}
 		catch (Exception e) {
 			// EJBExceptionはシステム例外
-			throw new EJBException(e);
+			//throw new EJBException(e)
+			ctx.setRollbackOnly();
+			throw e;
 		}
 	}
 
