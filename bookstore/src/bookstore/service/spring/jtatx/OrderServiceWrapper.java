@@ -24,7 +24,6 @@ import bookstore.vbean.VOrder;
 
 /*
  * トランザクションマネージャにJtaTransactionManagerを使用する場合：
- *
  * 可能ならば実装でのTx制御を行いたいが、うまくロールバックしない。ので実装部分はコメントアウト
  * ⇒JTAトランザクションなので、実装側でのTX制御ができないのは当然。なのでは？
  */
@@ -68,16 +67,16 @@ public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 		//return null
 	}
 
-
+	//コンテキスト.xmlでTx定義を行っていないので@Transactionalが必要
 	@Override
 	@Transactional(value="jtatx", propagation=Propagation.REQUIRED)
-	public void orderBooks(String uid, List<String> inISBNs) throws SQLException {
+	public void orderBooks(String uid, List<String> isbns) throws SQLException {
 		log.log(Level.INFO, "datasource={0}"
 				, jdbcTemplate == null ? "null" : jdbcTemplate.getDataSource().getClass().getName());
 
 		//rollbackするための例外はRuntimeExceptionでないといけない
 		try {
-			super.orderBooks(uid, inISBNs);
+			super.orderBooks(uid, isbns);
 		}
 		catch (RuntimeException e) {
 			throw e;
@@ -87,6 +86,7 @@ public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 		}
 	}
 
+	//コンテキスト.xmlでTx定義を行っていないので@Transactionalが必要
 	@Override
 	@Transactional(value="jtatx", propagation=Propagation.REQUIRED, readOnly=true)
 	public List<VOrder> listOrders(List<String> orderIdList) throws SQLException {

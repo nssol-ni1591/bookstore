@@ -9,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import bookstore.annotation.Log;
 import bookstore.annotation.UsedSpring;
@@ -19,11 +20,14 @@ import bookstore.dao.CustomerDAO;
 import bookstore.dao.OrderDAO;
 import bookstore.dao.OrderDetailDAO;
 import bookstore.service.AbstractOrderService;
-import bookstore.service.spring.SpringRuntimeException;
-import bookstore.vbean.VOrder;
 
 /*
  * トランザクションマネージャにDataSourceTransactionManagerを使用する場合：
+ * DataSourceTransactionManagerを使用しているので、以下のどれかでTx制御する
+ * (1)コンテキストxmlでのトランザクション定義 @see: bookstore.service.spring.OrderServiceWrapper
+ * (2)@Transactionalによるトランザクション定義 @see: bookstore.service.spring.jatx.OrderServiceWrapper
+ * (3)実装でトランザクション処理
+ * ここでは、(3)の方法でトランザクションを制御する
  */
 @UsedSpring
 @Component("ServiceOrderImplBId2")
@@ -36,6 +40,7 @@ public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 	@Autowired @Qualifier("OrderDAOBId2") OrderDAO<JdbcTemplate> orderdao;
 	@Autowired @Qualifier("OrderDetailDAOBId2") OrderDetailDAO<JdbcTemplate> odetaildao;
 	@Autowired @Qualifier("jdbcTemplate2") JdbcTemplate jdbcTemplate;
+	@Autowired @Qualifier("dstx") PlatformTransactionManager txMgr;
 
 	@Override
 	protected BookDAO<JdbcTemplate> getBookDAO() {
@@ -66,46 +71,26 @@ public class OrderServiceWrapper extends AbstractOrderService<JdbcTemplate> {
 	}
 
 
+	//実装でTx制御を行っているのでコンテキストxmlのTx定義も@Transactionalも必要ない
 	@Override
-	@Transactional(value="dstx", propagation=Propagation.REQUIRED)	//コンテキスト.xmlでTx定義を行っていないので@Transactionalが必要
-	public void orderBooks(String uid, List<String> inISBNs) throws SQLException {
+	public void orderBooks(String uid, List<String> isdns) throws SQLException {
 		log.log(Level.INFO, "datasource={0}"
 				, jdbcTemplate == null ? "null" : jdbcTemplate.getDataSource().getClass().getName());
 
-		//rollbackするための例外はRuntimeExceptionでないといけない
-		try {
-			super.orderBooks(uid, inISBNs);
-		}
-		catch (RuntimeException e) {
-			throw e;
-		}
-		catch (Exception e) {
-			throw new SpringRuntimeException(e);
-		}
-		/*
 		// Non-managed environment idiom
-		Session sess = sessionFactory.openSession();
-		Transaction tx = sess.getTransaction();
+		DefaultTransactionDefinition txDef = new DefaultTransactionDefinition();
+		TransactionStatus status = txMgr.getTransaction(txDef);
 		try {
-			tx.begin();
-			boolean rc = super.createCustomer(uid, password, name, email);
-			tx.commit();
-			return rc;
+			super.orderBooks(uid, isdns);
+			txMgr.commit(status);
 		}
 		catch (Exception e) {
-			tx.rollback();
+			txMgr.rollback(status);
 			throw e;
 		}
 		finally {
-			sess.close();
+			// Do nothing.
 		}
-		*/
-	}
-
-	@Override
-	@Transactional(value="dstx", propagation=Propagation.REQUIRED, readOnly=true)
-	public List<VOrder> listOrders(List<String> orderIdList) throws SQLException {
-		return super.listOrders(orderIdList);
 	}
 
 }
