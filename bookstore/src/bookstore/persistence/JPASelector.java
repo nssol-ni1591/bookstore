@@ -45,12 +45,6 @@ public class JPASelector {
 
 	@Produces
 	public EntityManager getEntityManager() {
-		// @Inject先の変数にnullが設定されるが、この値を変更する手段（@Injectの再実行）がなくなるので都合が悪い
-		/*
-		if (common == null || common.getJpaModule() == null || common.getTxType() == null) {
-			return null;
-		}
-		*/
 		return getEntityManager(common.getJpaModule(), common.getTxType());
 	}
 	public EntityManager getEntityManager(String txType) {

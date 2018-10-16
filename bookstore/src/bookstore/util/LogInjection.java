@@ -19,8 +19,6 @@ public class LogInjection implements BeanPostProcessor {
 
     @Override
     public Object postProcessBeforeInitialization(final Object bean, String name) {
-    	System.out.println("postProcessBeforeInitialization: bean=" + bean + ", name=" + name);
-
     	ReflectionUtils.doWithFields(bean.getClass(), field -> {
     		// lambda: new ReflectionUtils.FieldCallback() { ... } -
     		// make the field accessible if defined private
