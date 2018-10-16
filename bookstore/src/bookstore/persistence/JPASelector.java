@@ -1,5 +1,8 @@
 package bookstore.persistence;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
@@ -38,10 +41,16 @@ public class JPASelector {
 	public static final String RESOURCE_LOCAL = "Resource_Local";
 
 	@Inject private CommonJSFBean common;
-	//@Inject private Logger log
+	@Inject private Logger log;
 
 	@Produces
 	public EntityManager getEntityManager() {
+		// @Inject先の変数にnullが設定されるが、この値を変更する手段（@Injectの再実行）がなくなるので都合が悪い
+		/*
+		if (common == null || common.getJpaModule() == null || common.getTxType() == null) {
+			return null;
+		}
+		*/
 		return getEntityManager(common.getJpaModule(), common.getTxType());
 	}
 	public EntityManager getEntityManager(String txType) {
@@ -73,8 +82,7 @@ public class JPASelector {
 		default:
 			throw new IllegalArgumentException("unknown jpa module: " + jpaModule);
 		}
-
-		//log.log(Level.INFO, "persistence={0}-{1}-{2}, em={3}", new Object[] { "BookStore", jpaModule, txType, em })
+		log.log(Level.INFO, "persistence={0}-{1}-{2}, em={3}", new Object[] { "BookStore", jpaModule, txType, em });
 		return em;
 	}
 

@@ -10,7 +10,7 @@
 	<h2>ログアウトしました</h2>
 	</center>
 
-	<a href="$link.setRelative("/Login.vm" )">トップへ</a>
+	<a href="$link.setRelative("/index.html" )">トップへ</a>
 
 </body>
 

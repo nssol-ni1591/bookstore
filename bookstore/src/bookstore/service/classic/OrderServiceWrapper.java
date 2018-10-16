@@ -5,6 +5,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.enterprise.context.Dependent;
+import javax.inject.Named;
+
 import bookstore.annotation.UsedClassic;
 import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
@@ -17,7 +20,9 @@ import bookstore.dao.jdbc.OrderDAOImpl;
 import bookstore.dao.jdbc.OrderDetailDAOImpl;
 import bookstore.service.AbstractOrderService;
 
+@Named
 @UsedClassic
+@Dependent
 public class OrderServiceWrapper extends AbstractOrderService<Connection> {
 
 	private final BookDAO<Connection> bookdao = new BookDAOImpl<>();

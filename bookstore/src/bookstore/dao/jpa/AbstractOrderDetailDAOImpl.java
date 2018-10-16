@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -34,13 +33,13 @@ public abstract class AbstractOrderDetailDAOImpl<T extends EntityManager> implem
 	 * （注意：最初のインスタンスを破棄しない限り、2つ目のインスタンスを作成しないでください）
 	 */
 	protected abstract EntityManager getEntityManager();
+	protected abstract Logger getLogger();
 
-	@Inject private Logger log;
 
 	@Override
 	public void createOrderDetail(final T em2, TOrder order, TBook book) throws SQLException {
 		EntityManager em = em2 != null ? em2 : getEntityManager();
-		log.log(Level.INFO, "order_id={0}, book_id={1}"
+		getLogger().log(Level.INFO, "order_id={0}, book_id={1}"
 				, new Object[] { order.getId(), book.getId() });
 
 		if ("0-0000-0000-0".equals(book.getIsbn())) {

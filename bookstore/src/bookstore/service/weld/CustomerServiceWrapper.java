@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -15,6 +14,7 @@ import bookstore.annotation.UsedJpa;
 import bookstore.dao.CustomerDAO;
 import bookstore.persistence.JPASelector;
 import bookstore.service.AbstractCustomerService;
+import bookstore.vbean.VCustomer;
 
 @UsedWeld
 @Dependent
@@ -24,14 +24,9 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 	@Inject private Logger log;
 
 	@Inject private JPASelector selector;
+	// 多分、直接プロパティの値を更新してはいけない
 	private EntityManager em = null;
 
-
-	@PostConstruct
-	public void init() {
-		em = selector.getEntityManager();
-		log.log(Level.INFO, "this={0}, em={1}", new Object[] { this, em });
-	}
 
 	@Override
 	protected CustomerDAO<EntityManager> getCustomerDAO() {
@@ -44,16 +39,27 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 	@Override
 	protected EntityManager getManager() {
 		// EntityTransactionのTx制御の都合で、1Tx内のemは同じインスタンスを使用しないといけない
-		// ここでは、このクラスのインスタンスで使用するemは同じインスタンスを参照することで対応する
+		log.log(Level.INFO, "em={0}", em);
 		return em;
-		// 万が一、同時に複数のスレッドでこのインスタンスが使用されると都合が悪い
+	}
+
+	private void startManager() {
+		em = selector.getEntityManager();
+		log.log(Level.INFO, "em={0}", em);
+		if (em == null) {
+			log.log(Level.INFO, "print stack trace", new Exception());
+		}
+	}
+	private void stopManager() {
+		this.em = null;
 	}
 
 	@Override
 	public boolean createCustomer(String uid, String password, String name, String email) throws SQLException {
+		startManager();
 		EntityTransaction tx = null;
 		try {
-			tx = em.getTransaction();
+			tx = getManager().getTransaction();
 			tx.begin();
 	
 			boolean rc = super.createCustomer(uid, password, name, email);
@@ -69,8 +75,33 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 			throw e;
 		}
 		finally {
-			// Do nothing.
+			stopManager();
 		}
+	}
+
+	@Override
+	public boolean isAlreadyExsited(String uid) throws SQLException {
+		startManager();
+		boolean rc = super.isAlreadyExsited(uid);
+		stopManager();
+		return rc;
+	}
+
+	@Override
+	public boolean isPasswordMatched(String uid, String password) throws SQLException {
+		startManager();
+		log.log(Level.INFO, "em={0}", em);
+		boolean rc = super.isPasswordMatched(uid, password);
+		stopManager();
+		return rc;
+	}
+
+	@Override
+	public VCustomer createVCustomer(String uid) throws SQLException {
+		startManager();
+		VCustomer vc = super.createVCustomer(uid);
+		stopManager();
+		return vc;
 	}
 
 }

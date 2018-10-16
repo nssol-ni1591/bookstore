@@ -3,7 +3,6 @@ package bookstore.dao.jpa;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -30,8 +29,8 @@ public abstract class AbstractCustomerDAOImpl<T extends EntityManager> implement
 	 * （注意：最初のインスタンスを破棄しない限り、2つ目のインスタンスを作成しないでください）
 	 */
 	protected abstract EntityManager getEntityManager();
+	protected abstract Logger getLogger();
 
-	@Inject private Logger log;
 
 	@Override
 	public int getCustomerNumberByUid(final T em2, String uid) {
@@ -46,6 +45,7 @@ public abstract class AbstractCustomerDAOImpl<T extends EntityManager> implement
 	@Override
 	public TCustomer findCustomerByUid(final T em2, String uid) {
 		EntityManager em = em2 != null ? em2 : getEntityManager();
+		getLogger().log(Level.INFO, "em={0}", em);
 
 		Query q = em
 				.createQuery("select c from TCustomer c where c.username=:username");
@@ -56,7 +56,7 @@ public abstract class AbstractCustomerDAOImpl<T extends EntityManager> implement
 	@Override
 	public void saveCustomer(final T em2, String username, String passwordMD5, String name, String email) {
 		EntityManager em = em2 != null ? em2 : getEntityManager();
-		log.log(Level.INFO, "entityManager={0}", em);
+		getLogger().log(Level.INFO, "entityManager={0}", em);
 
 		em.getTransaction().begin();
 		TCustomer customer = new TCustomer();

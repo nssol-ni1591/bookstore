@@ -6,7 +6,7 @@ import bookstore.vbean.VCustomer;
 
 public interface CustomerService {
 
-	public boolean isAlreadyExsited(String inSid) throws SQLException;
+	public boolean isAlreadyExsited(String uid) throws SQLException;
 
 	public boolean createCustomer(String uid
 			, String password

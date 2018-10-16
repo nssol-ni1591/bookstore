@@ -1,6 +1,7 @@
 package bookstore.dao.jpa;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -28,6 +29,8 @@ public abstract class AbstractBookDAOImpl<T extends EntityManager> implements Bo
 	 * （注意：最初のインスタンスを破棄しない限り、2つ目のインスタンスを作成しないでください）
 	 */
 	protected abstract EntityManager getEntityManager();
+	protected abstract Logger getLogger();
+
 
 	@Override
 	public int getPriceByISBNs(final T em2, List<String> isbnList) {

@@ -55,7 +55,8 @@
 	E-Mail:	$Customer.email	<br>
 
 	<br>
-	<a href="$link.setRelative( "/Login.vm" )">トップに戻る</a>
+	<a href="$link.setRelative("BookStore.jsp")">再検索</a>
+	<a href="$link.setRelative("/index.html")">トップに戻る</a>
 </body>
 
 </html>

@@ -4,10 +4,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
 import bookstore.annotation.Log;
 
+@Component
 public class LogInjection implements BeanPostProcessor {
 
 	@Override
@@ -17,6 +19,8 @@ public class LogInjection implements BeanPostProcessor {
 
     @Override
     public Object postProcessBeforeInitialization(final Object bean, String name) {
+    	System.out.println("postProcessBeforeInitialization: bean=" + bean + ", name=" + name);
+
     	ReflectionUtils.doWithFields(bean.getClass(), field -> {
     		// lambda: new ReflectionUtils.FieldCallback() { ... } -
     		// make the field accessible if defined private

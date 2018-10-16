@@ -35,9 +35,10 @@ public abstract class AbstractOrderDAOImpl<T extends EntityManager> implements O
 	 * （注意：最初のインスタンスを破棄しない限り、2つ目のインスタンスを作成しないでください）
 	 */
 	protected abstract EntityManager getEntityManager();
+	protected abstract Logger getLogger();
 
-	@Inject private Logger log;
 	@Inject JPASelector selector;
+
 
 	@Override
 	public List<TOrder> retrieveOrders(T em2, List<String> orderIdList) {
@@ -61,7 +62,7 @@ public abstract class AbstractOrderDAOImpl<T extends EntityManager> implements O
 	@Override
 	public TOrder createOrder(T em2, TCustomer customer) {
 		EntityManager em = em2 != null ? em2 : getEntityManager();
-		log.log(Level.INFO, "entityManager={0}", em);
+		getLogger().log(Level.INFO, "entityManager={0}", em);
 
 		TOrder order = new TOrder();
 		order.setOrderday(Timestamp.valueOf(LocalDateTime.now()));
@@ -79,7 +80,7 @@ public abstract class AbstractOrderDAOImpl<T extends EntityManager> implements O
 		q.setParameter("CUSTID", customer);
 		order = (TOrder) q.getSingleResult();
 
-		log.log(Level.INFO, "customer_id={0}, order_id={1}"
+		getLogger().log(Level.INFO, "customer_id={0}, order_id={1}"
 				, new Object[] { customer.getId(), order.getId() });
 		return order;
 	}

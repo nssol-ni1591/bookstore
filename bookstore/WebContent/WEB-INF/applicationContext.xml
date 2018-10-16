@@ -19,6 +19,7 @@
 
 	<!-- spring DI対象のパッケージを指定する -->
 	<context:component-scan base-package="bookstore.service.spring.*" />
+	<context:component-scan base-package="bookstore.util.LogInjection" />
 	<!-- bookstore.service.spring.*は以下にbean定義がないのでscanが必要
 		それ以外は<bean>定義が行われているのでscanは不要
 	<context:component-scan base-package="bookstore.dao.jdbctemplate.*" />

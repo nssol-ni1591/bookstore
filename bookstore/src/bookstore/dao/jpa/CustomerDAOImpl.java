@@ -1,6 +1,9 @@
 package bookstore.dao.jpa;
 
+import java.util.logging.Logger;
+
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
 import bookstore.annotation.UsedJpa;
@@ -8,6 +11,9 @@ import bookstore.annotation.UsedJpa;
 @UsedJpa
 @Dependent
 public class CustomerDAOImpl<T extends EntityManager> extends AbstractCustomerDAOImpl<T> {
+
+	@Inject private Logger log; 
+
 	/*
 	 * RESOURCE_LOCALとJTA永続コンテキストの比較
 	 * <persistence-unit transaction-type = "RESOURCE_LOCAL">を使用すると、
@@ -29,6 +35,11 @@ public class CustomerDAOImpl<T extends EntityManager> extends AbstractCustomerDA
 	@Override
 	protected EntityManager getEntityManager() {
 		return null;
+	}
+
+	@Override
+	protected Logger getLogger() {
+		return log;
 	}
 
 }

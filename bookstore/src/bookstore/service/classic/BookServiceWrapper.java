@@ -3,12 +3,17 @@ package bookstore.service.classic;
 import java.sql.Connection;
 import java.util.logging.Logger;
 
+import javax.enterprise.context.Dependent;
+import javax.inject.Named;
+
 import bookstore.annotation.UsedClassic;
 import bookstore.dao.BookDAO;
 import bookstore.dao.jdbc.BookDAOImpl;
 import bookstore.service.AbstractBookService;
 
+@Named
 @UsedClassic
+@Dependent
 public class BookServiceWrapper extends AbstractBookService<Connection> {
 
 	private final BookDAO<Connection> bookdao = new BookDAOImpl<>();

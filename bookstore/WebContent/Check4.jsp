@@ -4,12 +4,11 @@
 <%@page import="java.util.Map" %>
 <%@page import="bookstore.vbean.VBook" %>
 <%@page import="bookstore.vbean.VCheckout" %>
-<%@page import="bookstore.vbean.VCustomer"%>
 
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=Windows-31J">
-	<title>注文確定</title>
+	<title>購入商品</title>
 </head>
 <style>
 h2 {
@@ -17,12 +16,21 @@ h2 {
 }
 </style>
 <body>
-	<h2>注文確認</h2>
-	<br><br>
-	
-	以下のとおり、注文を受け付けました。
+	<h2>購入商品</h2>
 	<br>
-	商品:
+	<% if (request.getAttribute("errors") != null) {
+		@SuppressWarnings("unchecked")
+		Map<String, String> errors = (Map<String, String>)request.getAttribute("errors"); %>
+		<br>
+		<font color="red">
+			<%= errors.get("orderalert") %>
+		</font>
+		<br>
+		<br>
+	<% } %>
+	<br>
+	
+	以下が購入する商品と合計です。
 	<br>
 	<table border="1">
 
@@ -55,22 +63,15 @@ h2 {
 	<br>
 	<br>
 	合計: <%= ItemsToBuy.getTotal() %> 円
-	<br>
-	<br>
-	<br>
-	お客様情報
-	<br>
-	<br>
-	<%
-		VCustomer customer = (VCustomer)request.getAttribute("Customer");
-	%>
-	UserID:	<%= customer.getUid() %>	<br>
-	氏名:	<%= customer.getName() %>	<br>
-	E-Mail:	<%= customer.getEmail() %>	<br>
 
-	<br>
-	<a href="BookStore.jsp">再検索</a>
-	<a href="Logout.jsp">ログアウト</a>
+	<form method="post" action="OrderServlet4">
+		<input type="submit" value="注文する" />
+	</form>
+
+	<form method="post" action="SearchServlet4">
+		<input type="hidden" name="keyword" />
+		<input type="submit" value="戻る" />
+	</form>
+
 </body>
-
 </html>

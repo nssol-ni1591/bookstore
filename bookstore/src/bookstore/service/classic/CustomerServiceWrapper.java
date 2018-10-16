@@ -4,13 +4,18 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import javax.enterprise.context.Dependent;
+import javax.inject.Named;
+
 import bookstore.annotation.UsedClassic;
 import bookstore.dao.CustomerDAO;
 import bookstore.dao.jdbc.CustomerDAOImpl;
 import bookstore.dao.jdbc.DB;
 import bookstore.service.AbstractCustomerService;
 
+@Named
 @UsedClassic
+@Dependent
 public class CustomerServiceWrapper extends AbstractCustomerService<Connection> {
 
 	private final CustomerDAO<Connection> customerdao = new CustomerDAOImpl<>();
