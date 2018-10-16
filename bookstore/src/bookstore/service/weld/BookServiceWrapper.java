@@ -10,16 +10,18 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
 import bookstore.annotation.UsedWeld;
+import bookstore.annotation.WithEntityTx;
 import bookstore.annotation.UsedJpa;
 import bookstore.dao.BookDAO;
 import bookstore.persistence.JPASelector;
 import bookstore.service.AbstractBookService;
+import bookstore.util.EntityTx;
 import bookstore.vbean.VBook;
 import bookstore.vbean.VCheckout;
 
 @UsedWeld
 @Dependent
-public class BookServiceWrapper extends AbstractBookService<EntityManager> {
+public class BookServiceWrapper extends AbstractBookService<EntityManager> implements EntityTx {
 
 	@Inject @UsedJpa private BookDAO<EntityManager> bookdao;
 	@Inject private Logger log;
@@ -37,20 +39,18 @@ public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 		return log;
 	}
 	@Override
-	protected EntityManager getManager() {
+	public EntityManager getManager() {
 		// EntityTransactionのTx制御の都合で、1Tx内のemは同じインスタンスを使用しないといけない
 		log.log(Level.INFO, "em={0}", em);
 		return em;
 	}
 
-	private void startManager() {
+	@Override
+	public void startEntityTx() {
 		em = selector.getEntityManager();
-		log.log(Level.INFO, "em={0}", em);
-		if (em == null) {
-			log.log(Level.INFO, "print stack trace", new Exception());
-		}
 	}
-	private void stopManager() {
+	@Override
+	public void stopEntityTx() {
 		this.em = null;
 	}
 
@@ -60,48 +60,39 @@ public class BookServiceWrapper extends AbstractBookService<EntityManager> {
 	 * @see bookstore.service.impl.BookServiceImpl#createCart(java.util.List, java.util.List, java.util.List)
 	 */
 	@Override
+	@WithEntityTx
 	public List<String> createCart(List<String> productList, List<String> selectedList, List<String> cart) {
-		startManager();
 		if (selectedList != null && !selectedList.isEmpty()) {
 			selectedList.stream()
 				.filter(p -> !cart.contains(p))
 				.filter(productList::contains)
 				.forEach(cart::add);
 		}
-		stopManager();
 		return cart;
 	}
 
 	@Override
+	@WithEntityTx
 	public List<String> getAllBookISBNs() throws SQLException {
-		startManager();
-		List<String> list = super.getAllBookISBNs();
-		stopManager();
-		return list;
+		return super.getAllBookISBNs();
 	}
 
 	@Override
+	@WithEntityTx
 	public List<String> retrieveBookISBNsByKeyword(String keyword) throws SQLException {
-		startManager();
-		List<String> list = super.retrieveBookISBNsByKeyword(keyword);
-		stopManager();
-		return list;
+		return super.retrieveBookISBNsByKeyword(keyword);
 	}
 
 	@Override
+	@WithEntityTx
 	public List<VBook> createVBookList(List<String> productList, List<String> selectedList) throws SQLException {
-		startManager();
-		List<VBook> list = super.createVBookList(productList, selectedList);
-		stopManager();
-		return list;
+		return super.createVBookList(productList, selectedList);
 	}
 
 	@Override
+	@WithEntityTx
 	public VCheckout createVCheckout(List<String> selectedList) throws SQLException {
-		startManager();
-		VCheckout vc = super.createVCheckout(selectedList);
-		stopManager();
-		return vc;
+		return super.createVCheckout(selectedList);
 	}
 
 }
