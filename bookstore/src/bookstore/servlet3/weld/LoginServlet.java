@@ -1,4 +1,4 @@
-package bookstore.servlet3.jpa;
+package bookstore.servlet3.weld;
 
 import java.util.logging.Logger;
 

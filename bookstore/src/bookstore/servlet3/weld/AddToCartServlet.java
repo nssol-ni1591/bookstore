@@ -1,4 +1,4 @@
-package bookstore.servlet3.jpa;
+package bookstore.servlet3.weld;
 
 import java.util.logging.Logger;
 
@@ -8,15 +8,15 @@ import javax.servlet.annotation.WebServlet;
 
 import bookstore.annotation.UsedWeld;
 import bookstore.service.BookService;
-import bookstore.servlet3.AbstractSearchServlet;
+import bookstore.servlet3.AbstractAddToCartServlet;
 
 /*
  * ServletはScopeアノテーションを付加するとCDI管理下になる
  * @Injectの@Qualifierでservice層を切替える
  */
-@WebServlet(urlPatterns="/SearchServlet3")
+@WebServlet(urlPatterns="/AddToCartServlet3")
 @RequestScoped
-public class SearchServlet extends AbstractSearchServlet {
+public class AddToCartServlet extends AbstractAddToCartServlet {
 
 	private static final long serialVersionUID = 1L;
 
