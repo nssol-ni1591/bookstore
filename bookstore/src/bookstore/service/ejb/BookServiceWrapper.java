@@ -22,8 +22,10 @@ import bookstore.service.BookService;
 @LocalBean
 @Local(BookService.class)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class BookServiceWrapper extends AbstractBookService<EntityManager> {
-
+public class BookServiceWrapper
+	extends AbstractBookService<EntityManager>
+//	implements BookServiceLocal, BookServiceRemote
+{
 	@Inject @UsedJpa private BookDAO<EntityManager> bookdao;
 
 	@Inject private Logger log;

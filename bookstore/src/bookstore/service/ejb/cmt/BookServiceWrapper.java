@@ -11,19 +11,26 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import bookstore.annotation.UsedCMT;
 import bookstore.annotation.UsedJpaJta;
 import bookstore.dao.BookDAO;
 import bookstore.service.AbstractBookService;
 import bookstore.service.BookService;
+import bookstore.service.ejb.BookServiceLocal;
+import bookstore.service.ejb.BookServiceRemote;
 
+@UsedCMT	// –³ˆÓ–¡
 @Stateless(name="BookServiceCmtWrapper")
 @LocalBean
 @Local(BookService.class)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class BookServiceWrapper extends AbstractBookService<EntityManager> {
-
+public class BookServiceWrapper
+	extends AbstractBookService<EntityManager>
+	implements BookServiceLocal, BookServiceRemote
+{
 	@Inject @UsedJpaJta private BookDAO<EntityManager> bookdao;
 	@Inject private Logger log;
+
 
 	@Override
 	protected BookDAO<EntityManager> getBookDAO() {

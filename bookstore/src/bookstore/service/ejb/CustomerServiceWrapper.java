@@ -25,8 +25,10 @@ import bookstore.service.CustomerService;
 @LocalBean
 @Local(CustomerService.class)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class CustomerServiceWrapper extends AbstractCustomerService<EntityManager> {
-
+public class CustomerServiceWrapper
+	extends AbstractCustomerService<EntityManager>
+//	implements CustomerServiceLocal, CustomerServiceRemote
+{
 	@Inject @UsedJpa private CustomerDAO<EntityManager> customerdao;
 
 	@Inject private Logger log;

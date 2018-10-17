@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import bookstore.annotation.WithLogging;
 import bookstore.dao.CustomerDAO;
 import bookstore.pbean.TCustomer;
 import bookstore.vbean.VCustomer;
@@ -26,6 +27,7 @@ public abstract class AbstractCustomerService<T> implements CustomerService {
 	}
 
 	@Override
+	@WithLogging
 	public boolean isAlreadyExsited(String uid) throws SQLException {
 		return isAlreadyExsitedLocal(uid);
 	}
@@ -49,6 +51,7 @@ public abstract class AbstractCustomerService<T> implements CustomerService {
 	}
 
 	@Override
+	@WithLogging
 	public boolean isPasswordMatched(String uid, String password) throws SQLException {
 		if (!isAlreadyExsitedLocal(uid)) {
 			return false;

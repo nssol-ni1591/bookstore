@@ -1,3 +1,4 @@
+
 package bookstore.jsf.bean.ejb;
 
 import javax.ejb.EJB;

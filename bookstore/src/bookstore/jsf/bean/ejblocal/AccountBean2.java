@@ -8,7 +8,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
-import bookstore.service.ejb.cmt.CustomerServiceWrapper;
+import bookstore.service.CustomerService;
 import bookstore.util.Messages;
 
 @Named(value="accountBean2")
@@ -17,13 +17,15 @@ public class AccountBean2 {
 
 	private static final String CREATE_ACCOUNT = "CreateAccount2";
 
-	@EJB private CustomerServiceWrapper customerService;
+	//@LocalBean
+	@EJB private CustomerService customerService;
 
 	private String account;
 	private String name;
 	private String email;
 	private String passwd;
 	private String passwd2;
+
 
 	public String getAccount() {
 		return account;

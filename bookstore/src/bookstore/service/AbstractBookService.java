@@ -17,6 +17,8 @@ public abstract class AbstractBookService<T> implements BookService {
 	protected abstract Logger getLogger();
 	protected abstract T getManager();
 
+
+	@Override
 	public List<String> getAllBookISBNs() throws SQLException {
 		T em = getManager();
 		BookDAO<T> bookdao = getBookDAO();
@@ -31,6 +33,7 @@ public abstract class AbstractBookService<T> implements BookService {
 		return isbns;
 	}
 
+	@Override
 	public List<String> retrieveBookISBNsByKeyword(String keyword) throws SQLException {
 		T em = getManager();
 		BookDAO<T> bookdao = getBookDAO();
@@ -44,7 +47,10 @@ public abstract class AbstractBookService<T> implements BookService {
 		return isbns;
 	}
 
-	public List<VBook> createVBookList(List<String> productList, List<String> selectedList) throws SQLException {
+	@Override
+	public List<VBook> createVBookList(List<String> productList
+			, List<String> selectedList) throws SQLException
+	{
 		T em = getManager();
 		BookDAO<T> bookdao = getBookDAO();
 		List<VBook> vArrayList = new ArrayList<>();
@@ -56,7 +62,10 @@ public abstract class AbstractBookService<T> implements BookService {
 
 			currentVBook.setSelected(false);
 
-			if (selectedList != null && !selectedList.isEmpty() && selectedList.contains(currentBook.getIsbn())) {
+			if (selectedList != null
+					&& !selectedList.isEmpty()
+					&& selectedList.contains(currentBook.getIsbn())
+					) {
 				currentVBook.setSelected(true);
 			}
 
@@ -65,6 +74,7 @@ public abstract class AbstractBookService<T> implements BookService {
 		return vArrayList;
 	}
 
+	@Override
 	public VCheckout createVCheckout(List<String> selectedList) throws SQLException {
 		T em = getManager();
 		BookDAO<T> bookdao = getBookDAO();
@@ -86,8 +96,11 @@ public abstract class AbstractBookService<T> implements BookService {
 		return (vc);
 	}
 
-	public List<String> createCart(List<String> productList, List<String> selectedList, List<String> cart) {
-
+	@Override
+	public List<String> createCart(List<String> productList
+			, List<String> selectedList
+			, List<String> cart)
+	{
 		cart.removeAll(productList);
 		if (selectedList != null && !selectedList.isEmpty()) {
 			cart.addAll(selectedList);

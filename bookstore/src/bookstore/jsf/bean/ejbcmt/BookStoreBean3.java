@@ -8,6 +8,7 @@ import javax.inject.Named;
 
 import bookstore.jsf.bean.AbstractBookStoreBean;
 import bookstore.service.BookService;
+import bookstore.service.ejb.BookServiceLocal;
 
 @Named
 @SessionScoped
@@ -15,15 +16,15 @@ public class BookStoreBean3 extends AbstractBookStoreBean implements Serializabl
 
 	private static final long serialVersionUID = 1L;
 
-	@EJB(mappedName="BookServiceCmtWrapper") private transient BookService bookService;
+	//@Local
+	@EJB(mappedName="BookServiceCmtWrapper") private transient BookServiceLocal bookService;
 
-	public BookStoreBean3() {
-		super();
-	}
 
+	@Override
 	protected String getBookStorePage() {
 		return "BookStore3";
 	}
+	@Override
 	protected BookService getBookService() {
 		return bookService;
 	}

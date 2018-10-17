@@ -15,17 +15,23 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
+import bookstore.annotation.UsedBMT;
 import bookstore.annotation.UsedJpaJta;
 import bookstore.dao.CustomerDAO;
 import bookstore.service.AbstractCustomerService;
 import bookstore.service.CustomerService;
+import bookstore.service.ejb.CustomerServiceLocal;
+import bookstore.service.ejb.CustomerServiceRemote;
 
-@Stateless(name="CustomerServiceBmtWrapper")
+@UsedBMT	// 無意味
+@Stateless//(name="CustomerServiceBmtWrapper")
 @LocalBean
 @Local(CustomerService.class)
 @TransactionManagement(TransactionManagementType.BEAN)
-public class CustomerServiceWrapper extends AbstractCustomerService<EntityManager> {
-
+public class CustomerServiceWrapper
+	extends AbstractCustomerService<EntityManager>
+	implements CustomerServiceLocal, CustomerServiceRemote
+{
 	// RESOURCE_LOCALでは正常に動作しない
 	//@Inject @UsedJpaLocal CustomerDAO<EntityManager> customerdao
 	@Inject @UsedJpaJta CustomerDAO<EntityManager> customerdao;
@@ -33,6 +39,7 @@ public class CustomerServiceWrapper extends AbstractCustomerService<EntityManage
 
 	// BMTなのでトランザクションをUserTransactionで制御する
 	@Resource private UserTransaction tx;
+
 
 	@Override
 	protected CustomerDAO<EntityManager> getCustomerDAO() {

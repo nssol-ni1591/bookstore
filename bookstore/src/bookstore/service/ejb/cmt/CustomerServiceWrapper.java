@@ -16,21 +16,27 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import bookstore.annotation.UsedCMT;
 import bookstore.annotation.UsedJpaJta;
 import bookstore.dao.CustomerDAO;
 import bookstore.service.AbstractCustomerService;
 import bookstore.service.CustomerService;
+import bookstore.service.ejb.CustomerServiceLocal;
 
-@Stateless(name="CustomerServiceCmtWrapper")
+@UsedCMT	// –³ˆÓ–¡
+@Stateless//(name="CustomerServiceCmtWrapper")
 @LocalBean
 @Local(CustomerService.class)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class CustomerServiceWrapper extends AbstractCustomerService<EntityManager> {
-
+public class CustomerServiceWrapper
+	extends AbstractCustomerService<EntityManager>
+	implements CustomerServiceLocal//, CustomerServiceRemote
+{
 	@Inject @UsedJpaJta CustomerDAO<EntityManager> customerdao;
 	@Inject private Logger log;
 
 	@Resource SessionContext ctx;
+
 
 	@Override
 	protected CustomerDAO<EntityManager> getCustomerDAO() {

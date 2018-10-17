@@ -52,7 +52,7 @@ public class JPASelector {
 	}
 	public EntityManager getEntityManager(String jpaModule, String txType) {
 		if (!JTA.equals(txType) && !RESOURCE_LOCAL.equals(txType)) {
-			throw new IllegalArgumentException("unknown resource type: " + txType);
+			throw new IllegalArgumentException("unknown txType: " + txType);
 		}
 
 		if (jpaModule == null) {
@@ -74,9 +74,9 @@ public class JPASelector {
 			em = JTA.equals(txType) ? openjpaEM : openjpaEMF.createEntityManager();
 			break;
 		default:
-			throw new IllegalArgumentException("unknown jpa module: " + jpaModule);
+			throw new IllegalArgumentException("unknown jpaModule: " + jpaModule);
 		}
-		log.log(Level.INFO, "persistence={0}-{1}-{2}, em={3}", new Object[] { "BookStore", jpaModule, txType, em });
+		log.log(Level.FINE, "persistence={0}-{1}-{2}, em={3}", new Object[] { "BookStore", jpaModule, txType, em });
 		return em;
 	}
 

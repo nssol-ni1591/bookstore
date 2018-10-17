@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
+import bookstore.annotation.UsedBMT;
 import bookstore.annotation.UsedJpaJta;
 import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
@@ -23,13 +24,18 @@ import bookstore.dao.OrderDAO;
 import bookstore.dao.OrderDetailDAO;
 import bookstore.service.AbstractOrderService;
 import bookstore.service.OrderService;
+import bookstore.service.ejb.OrderServiceLocal;
+import bookstore.service.ejb.OrderServiceRemote;
 
+@UsedBMT	// 無意味
 @Stateless(name="OrderServiceBmtWrapper")
 @LocalBean
 @Local(OrderService.class)
 @TransactionManagement(TransactionManagementType.BEAN)
-public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
-
+public class OrderServiceWrapper
+	extends AbstractOrderService<EntityManager>
+	implements OrderServiceLocal, OrderServiceRemote
+{
 	// RESOURCE_LOCALでは正常に動作しない
 	//@Inject @UsedJpaLocal private BookDAO<EntityManager> bookdao
 	//@Inject @UsedJpaLocal private CustomerDAO<EntityManager> customerdao
@@ -43,6 +49,7 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 
 	// BMTなのでトランザクションをUserTransactionで制御する
 	@Resource private UserTransaction tx;
+
 
 	@Override
 	protected BookDAO<EntityManager> getBookDAO() {

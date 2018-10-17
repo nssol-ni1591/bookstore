@@ -29,8 +29,10 @@ import bookstore.service.OrderService;
 @LocalBean
 @Local(OrderService.class)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
-
+public class OrderServiceWrapper
+	extends AbstractOrderService<EntityManager>
+//	implements OrderServiceLocal, OrderServiceRemote
+{
 	@Inject @UsedJpa private BookDAO<EntityManager> bookdao;
 	@Inject @UsedJpa private CustomerDAO<EntityManager> customerdao;
 	@Inject @UsedJpa private OrderDAO<EntityManager> orderdao;

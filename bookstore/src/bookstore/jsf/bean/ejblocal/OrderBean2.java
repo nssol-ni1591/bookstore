@@ -8,37 +8,43 @@ import bookstore.jsf.bean.AbstractOrderBean;
 import bookstore.service.BookService;
 import bookstore.service.CustomerService;
 import bookstore.service.OrderService;
-import bookstore.service.ejb.cmt.BookServiceWrapper;
-import bookstore.service.ejb.cmt.CustomerServiceWrapper;
-import bookstore.service.ejb.cmt.OrderServiceWrapper;
 
 @Named
 @RequestScoped
 public class OrderBean2 extends AbstractOrderBean {
 
-	@EJB private BookServiceWrapper bookService;
-	@EJB private CustomerServiceWrapper customerService;
-	@EJB private OrderServiceWrapper orderService;
+	//@LocalBean
+	@EJB private BookService bookService;
+	@EJB private CustomerService customerService;
+	@EJB private OrderService orderService;
 
+
+	@Override
 	protected BookService getBookService() {
 		return bookService;
 	}
+	@Override
 	protected CustomerService getCustomerService() {
 		return customerService;
 	}
+	@Override
 	protected OrderService getOrderService() {
 		return orderService;
 	}
 
+	@Override
 	protected String getBookStorePage() {
 		return "BookStore2";
 	}
+	@Override
 	protected String getCheckPage() {
 		return "Check2";
 	}
+	@Override
 	protected String getOrderPage() {
 		return "Order2";
 	}
+	@Override
 	protected String getOrderListPage() {
 		return "OrderList";
 	}

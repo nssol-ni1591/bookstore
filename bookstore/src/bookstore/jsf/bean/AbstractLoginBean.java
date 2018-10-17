@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import bookstore.service.CustomerService;
 import bookstore.util.Messages;
 
-public abstract class AbstractLoginBean /*extends CommonJSFBean*/ {
+public abstract class AbstractLoginBean {
 
 	@Inject private Logger log;
 

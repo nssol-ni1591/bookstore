@@ -27,6 +27,7 @@ public abstract class AbstractOrderService<T> implements OrderService {
 	protected abstract Logger getLogger();
 	protected abstract T getManager();
 
+
 	@Override
 	public void orderBooks(String uid, List<String> isbnList) throws SQLException {
 		Logger log = getLogger();
@@ -60,7 +61,6 @@ public abstract class AbstractOrderService<T> implements OrderService {
 		OrderDAO<T> orderdao = getOrderDAO();
 
 		Iterator<TOrder> iter = orderdao.retrieveOrders(em, orderIdList).iterator();
-
 		while (iter.hasNext()) {
 			TOrder currentOrder = iter.next();
 			VOrder currentVOrder = new VOrder(currentOrder);

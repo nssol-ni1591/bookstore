@@ -6,25 +6,27 @@ import javax.inject.Named;
 
 import bookstore.jsf.bean.AbstractLoginBean;
 import bookstore.service.CustomerService;
+import bookstore.service.ejb.CustomerServiceLocal;
 
 @Named
 @RequestScoped
 public class LoginBean3 extends AbstractLoginBean {
 
-	@EJB(mappedName="CustomerServiceBmtWrapper") private CustomerService customerService;
+	//@Local
+	//@EJB(mappedName="CustomerServiceCmtWrapper") private CustomerServiceLocal customerService;
+	@EJB private CustomerServiceLocal customerService;
 
-	public LoginBean3() {
-		super();
-	}
 
 	@Override
 	protected CustomerService getCustomerService() {
 		return customerService;
 	}
 
+	@Override
 	protected String getLoginPage() {
 		return "Login3";
 	}
+	@Override
 	protected String getBookStorePage() {
 		return "BookStore3";
 	}

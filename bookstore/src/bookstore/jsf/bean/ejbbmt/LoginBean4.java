@@ -4,27 +4,30 @@ import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
+import bookstore.annotation.UsedBMT;
 import bookstore.jsf.bean.AbstractLoginBean;
 import bookstore.service.CustomerService;
+import bookstore.service.ejb.CustomerServiceRemote;
 
 @Named
 @RequestScoped
 public class LoginBean4 extends AbstractLoginBean {
 
-	@EJB(mappedName="CustomerServiceBmtWrapper") private CustomerService customerService;
+	// @Remote
+	//@EJB(mappedName="CustomerServiceBmtWrapper") private CustomerServiceRemote customerService;
+	@EJB @UsedBMT private CustomerServiceRemote customerService;
 
-	public LoginBean4() {
-		super();
-	}
 
 	@Override
 	protected CustomerService getCustomerService() {
 		return customerService;
 	}
 
+	@Override
 	protected String getLoginPage() {
 		return "Login4";
 	}
+	@Override
 	protected String getBookStorePage() {
 		return "BookStore4";
 	}

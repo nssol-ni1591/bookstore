@@ -17,6 +17,7 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import bookstore.annotation.UsedCMT;
 import bookstore.annotation.UsedJpaJta;
 import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
@@ -24,13 +25,18 @@ import bookstore.dao.OrderDAO;
 import bookstore.dao.OrderDetailDAO;
 import bookstore.service.AbstractOrderService;
 import bookstore.service.OrderService;
+import bookstore.service.ejb.OrderServiceLocal;
+import bookstore.service.ejb.OrderServiceRemote;
 
+@UsedCMT	// –³ˆÓ–¡
 @Stateless(name="OrderServiceCmtWrapper")
 @LocalBean
 @Local(OrderService.class)
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
-
+public class OrderServiceWrapper
+	extends AbstractOrderService<EntityManager>
+	implements OrderServiceLocal, OrderServiceRemote
+{
 	@Inject @UsedJpaJta private BookDAO<EntityManager> bookdao;
 	@Inject @UsedJpaJta private CustomerDAO<EntityManager> customerdao;
 	@Inject @UsedJpaJta private OrderDAO<EntityManager> orderdao;
@@ -38,6 +44,7 @@ public class OrderServiceWrapper extends AbstractOrderService<EntityManager> {
 	@Inject private Logger log;
 
 	@Resource SessionContext ctx;
+
 
 	@Override
 	protected BookDAO<EntityManager> getBookDAO() {

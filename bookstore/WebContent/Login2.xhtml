@@ -13,6 +13,12 @@
 	</ui:define>
 
 	<ui:define name="content">
+		<!-- クエリパラメータをセットして初期化処理を呼ぶ -->
+		<f:metadata>
+			<f:viewParam name="jpaModule" value="#{commonJSFBean.jpaModule}" />
+			<f:viewParam name="txType" value="#{commonJSFBean.txType}" />
+		</f:metadata>
+
 		<h:form>
 			<h:panelGrid border="1" columns="2">
 				<h:outputText value="ユーザ名"></h:outputText>
