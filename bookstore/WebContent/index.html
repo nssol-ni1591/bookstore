@@ -20,44 +20,40 @@ and open the template in the editor.
 		<h5><a href="faces/Login3.xhtml">EJB (Local CMT) + JSF + JPA:JTA</a>&nbsp;(JPAモジュールはpersistence.xmlの[BookStore2]定義に依存)</h5>
 		<h5><a href="faces/Login4.xhtml">EJB (Remote BMT) + JSF + JPA:JTA</a>&nbsp;(JPAモジュールはpersistence.xmlの[BookStore2]定義に依存)</h5>
 
-		<h4>(2)CMT<br>
-		<small>RESOURCE_LOCALとの組み合わせは例外は発生しないが更新が行われない</small>
-		</h4>
+		<h4>(2)CMT</h4>
 		<h5><a href="faces/Login5.xhtml?jpaModule=Hibernate&txType=JTA">EJB (CMT) + JSF + Hibernate:JTA</a></h5>
-		<h5><a href="faces/Login5.xhtml?jpaModule=Hibernate&txType=Resource_Local">EJB (CMT) + JSF + Hibernate:Resource_Local</a></h5>
 		<h5><a href="faces/Login5.xhtml?jpaModule=Eclipselink&txType=JTA">EJB (CMT) + JSF + Eclipselink:JTA</a></h5>
-		<h5><a href="faces/Login5.xhtml?jpaModule=Eclipselink&txType=Resource_Local">EJB (CMT) + JSF + Eclipselink:Resource_Local</a></h5>
 		<h5><a href="faces/Login5.xhtml?jpaModule=OpenJPA&txType=JTA">EJB (CMT) + JSF + OpenJPA:JTA</a></h5>
+		<small>RESOURCE_LOCALとの組み合わせは例外は発生しないが更新が行われない</small>
+		<h5><a href="faces/Login5.xhtml?jpaModule=Hibernate&txType=Resource_Local">EJB (CMT) + JSF + Hibernate:Resource_Local</a></h5>
+		<h5><a href="faces/Login5.xhtml?jpaModule=Eclipselink&txType=Resource_Local">EJB (CMT) + JSF + Eclipselink:Resource_Local</a></h5>
 		<h5><a href="faces/Login5.xhtml?jpaModule=OpenJPA&txType=Resource_Local">EJB (CMT) + JSF + OpenJPA:Resource_Local</a></h5>
 
-		<h4>(3)BMT<br/>
-		<small>RESOURCE_LOCALとの組み合わせは例外は発生しないが更新が行われない</small>
-		</h4>
+		<h4>(3)BMT</h4>
 		<h5><a href="faces/Login6.xhtml?jpaModule=Hibernate&txType=JTA">EJB (BMT) + JSF + Hibernate:JTA</a></h5>
-		<h5><a href="faces/Login6.xhtml?jpaModule=Hibernate&txType=Resource_Local">EJB (BMT) + JSF + Hibernate:Resource_Local</a></h5>
 		<h5><a href="faces/Login6.xhtml?jpaModule=Eclipselink&txType=JTA">EJB (BMT) + JSF + Eclipselink:JTA</a></h5>
-		<h5><a href="faces/Login6.xhtml?jpaModule=Eclipselink&txType=Resource_Local">EJB (BMT) + JSF + Eclipselink:Resource_Local</a></h5>
 		<h5><a href="faces/Login6.xhtml?jpaModule=OpenJPA&txType=JTA">EJB (BMT) + JSF + OpenJPA:JTA</a></h5>
+		<small>RESOURCE_LOCALとの組み合わせは例外は発生しないが更新が行われない</small>
+		<h5><a href="faces/Login6.xhtml?jpaModule=Hibernate&txType=Resource_Local">EJB (BMT) + JSF + Hibernate:Resource_Local</a></h5>
+		<h5><a href="faces/Login6.xhtml?jpaModule=Eclipselink&txType=Resource_Local">EJB (BMT) + JSF + Eclipselink:Resource_Local</a></h5>
 		<h5><a href="faces/Login6.xhtml?jpaModule=OpenJPA&txType=Resource_Local">EJB (BMT) + JSF + OpenJPA:Resource_Local</a></h5>
 
-		<h4>(4)EntityTransaction<br/>
-		<small>JTA:IllegalStateException: A JTA EntityManager can not use the EntityTransaction API.  See JPA 1.0 section 5.5</small>
-		</h4>
-		<h5><a href="faces/Login.xhtml?jpaModule=Hibernate&txType=JTA">Weld + JSF + Hibernate:JTA</a></h5>
+		<h4>(4)EntityTransaction</h4>
 		<h5><a href="faces/Login.xhtml?jpaModule=Hibernate&txType=Resource_Local">Weld + JSF + Hibernate:Resource_Local</a></h5>
-		<h5><a href="faces/Login.xhtml?jpaModule=Eclipselink&txType=JTA">Weld + JSF + Eclipselink:JTA</a></h5>
 		<h5><a href="faces/Login.xhtml?jpaModule=Eclipselink&txType=Resource_Local">Weld + JSF + Eclipselink:Resource_Local</a></h5>
-		<h5><a href="faces/Login.xhtml?jpaModule=OpenJPA&txType=JTA">Weld + JSF + OpenJPA:JTA</a></h5>
 		<h5><a href="faces/Login.xhtml?jpaModule=OpenJPA&txType=Resource_Local">Weld + JSF + OpenJPA:Resource_Local</a></h5>
-
-		<h4>(5)Servlet3 + JSP + Weld + JPA<br/>
 		<small>JTA:IllegalStateException: A JTA EntityManager can not use the EntityTransaction API.  See JPA 1.0 section 5.5</small>
-		</h4>
+		<h5><a href="faces/Login.xhtml?jpaModule=Hibernate&txType=JTA">Weld + JSF + Hibernate:JTA</a></h5>
+		<h5><a href="faces/Login.xhtml?jpaModule=Eclipselink&txType=JTA">Weld + JSF + Eclipselink:JTA</a></h5>
+		<h5><a href="faces/Login.xhtml?jpaModule=OpenJPA&txType=JTA">Weld + JSF + OpenJPA:JTA</a></h5>
+
+		<h4>(5)Servlet3 + JSP + Weld + JPA</h4>
 		<h5><a href="Login3.jsp?jpaModule=Hibernate&txType=JTA">Servlet3 + Weld + JSP + Hibernate:JTA</a></h5>
-		<h5><a href="Login3.jsp?jpaModule=Hibernate&txType=Resource_Local">Servlet3 + Weld + JSP + Hibernate:Resource_Local</a></h5>
 		<h5><a href="Login3.jsp?jpaModule=Eclipselink&txType=JTA">Servlet3 + Weld + JSP + Eclipselink:JTA</a></h5>
-		<h5><a href="Login3.jsp?jpaModule=Eclipselink&txType=Resource_Local">Servlet3 + Weld + JSP + Eclipselink:Resource_Local</a></h5>
 		<h5><a href="Login3.jsp?jpaModule=OpenJPA&txType=JTA">Servlet3 + Weld + JSP + OpenJPA:JTA</a></h5>
+		<small>JTA:IllegalStateException: A JTA EntityManager can not use the EntityTransaction API.  See JPA 1.0 section 5.5</small>
+		<h5><a href="Login3.jsp?jpaModule=Hibernate&txType=Resource_Local">Servlet3 + Weld + JSP + Hibernate:Resource_Local</a></h5>
+		<h5><a href="Login3.jsp?jpaModule=Eclipselink&txType=Resource_Local">Servlet3 + Weld + JSP + Eclipselink:Resource_Local</a></h5>
 		<h5><a href="Login3.jsp?jpaModule=OpenJPA&txType=Resource_Local">Servlet3 + Weld + JSP + OpenJPA:Resource_Local</a></h5>
 		</div>
 	</body>
