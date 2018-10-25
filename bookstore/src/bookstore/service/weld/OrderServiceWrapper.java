@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 import bookstore.annotation.UsedWeld;
 import bookstore.annotation.WithEntityTx;
 import bookstore.annotation.WithEntityTxUpdate;
-import bookstore.annotation.UsedJpa;
+import bookstore.annotation.UsedJpaSelector;
 import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
 import bookstore.dao.OrderDAO;
@@ -25,10 +25,10 @@ import bookstore.vbean.VOrder;
 @Dependent
 public class OrderServiceWrapper extends AbstractOrderService<EntityManager> implements EntityTx {
 
-	@Inject @UsedJpa private BookDAO<EntityManager> bookdao;
-	@Inject @UsedJpa private CustomerDAO<EntityManager> customerdao;
-	@Inject @UsedJpa private OrderDAO<EntityManager> orderdao;
-	@Inject @UsedJpa private OrderDetailDAO<EntityManager> orderdetaildao;
+	@Inject @UsedJpaSelector private BookDAO<EntityManager> bookdao;
+	@Inject @UsedJpaSelector private CustomerDAO<EntityManager> customerdao;
+	@Inject @UsedJpaSelector private OrderDAO<EntityManager> orderdao;
+	@Inject @UsedJpaSelector private OrderDetailDAO<EntityManager> orderdetaildao;
 	@Inject private Logger log;
 
 	private EntityManager em = null;

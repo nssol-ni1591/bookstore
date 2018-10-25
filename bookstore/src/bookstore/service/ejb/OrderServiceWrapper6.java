@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
-import bookstore.annotation.UsedJpa;
+import bookstore.annotation.UsedJpaSelector;
 import bookstore.dao.BookDAO;
 import bookstore.dao.CustomerDAO;
 import bookstore.dao.OrderDAO;
@@ -33,10 +33,10 @@ public class OrderServiceWrapper6
 	extends AbstractOrderService<EntityManager>
 //	implements OrderServiceLocal, OrderServiceRemote
 {
-	@Inject @UsedJpa private BookDAO<EntityManager> bookdao;
-	@Inject @UsedJpa private CustomerDAO<EntityManager> customerdao;
-	@Inject @UsedJpa private OrderDAO<EntityManager> orderdao;
-	@Inject @UsedJpa private OrderDetailDAO<EntityManager> orderdetaildao;
+	@Inject @UsedJpaSelector private BookDAO<EntityManager> bookdao;
+	@Inject @UsedJpaSelector private CustomerDAO<EntityManager> customerdao;
+	@Inject @UsedJpaSelector private OrderDAO<EntityManager> orderdao;
+	@Inject @UsedJpaSelector private OrderDetailDAO<EntityManager> orderdetaildao;
 
 	@Inject private Logger log;
 	@Inject private JPASelector selector;

@@ -12,7 +12,7 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import bookstore.annotation.UsedJpa;
+import bookstore.annotation.UsedJpaSelector;
 import bookstore.dao.BookDAO;
 import bookstore.persistence.JPASelector;
 import bookstore.service.AbstractBookService;
@@ -26,7 +26,7 @@ public class BookServiceWrapper6
 	extends AbstractBookService<EntityManager>
 //	implements BookServiceLocal, BookServiceRemote
 {
-	@Inject @UsedJpa private BookDAO<EntityManager> bookdao;
+	@Inject @UsedJpaSelector private BookDAO<EntityManager> bookdao;
 
 	@Inject private Logger log;
 	@Inject private JPASelector selector;

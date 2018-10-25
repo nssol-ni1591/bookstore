@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 
 import bookstore.annotation.UsedWeld;
 import bookstore.annotation.WithEntityTx;
-import bookstore.annotation.UsedJpa;
+import bookstore.annotation.UsedJpaSelector;
 import bookstore.dao.BookDAO;
 import bookstore.persistence.JPASelector;
 import bookstore.service.AbstractBookService;
@@ -23,7 +23,7 @@ import bookstore.vbean.VCheckout;
 @Dependent
 public class BookServiceWrapper extends AbstractBookService<EntityManager> implements EntityTx {
 
-	@Inject @UsedJpa private BookDAO<EntityManager> bookdao;
+	@Inject @UsedJpaSelector private BookDAO<EntityManager> bookdao;
 	@Inject private Logger log;
 
 	@Inject private JPASelector selector;

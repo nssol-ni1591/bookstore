@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
 
-import bookstore.annotation.UsedJpa;
+import bookstore.annotation.UsedJpaSelector;
 import bookstore.dao.CustomerDAO;
 import bookstore.persistence.JPASelector;
 import bookstore.service.AbstractCustomerService;
@@ -29,7 +29,7 @@ public class CustomerServiceWrapper6
 	extends AbstractCustomerService<EntityManager>
 //	implements CustomerServiceLocal, CustomerServiceRemote
 {
-	@Inject @UsedJpa private CustomerDAO<EntityManager> customerdao;
+	@Inject @UsedJpaSelector private CustomerDAO<EntityManager> customerdao;
 
 	@Inject private Logger log;
 	@Inject private JPASelector selector;
